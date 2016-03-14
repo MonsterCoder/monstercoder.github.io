@@ -4,17 +4,24 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Tag: microservice | Awakening Byte</title>
+  <title>Build a backend with Node.js, container and Azure (1) | Awakening Byte</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Awakening Byte">
-<meta property="og:url" content="http://monstercoder.github.io/tags/microservice/index.html">
+  <meta name="description" content="These years I have worked with several projects with non-profite organizations and Startups. Here are some common features to these projects.
+
+Scalability: it starts from small, but need scale up easi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Build a backend with Node.js, container and Azure (1)">
+<meta property="og:url" content="http://monstercoder.github.io/2015/Node-js-and-Docker-on-Azure/index.html">
 <meta property="og:site_name" content="Awakening Byte">
-<meta property="og:description">
+<meta property="og:description" content="These years I have worked with several projects with non-profite organizations and Startups. Here are some common features to these projects.
+
+Scalability: it starts from small, but need scale up easi">
+<meta property="og:updated_time" content="2016-03-14T03:10:57.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Awakening Byte">
-<meta name="twitter:description">
+<meta name="twitter:title" content="Build a backend with Node.js, container and Azure (1)">
+<meta name="twitter:description" content="These years I have worked with several projects with non-profite organizations and Startups. Here are some common features to these projects.
+
+Scalability: it starts from small, but need scale up easi">
   
   
     <link rel="icon" href="/favicon.png">
@@ -156,53 +163,112 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-Node-js-and-Docker-on-Azure" class="article article-type-post" itemscope itemprop="blogPost">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/Node-js-and-Docker-on-Azure/" class="archive-article-date">
-  	<time datetime="2015-08-13T23:12:03.000Z" itemprop="datePublished">Aug 13</time>
+    <div class="article-meta">
+      <a href="/2015/Node-js-and-Docker-on-Azure/" class="article-date">
+  	<time datetime="2015-08-13T23:12:03.000Z" itemprop="datePublished">2015-08-13</time>
 </a>
-        </div>
-    	 
+    </div>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/Node-js-and-Docker-on-Azure/">Build a backend with Node.js, container and Azure (1)</a>
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Build a backend with Node.js, container and Azure (1)
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+      </header>
+      
+      <div class="article-info article-info-post">
+        
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/">Node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/architecture/">architecture</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/microservice/">microservice</a></li></ul>
 	</div>
 
-          
+        
 
-        </div>
         <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
+      </div>
+      
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>These years I have worked with several projects with non-profite organizations and Startups. Here are some common features to these projects.</p>
+<ul>
+<li>Scalability: it starts from small, but need scale up easily</li>
+<li>Agility: be able to move to different platforms</li>
+<li>Flexiblity: components and features might be expanded or replaced</li>
+<li>Management &amp; Operations: not to keep own infrastructure </li>
+<li>Limited budget</li>
+</ul>
+<p>Rails and Heroku are used to be my first choice for these. RoR is an amazing framework with a strong ecosystem.  While Heroku offers instant deployment, easy scaling and requires little manitainace. </p>
+<p>Until last year, I swithced to Node.js and docker container for even more simplicity and scalability.<br>Lets uses an example to prove it.</p>
+<h2 id="example-application"><a href="#example-application" class="headerlink" title="example application"></a>example application</h2><p>Lets say we are going to build a REST API for user registration. User sign-up your service with a mobile or web client which will call the API. After a successful sginup, the backend will send the user a welcome email with a confirmation link. </p>
+<p>It contains the following services:</p>
+<ul>
+<li>Registration API</li>
+<li>MongoDB</li>
+<li>Email-worker</li>
+<li>Message Queue</li>
+</ul>
+<h2 id="setup"><a href="#setup" class="headerlink" title="setup"></a>setup</h2><h3 id="install-node-js"><a href="#install-node-js" class="headerlink" title="install node.js"></a>install node.js</h3><p>First we need to install node and updating npm on our dev machine. <a href="https://docs.npmjs.com/getting-started/installing-node" target="_blank" rel="external">link</a> </p>
+<h3 id="start-MongoDB-and-RabbitMQ-services"><a href="#start-MongoDB-and-RabbitMQ-services" class="headerlink" title="start MongoDB and RabbitMQ services"></a>start MongoDB and RabbitMQ services</h3><p>Login to Microsoft Azure porta<br>(if you don’t have an Azure Subscription, get a <a href="https://azure.microsoft.com/en-us/pricing/free-trial/" target="_blank" rel="external">free trial</a>)</p>
+<p>Go to  “Virtual Machines” and create a vm from Docker on Unbuntu Server image</p>
+<p>SSH into your new created VM</p>
+<p>then start services with the following command</p>
+<pre><code>$ docker run --name mongo -p 27017:27017  -d mongo:3
+$ docker run -d -p 8080:15672 -p 4369:4369 -p 5671:5671 -p 5672:5672 -p 25672:25672 --hostname rabbit --name rabbit-server -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=ZAQ! rabbitmq:3-management
+</code></pre><p>run</p>
+<pre><code>$ docker ps
+</code></pre><p>you should see containers of MongoDB and RabbitMQ are up and running.</p>
+<h2 id="REST-API"><a href="#REST-API" class="headerlink" title="REST API"></a>REST API</h2><p>in next post, we are going to implement an REST API servic using Node.js and deploy to it Azure website. Keep tuned.</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/deploy-node-app-to-azure-website/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Troubleshoot your node.js app deployment on Azure website
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+
+</div>
+
+
+
 
 </div>
       <footer id="footer">
@@ -225,9 +291,9 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false
 	}
