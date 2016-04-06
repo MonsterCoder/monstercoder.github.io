@@ -4,17 +4,21 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Awakening Byte</title>
+  <title>Build a backend with Node.js, container and Azure (2) | Awakening Byte</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Awakening Byte">
-<meta property="og:url" content="http://monstercoder.github.io/index.html">
+  <meta name="description" content="Registration ServiceIn this post we will be looking at creating a backend API using using Node, Express and Mongoose. It will handle user registration requests and publish a message to job queue.
+Crea">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Build a backend with Node.js, container and Azure (2)">
+<meta property="og:url" content="http://monstercoder.github.io/2016/2/index.html">
 <meta property="og:site_name" content="Awakening Byte">
-<meta property="og:description">
+<meta property="og:description" content="Registration ServiceIn this post we will be looking at creating a backend API using using Node, Express and Mongoose. It will handle user registration requests and publish a message to job queue.
+Crea">
+<meta property="og:updated_time" content="2016-04-06T14:45:18.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Awakening Byte">
-<meta name="twitter:description">
+<meta name="twitter:title" content="Build a backend with Node.js, container and Azure (2)">
+<meta name="twitter:description" content="Registration ServiceIn this post we will be looking at creating a backend API using using Node, Express and Mongoose. It will handle user registration requests and publish a message to job queue.
+Crea">
   
   
     <link rel="icon" href="/favicon.png">
@@ -156,9 +160,7 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
-  
-    <article id="post-2" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-2" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2016/2/" class="article-date">
@@ -174,12 +176,23 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/2/">Build a backend with Node.js, container and Azure (2)</a>
+    <h1 class="article-title" itemprop="name">
+      Build a backend with Node.js, container and Azure (2)
     </h1>
   
 
       </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/">Node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/architecture/">architecture</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/microservice/">microservice</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
       
     
     <div class="article-entry" itemprop="articleBody">
@@ -273,37 +286,39 @@ function send_to_queue(ch, q_name, content) {
       
     </div>
     
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/">Node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/architecture/">architecture</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/microservice/">microservice</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/deploy-node-app-to-azure-website/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Troubleshoot your node.js app deployment on Azure website</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
   
 </article>
 
 
+<div class="share_jia">
+
+</div>
 
 
 
 
 
 
+<div class="duoshuo">
 
-  
-  
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
-  
+</div>
+
+
+
+
 </div>
       <footer id="footer">
   <div class="outer">
@@ -324,8 +339,8 @@ function send_to_queue(ch, q_name, content) {
 		fancybox: true,
 		mathjax: true,
 		animate: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
