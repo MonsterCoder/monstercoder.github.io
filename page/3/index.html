@@ -158,11 +158,11 @@
 
       <div class="body-wrap">
   
-    <article id="post-1" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-deploy-node-app-to-azure-website" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/1/" class="article-date">
-  	<time datetime="2015-08-13T23:12:03.000Z" itemprop="datePublished">2015-08-13</time>
+      <a href="/2015/deploy-node-app-to-azure-website/" class="article-date">
+  	<time datetime="2015-12-22T05:33:02.000Z" itemprop="datePublished">2015-12-21</time>
 </a>
     </div>
   
@@ -175,7 +175,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/1/">Build a backend with Node.js, container and Azure (1)</a>
+      <a class="article-title" href="/2015/deploy-node-app-to-azure-website/">Troubleshoot your node.js app deployment on Azure website</a>
     </h1>
   
 
@@ -184,35 +184,38 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>These years I have worked with several projects with non-profite organizations and Startups. Here are some common features to these projects.</p>
+        <p>Deploying Node applications to Azure website seems simple. Just set up continuous deployment on the Azure Portal. Azure will build, test and automatically depoly your app when you check in code. Everything runs so well until you open a browser, navigate to the webisite url and see this: 500 internal server error. That was exactly the case we had in last project. The application was written in node &amp; express with dependancies to 52 npm packages including babel, redis, new relic, gulp, webpack. It works like a charm on local servers, just not on Azure website with git deployment. As usual, most documentation we found online are about “Hello world” which won’t help much with a production problem. Here are some of the steps we used to diagnose and analysis the deploy problem and make it work.</p>
+<h2 id="Test-compilation-on-windows"><a href="#Test-compilation-on-windows" class="headerlink" title="Test compilation on windows"></a>Test compilation on windows</h2><p>During npm install, some node modules with native extensions will be compiled to match the hosting OS and architecture(x86 or x64). If the application is developed on Mac OS, Linux and deploy to Azure website, first thing to do is to confirm that every module is compatible with windows platfom. </p>
+<p>##web.config file<br>Under the hood, Azure website hosts node.js apps with iisnode. You need a web.config to config iisnode. If you use git deployment, when Azure detects an app.js or server.js file, it will automatically generate a web.config. Or you can add a custom one manually. Open the web.config file, and check the handlers section. Make sure it points to the correct application entry point.</p>
+<pre><code>&lt;handlers&gt;
+    &lt;add name=&quot;iisnode&quot; path=&quot;app.js&quot; verb=&quot;*&quot; modules=&quot;iisnode&quot;/&gt;
+&lt;/handlers&gt;
+</code></pre><h2 id="Enviroment-variables"><a href="#Enviroment-variables" class="headerlink" title="Enviroment variables"></a>Enviroment variables</h2><p>You can set enviroment variables through website portal or Azure CLI. The easiest way to check their value is through website portal, under <strong>config</strong> section, choose app settings. Or if you are using Azure CLI, run</p>
+<pre><code>azure site config list your-site
+</code></pre><p>Make sure there is no PORT setting. iisnode will use this variable to pipe IIS to your app.<br>Also check value of WEBSITE_NODE_DEFAULT_VERSION, it sets default node version used by the target website.</p>
+<h2 id="Check-in-node-modules"><a href="#Check-in-node-modules" class="headerlink" title="Check in node_modules"></a>Check in node_modules</h2><p>When using git deployment, normally we don’t check in node_modules. However, according to this Azure documentation</p>
+<blockquote>
+<p>Azure Websites does not support all native modules and might fail at compiling those with very specific prerequisites. </p>
+</blockquote>
+<p>So if all the about steps don’t help, you might want to test it out by checking in you node_modules. Remember, before checkin, run npm install on a windows platform with some architecture of you website.</p>
+<h2 id="Enable-Application-log"><a href="#Enable-Application-log" class="headerlink" title="Enable Application log"></a>Enable Application log</h2><p>Add the following to your iisnode.yml</p>
+<pre><code>node_env: production
+loggingEnabled: true
+devErrorsEnabled: true
+</code></pre><p>Then you can use Azure CLI to live stream the logs</p>
+<pre><code>$ azure site log tail sampleBlog
+</code></pre><h2 id="Debug-with-Kudu"><a href="#Debug-with-Kudu" class="headerlink" title="Debug with Kudu"></a>Debug with Kudu</h2><p><a href="https://github.com/" target="_blank" rel="external">Kudu</a> is the engine behind git deployments in Azure Web Sites.<br>Every Azure web site has an associated ‘scm’ service site at <a href="https://your-site.scm.azurewebsites.net/" target="_blank" rel="external">https://your-site.scm.azurewebsites.net/</a>. It provides a set of tools for troubleshooting and analysis your node.js website. You can:</p>
 <ul>
-<li>Scalability: it starts from small, but need scale up easily</li>
-<li>Agility: be able to move to different platforms</li>
-<li>Flexiblity: components and features might be expanded or replaced</li>
-<li>Management &amp; Operations: not to keep own infrastructure </li>
-<li>Limited budget</li>
+<li>Launch the <a href="https://github.com/projectkudu/kudu/wiki/Kudu-console" target="_blank" rel="external">diagnostic console</a></li>
+<li>Check runtime environment</li>
+<li>Monitor active node process</li>
 </ul>
-<p>Rails and Heroku are used to be my first choice for these. RoR is an amazing framework with a strong ecosystem.  While Heroku offers instant deployment, easy scaling and requires little manitainace. </p>
-<p>Until last year, I swithced to Node.js and docker container for even more simplicity and scalability.<br>Lets uses an example to prove it.</p>
-<h2 id="example-application"><a href="#example-application" class="headerlink" title="example application"></a>example application</h2><p>Lets say we are going to build a REST API for user registration. User sign-up your service with a mobile or web client which will call the API. After a successful sginup, the backend will send the user a welcome email with a confirmation link. </p>
-<p>It contains the following services:</p>
-<ul>
-<li>Registration API</li>
-<li>MongoDB</li>
-<li>Email-worker</li>
-<li>Message Queue</li>
-</ul>
-<h2 id="setup"><a href="#setup" class="headerlink" title="setup"></a>setup</h2><h3 id="install-node-js"><a href="#install-node-js" class="headerlink" title="install node.js"></a>install node.js</h3><p>First we need to install node and updating npm on our dev machine. <a href="https://docs.npmjs.com/getting-started/installing-node" target="_blank" rel="external">link</a> </p>
-<h3 id="start-MongoDB-and-RabbitMQ-services"><a href="#start-MongoDB-and-RabbitMQ-services" class="headerlink" title="start MongoDB and RabbitMQ services"></a>start MongoDB and RabbitMQ services</h3><p>Login to Microsoft Azure porta<br>(if you don’t have an Azure Subscription, get a <a href="https://azure.microsoft.com/en-us/pricing/free-trial/" target="_blank" rel="external">free trial</a>)</p>
-<p>Go to  “Virtual Machines” and create a vm from Docker on Unbuntu Server image</p>
-<p>SSH into your new created VM</p>
-<p>then start services with the following command</p>
-<pre><code>$ docker run -d --name mongo-server -p 27017:27017 mongo:3
-$ docker run -d --name rabbit-server -p 15672:15672 -p 4369:4369 -p 5671:5671 -p 5672:5672 -p 25672:25672 --hostname rabbit  -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=admin rabbitmq:3-management
-</code></pre><p>run</p>
-<pre><code>$ docker ps
-</code></pre><p>you should see containers of MongoDB and RabbitMQ are up and running.</p>
-<h2 id="REST-API"><a href="#REST-API" class="headerlink" title="REST API"></a>REST API</h2><p>in next post, we are going to implement an REST API servic using Node.js and deploy to it Azure website. Keep tuned.</p>
+<p>Open the debug console, choose CMD or powershell.<br>Then start you app with node.exe directly</p>
+<pre><code>$ cd D:\home\site\wwwroot&gt; 
+$ node app.js
+</code></pre><p>If you see an error from a node module, it might be caused by either wrong node version or corrupt node_module.  Check the current node version </p>
+<pre><code>$ node -v
+</code></pre><p>make sure it is your target version. Run npm install for the failed module if necessary. Once the app starts from console, you can close it and restart your website. Open a browser and see your website start working.</p>
 
       
     </div>
@@ -221,7 +224,7 @@ $ docker run -d --name rabbit-server -p 15672:15672 -p 4369:4369 -p 5671:5671 -p
       
       
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/">Node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/architecture/">architecture</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/microservice/">microservice</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Azure/">Azure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/">Node.js</a></li></ul>
 	</div>
 
       
@@ -245,7 +248,7 @@ $ docker run -d --name rabbit-server -p 15672:15672 -p 4369:4369 -p 5671:5671 -p
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
     </nav>
   
 </div>

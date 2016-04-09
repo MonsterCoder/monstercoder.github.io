@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Tag: docker | Awakening Byte</title>
+  <title>Awakening Byte</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Awakening Byte">
-<meta property="og:url" content="http://monstercoder.github.io/tags/docker/page/2/index.html">
+<meta property="og:url" content="http://monstercoder.github.io/page/4/index.html">
 <meta property="og:site_name" content="Awakening Byte">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
@@ -158,56 +158,96 @@
 
       <div class="body-wrap">
   
+    <article id="post-1" class="article article-type-post" itemscope itemprop="blogPost">
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/2/" class="archive-article-date">
-  	<time datetime="2016-01-11T18:12:14.000Z" itemprop="datePublished">Jan 11</time>
+    <div class="article-meta">
+      <a href="/2015/1/" class="article-date">
+  	<time datetime="2015-08-13T23:12:03.000Z" itemprop="datePublished">2015-08-13</time>
 </a>
-        </div>
-    	 
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
   
     <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/2/">Build a backend with Node.js, container and Azure (2)</a>
+      <a class="article-title" href="/2015/1/">Build a backend with Node.js, container and Azure (1)</a>
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>These years I have worked with several projects with non-profite organizations and Startups. Here are some common features to these projects.</p>
+<ul>
+<li>Scalability: it starts from small, but need scale up easily</li>
+<li>Agility: be able to move to different platforms</li>
+<li>Flexiblity: components and features might be expanded or replaced</li>
+<li>Management &amp; Operations: not to keep own infrastructure </li>
+<li>Limited budget</li>
+</ul>
+<p>Rails and Heroku are used to be my first choice for these. RoR is an amazing framework with a strong ecosystem.  While Heroku offers instant deployment, easy scaling and requires little manitainace. </p>
+<p>Until last year, I swithced to Node.js and docker container for even more simplicity and scalability.<br>Lets uses an example to prove it.</p>
+<h2 id="example-application"><a href="#example-application" class="headerlink" title="example application"></a>example application</h2><p>Lets say we are going to build a REST API for user registration. User sign-up your service with a mobile or web client which will call the API. After a successful sginup, the backend will send the user a welcome email with a confirmation link. </p>
+<p>It contains the following services:</p>
+<ul>
+<li>Registration API</li>
+<li>MongoDB</li>
+<li>Email-worker</li>
+<li>Message Queue</li>
+</ul>
+<h2 id="setup"><a href="#setup" class="headerlink" title="setup"></a>setup</h2><h3 id="install-node-js"><a href="#install-node-js" class="headerlink" title="install node.js"></a>install node.js</h3><p>First we need to install node and updating npm on our dev machine. <a href="https://docs.npmjs.com/getting-started/installing-node" target="_blank" rel="external">link</a> </p>
+<h3 id="start-MongoDB-and-RabbitMQ-services"><a href="#start-MongoDB-and-RabbitMQ-services" class="headerlink" title="start MongoDB and RabbitMQ services"></a>start MongoDB and RabbitMQ services</h3><p>Login to Microsoft Azure porta<br>(if you don’t have an Azure Subscription, get a <a href="https://azure.microsoft.com/en-us/pricing/free-trial/" target="_blank" rel="external">free trial</a>)</p>
+<p>Go to  “Virtual Machines” and create a vm from Docker on Unbuntu Server image</p>
+<p>SSH into your new created VM</p>
+<p>then start services with the following command</p>
+<pre><code>$ docker run -d --name mongo-server -p 27017:27017 mongo:3
+$ docker run -d --name rabbit-server -p 15672:15672 -p 4369:4369 -p 5671:5671 -p 5672:5672 -p 25672:25672 --hostname rabbit  -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=admin rabbitmq:3-management
+</code></pre><p>run</p>
+<pre><code>$ docker ps
+</code></pre><p>you should see containers of MongoDB and RabbitMQ are up and running.</p>
+<h2 id="REST-API"><a href="#REST-API" class="headerlink" title="REST API"></a>REST API</h2><p>in next post, we are going to implement an REST API servic using Node.js and deploy to it Azure website. Keep tuned.</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/">Node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/architecture/">architecture</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/microservice/">microservice</a></li></ul>
 	</div>
 
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
+      
+      <div class="clearfix"></div>
+    </div>
     
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+  
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/tags/docker/">&laquo; Prev</a><a class="page-number" href="/tags/docker/">1</a><span class="page-number current">2</span><a class="page-number" href="/tags/docker/page/3/">3</a><a class="extend next" rel="next" href="/tags/docker/page/3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
     </nav>
   
-
 </div>
       <footer id="footer">
   <div class="outer">
@@ -228,10 +268,10 @@
 		fancybox: true,
 		mathjax: true,
 		animate: true,
-		isHome: false,
+		isHome: true,
 		isPost: false,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false
 	}

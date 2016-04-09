@@ -4,17 +4,18 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Tag: docker | Awakening Byte</title>
+  <title>Build a backend with Node.js, container and Azure (3) | Awakening Byte</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Awakening Byte">
-<meta property="og:url" content="http://monstercoder.github.io/tags/docker/page/2/index.html">
+  <meta name="description" content="In last post, We have created an API that accepts registration request, saves user information into database. Once a registration completed, we want to send a welcome email to the user. Sending email">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Build a backend with Node.js, container and Azure (3)">
+<meta property="og:url" content="http://monstercoder.github.io/2016/3/index.html">
 <meta property="og:site_name" content="Awakening Byte">
-<meta property="og:description">
+<meta property="og:description" content="In last post, We have created an API that accepts registration request, saves user information into database. Once a registration completed, we want to send a welcome email to the user. Sending email">
+<meta property="og:updated_time" content="2016-04-09T19:23:09.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Awakening Byte">
-<meta name="twitter:description">
+<meta name="twitter:title" content="Build a backend with Node.js, container and Azure (3)">
+<meta name="twitter:description" content="In last post, We have created an API that accepts registration request, saves user information into database. Once a registration completed, we want to send a welcome email to the user. Sending email">
   
   
     <link rel="icon" href="/favicon.png">
@@ -156,57 +157,138 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-3" class="article article-type-post" itemscope itemprop="blogPost">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/2/" class="archive-article-date">
-  	<time datetime="2016-01-11T18:12:14.000Z" itemprop="datePublished">Jan 11</time>
+    <div class="article-meta">
+      <a href="/2016/3/" class="article-date">
+  	<time datetime="2016-04-09T19:08:38.000Z" itemprop="datePublished">2016-04-09</time>
 </a>
-        </div>
-    	 
+    </div>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/2/">Build a backend with Node.js, container and Azure (2)</a>
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Build a backend with Node.js, container and Azure (3)
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+      </header>
+      
+      <div class="article-info article-info-post">
+        
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/">Node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/architecture/">architecture</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/microservice/">microservice</a></li></ul>
 	</div>
 
-          
+        
 
-        </div>
         <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
+      </div>
+      
     
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/tags/docker/">&laquo; Prev</a><a class="page-number" href="/tags/docker/">1</a><span class="page-number current">2</span><a class="page-number" href="/tags/docker/page/3/">3</a><a class="extend next" rel="next" href="/tags/docker/page/3/">Next &raquo;</a>
-    </nav>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>In last post, We have created an API that accepts registration request, saves user information into database. Once a registration completed, we want to send a welcome email to the user. Sending email is a time consuming task, it should be done asynchronously outside the user request/response cycle. This enables web requests to return immediately, results in better response time and higher throughput. </p>
+<h3 id="Email-worker"><a href="#Email-worker" class="headerlink" title="Email worker"></a>Email worker</h3><p>In this post we are going to create an email worker that runs in a seperated process, pulls tasks from message queue and sends emails. </p>
+<pre><code>var config = require(&apos;./config/config&apos;)
+var nodemailer = require(&apos;nodemailer&apos;);
+
+var EmailService = require(&apos;./src/email_service&apos;)
+
+function handleError()  {
+    this.close();
+    setTimeout( function() {
+        processor = start_worker();
+    }
+    , 10000)
+}
+
+function onMessage(data) {
+    var email_address = data;
+    var transporter = nodemailer.createTransport( {
+        service: config.email.service ,
+        auth: {
+            user: config.email.user, // Your email id
+            pass: config.email.pass  // Your password
+        }
+    });
+
+    var mailOptions = {
+        from: config.email.from, 
+        to: email_address, 
+        subject: &apos;Welcome!&apos;, 
+        html: &apos;&lt;b&gt;Thanks for registering&lt;/b&gt;&apos; 
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            console.log(error);
+        }else{
+            console.log(&apos;Message sent: &apos; + info.response);
+        };
+    });
+}
+
+function start_worker() {
+    var emailProcessor = new EmailService();
+    emailProcessor.once(&apos;error&apos;, handleError.bind(emailProcessor))
+    emailProcessor.once(&apos;connect&apos;, (function() {
+            this.process(&apos;email&apos;, onMessage)
+        })
+        .bind(emailProcessor) 
+    )
+
+    return emailProcessor.start();
+}
+
+
+var processor = start_worker();
+</code></pre><p>We also need to install the <a href="https://github.com/nodemailer/nodemailer" target="_blank" rel="external">nodemailer</a> package which does the real work of email sending.</p>
+<pre><code>npm install --save nodemailer
+</code></pre><p>Note that we are using the same repository as api. The EmailService is used by both api and work for message publish/subscribe. </p>
+<p>In next post, we will put everything together. Start a dev database, message queue, launch the API server, run the task work.</p>
+
+      
+    </div>
+    
+  </div>
   
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/2/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Build a backend with Node.js, container and Azure (2)</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+
+</div>
+
+
+
 
 </div>
       <footer id="footer">
@@ -229,9 +311,9 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false
 	}
