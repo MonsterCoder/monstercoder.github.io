@@ -98,7 +98,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/tags/Node-js/" style="font-size: 20px;">Node.js</a> <a href="/tags/architecture/" style="font-size: 15px;">architecture</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/microservice/" style="font-size: 15px;">microservice</a>
+						<a href="/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/tags/Node-js/" style="font-size: 20px;">Node.js</a> <a href="/tags/architecture/" style="font-size: 15px;">architecture</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/microservice/" style="font-size: 15px;">microservice</a> <a href="/tags/project-euler/" style="font-size: 10px;">project-euler</a>
 					</div>
 				</section>
 				
@@ -158,11 +158,11 @@
 
       <div class="body-wrap">
   
-    <article id="post-2" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-3" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/2/" class="article-date">
-  	<time datetime="2016-01-11T18:12:14.000Z" itemprop="datePublished">2016-01-11</time>
+      <a href="/2016/3/" class="article-date">
+  	<time datetime="2016-04-09T19:08:38.000Z" itemprop="datePublished">2016-04-09</time>
 </a>
     </div>
   
@@ -175,7 +175,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/2/">Build a backend with Node.js, container and Azure (2)</a>
+      <a class="article-title" href="/2016/3/">Build a backend with Node.js, container and Azure (3)</a>
     </h1>
   
 
@@ -184,91 +184,65 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Registration-Service"><a href="#Registration-Service" class="headerlink" title="Registration Service"></a>Registration Service</h2><p>Node.js is a popular a server-side framework for building high performance backend. In this post we will be looking at creating a backend API using using Node, Express and Mongoose. It will handle user registration requests and publish a message to job queue.</p>
-<h3 id="Creating-the-App"><a href="#Creating-the-App" class="headerlink" title="Creating the App"></a>Creating the App</h3><p>Our project structure is like the following. We will keep this very simple for the demonstration purposes.</p>
-<pre><code>├── server.js
-└── src
-    ├── api.js
-    └── email_service.js
-├── config
-│   └── config.js
-├── model
-│   └── user.js
-├── package.json
-├── docker-compose.yml
-├── Dockerfile
-</code></pre><p>Fist,  create the package.json </p>
-<pre><code>npm init
-</code></pre><p>This will ask you a bunch of questions, and then write a package.json for you. Now install the packages we will be using in this project.</p>
-<pre><code>npm install --save express mongoose body-parser amqplib
-</code></pre><p>Then, we define a user model with Mongoose. Mongoose provides a schema-based way to model application data. It includes built-in type casting, validation, query building, business logic hooks and more, out of the box.</p>
-<p>   var mongoose = require(‘mongoose’);</p>
-<pre><code>var userSchema = new mongoose.Schema({
-  email : { 
-    type: String, 
-    trim: true, 
-    required: true, 
-    index: { unique: true, uniqueCaseInsensitive: true },
-    validate: {
-      validator: function(v) {
-            p =/^[a-zA-Z0-9.!#$%&amp;&apos;*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/i
-            p.test(v);
-        },
-          message: &apos;{VALUE} is not a valid email address!&apos;
-        }
-    },
-    created_at: { type: Date, default: Date.now },
-  }
-)
+        <p>In last post, We have created an API that accepts registration request, saves user information into database. Once a registration completed, we want to send a welcome email to the user. Sending email is a time consuming task, it should be done asynchronously outside the user request/response cycle. This enables web requests to return immediately, results in better response time and higher throughput. </p>
+<h3 id="Email-worker"><a href="#Email-worker" class="headerlink" title="Email worker"></a>Email worker</h3><p>In this post we are going to create an email worker that runs in a seperated process, pulls tasks from message queue and sends emails. </p>
+<pre><code>var config = require(&apos;./config/config&apos;)
+var nodemailer = require(&apos;nodemailer&apos;);
 
-module.exports = mongoose.model(&apos;User&apos;, userSchema);
-</code></pre><p>Now lets look at the api.js. In this file we define how our api responds to a client request to a particular endpoint, which is a URI (or path) and a specific HTTP request method (GET, POST, and so on).<br>Here we has a handler function that accepts a post request, creates a new user. Once the registration has completed, it publish an email sending job to message queue. </p>
-<p>app.js</p>
-<pre><code>app.post(&apos;/register&apos;, function(req, res) {
-    var user = new User(req.body);
-    user
-    .save()
-    .then(
-        function(u) {
-            email_service.send_welcome_email(u);
-            return res.json({success: true})
-        },
-        function(err) {
-            return res.status(400).json({sucess: false, data: req.body, error: err})
-        }
-    )
-});
-</code></pre><p>We will delegate the work of sending email task to the email_servie. Note the send_welcome_email is a non-block function. </p>
-<p>email_service.js</p>
-<pre><code>EmailService.prototype.send_welcome_email = function(customer) {
-    var self = this;
+var EmailService = require(&apos;./src/email_service&apos;)
 
-    if (self.ch) {
-         process.nextTick(function() {
-                 send_to_queue(self.ch, email_queue, customer.email);
-         })
-    } else {
-        self.conn.createConfirmChannel( function(err, ch) {
-            if (err) {
-                return console.error(err);
-            }
-        self.ch = ch;
-        ch.on(&quot;error&quot;, function(err) { console.error(err)});
-        send_to_queue(self.ch, email_queue, customer.email)
-      })
-    }                                        
+function handleError()  {
+    this.close();
+    setTimeout( function() {
+        processor = start_worker();
+    }
+    , 10000)
 }
 
-function send_to_queue(ch, q_name, content) {
-    ch.publish(&apos;&apos;, q_name, new Buffer(content), { persistent: true },
-        function (err, ok) {
-            if (err) {
-                console.error(&quot;[AMQP] publish &quot;, err);
-                pubChannel.connection.close();
-            }
-    })
-}    
-</code></pre><p>The email service publishes an email task to message queue. In next post, we will implement a work process that picks up an email task from the message queue and send an email out throught SMTP. </p>
+function onMessage(data) {
+    var email_address = data;
+    var transporter = nodemailer.createTransport( {
+        service: config.email.service ,
+        auth: {
+            user: config.email.user, // Your email id
+            pass: config.email.pass  // Your password
+        }
+    });
+
+    var mailOptions = {
+        from: config.email.from, 
+        to: email_address, 
+        subject: &apos;Welcome!&apos;, 
+        html: &apos;&lt;b&gt;Thanks for registering&lt;/b&gt;&apos; 
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            console.log(error);
+        }else{
+            console.log(&apos;Message sent: &apos; + info.response);
+        };
+    });
+}
+
+function start_worker() {
+    var emailProcessor = new EmailService();
+    emailProcessor.once(&apos;error&apos;, handleError.bind(emailProcessor))
+    emailProcessor.once(&apos;connect&apos;, (function() {
+            this.process(&apos;email&apos;, onMessage)
+        })
+        .bind(emailProcessor) 
+    )
+
+    return emailProcessor.start();
+}
+
+
+var processor = start_worker();
+</code></pre><p>We also need to install the <a href="https://github.com/nodemailer/nodemailer" target="_blank" rel="external">nodemailer</a> package which does the real work of email sending.</p>
+<pre><code>npm install --save nodemailer
+</code></pre><p>Note that we are using the same repository as api. The EmailService is used by both api and work for message publish/subscribe. </p>
+<p>In next post, we will put everything together. Start a dev database, message queue, launch the API server, run the task work.</p>
 
       
     </div>
@@ -301,7 +275,7 @@ function send_to_queue(ch, q_name, content) {
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 </div>

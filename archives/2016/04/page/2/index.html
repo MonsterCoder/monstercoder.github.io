@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Awakening Byte</title>
+  <title>Archives: 2016/4 | Awakening Byte</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Awakening Byte">
-<meta property="og:url" content="http://monstercoder.github.io/index.html">
+<meta property="og:url" content="http://monstercoder.github.io/archives/2016/04/page/2/index.html">
 <meta property="og:site_name" content="Awakening Byte">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
@@ -158,93 +158,56 @@
 
       <div class="body-wrap">
   
-    <article id="post-project-euler" class="article article-type-post" itemscope itemprop="blogPost">
   
-    <div class="article-meta">
-      <a href="/2016/project-euler/" class="article-date">
-  	<time datetime="2016-04-10T16:07:57.000Z" itemprop="datePublished">2016-04-10</time>
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2016" class="archive-year">2016</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2016/3/" class="archive-article-date">
+  	<time datetime="2016-04-09T19:08:38.000Z" itemprop="datePublished">Apr 9</time>
 </a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
+        </div>
+    	 
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/project-euler/">Project Euler problems</a>
+      <a class="archive-article-title" href="/2016/3/">Build a backend with Node.js, container and Azure (3)</a>
     </h1>
   
 
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>##Introduction</p>
-<p>First time I came across a project-euler problem was at Stack Overflow. While answering an algorithem question, I found the <a href="https://projecteuler.net" target="_blank" rel="external">Project Euler</a> provides a fun way to learn new concepts and keep my problem solving and mathematics skills sharp. </p>
-<blockquote>
-<p>Project Euler is a series of challenging mathematical/computer programming problems that will require more than just mathematical insights to solve. Although mathematics will help you arrive at elegant and efficient methods, the use of a computer and programming skills will be required to solve most problems.</p>
-</blockquote>
-<p>So I decide to solve one problem a day and keep my solutions here. To spicy things up, I want solve each problem with two different languages. One imperative language that I am already comfortable with,  such as C#, ruby, java, javascript. Another one, I would use a functional language. </p>
-<h3 id="Problem-1-Multiples-of-3-and-5"><a href="#Problem-1-Multiples-of-3-and-5" class="headerlink" title="Problem 1: Multiples of 3 and 5"></a>Problem 1: Multiples of 3 and 5</h3><blockquote>
-<p>If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23.<br>Find the sum of all the multiples of 3 or 5 below 1000.</p>
-</blockquote>
-<h4 id="Solution-1"><a href="#Solution-1" class="headerlink" title="Solution 1"></a>Solution 1</h4><p>C#</p>
-<p>It could be something like this</p>
-<pre><code>var result = 0;
-
-for(var i =1; i &lt; 1000; i ++) {
-  if (i % 3 == 0 || 1 % 5 ==0 ) {
-    result += i;
-  }
-}
-</code></pre><p>But NO, I really don’t want see any for-loop or while-loop here. Using C# doesn’t mean you cannot do it in a concise, declaritive style. Here you go:</p>
-<pre><code>Enumerable
-.Range(1, 999)
-.Where(n =&gt; (n % 3) * (n % 5) ==0)
-.Sum();
-</code></pre><h4 id="Solution-2"><a href="#Solution-2" class="headerlink" title="Solution 2"></a>Solution 2</h4><p>Lets do it in a real functional language.</p>
-<p>F#</p>
-<pre><code>[1..999] |&gt; List.filter (fun n -&gt; (n % 5) * (n % 3) = 0 ) |&gt; List.sum
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/project-euler/">project-euler</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/">Node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/architecture/">architecture</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/microservice/">microservice</a></li></ul>
 	</div>
 
-      
+          
 
-      
-      <div class="clearfix"></div>
-    </div>
-    
+        </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
-  
 </article>
-
-
-
-
-
-
-
-
-
   
   
+    </div></section>
+  
+
+    
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/archives/2016/04/">&laquo; Prev</a><a class="page-number" href="/archives/2016/04/">1</a><span class="page-number current">2</span>
     </nav>
   
+
 </div>
       <footer id="footer">
   <div class="outer">
@@ -265,9 +228,9 @@ for(var i =1; i &lt; 1000; i ++) {
 		fancybox: true,
 		mathjax: true,
 		animate: true,
-		isHome: true,
+		isHome: false,
 		isPost: false,
-		isArchive: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false
