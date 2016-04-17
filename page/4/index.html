@@ -98,7 +98,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/tags/Node-js/" style="font-size: 20px;">Node.js</a> <a href="/tags/architecture/" style="font-size: 15px;">architecture</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/microservice/" style="font-size: 15px;">microservice</a> <a href="/tags/project-euler/" style="font-size: 10px;">project-euler</a>
+						<a href="/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/tags/C/" style="font-size: 13.33px;">C#</a> <a href="/tags/F/" style="font-size: 10px;">F#</a> <a href="/tags/Node-js/" style="font-size: 20px;">Node.js</a> <a href="/tags/architecture/" style="font-size: 16.67px;">architecture</a> <a href="/tags/docker/" style="font-size: 16.67px;">docker</a> <a href="/tags/microservice/" style="font-size: 16.67px;">microservice</a> <a href="/tags/project-euler/" style="font-size: 13.33px;">project-euler</a>
 					</div>
 				</section>
 				
@@ -158,11 +158,11 @@
 
       <div class="body-wrap">
   
-    <article id="post-deploy-node-app-to-azure-website" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/deploy-node-app-to-azure-website/" class="article-date">
-  	<time datetime="2015-12-22T05:33:02.000Z" itemprop="datePublished">2015-12-21</time>
+      <a href="/2016/2/" class="article-date">
+  	<time datetime="2016-01-11T18:12:14.000Z" itemprop="datePublished">2016-01-11</time>
 </a>
     </div>
   
@@ -175,7 +175,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/deploy-node-app-to-azure-website/">Troubleshoot your node.js app deployment on Azure website</a>
+      <a class="article-title" href="/2016/2/">Build a backend with Node.js, container and Azure (2)</a>
     </h1>
   
 
@@ -184,38 +184,91 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Deploying Node applications to Azure website seems simple. Just set up continuous deployment on the Azure Portal. Azure will build, test and automatically depoly your app when you check in code. Everything runs so well until you open a browser, navigate to the webisite url and see this: 500 internal server error. That was exactly the case we had in last project. The application was written in node &amp; express with dependancies to 52 npm packages including babel, redis, new relic, gulp, webpack. It works like a charm on local servers, just not on Azure website with git deployment. As usual, most documentation we found online are about “Hello world” which won’t help much with a production problem. Here are some of the steps we used to diagnose and analysis the deploy problem and make it work.</p>
-<h2 id="Test-compilation-on-windows"><a href="#Test-compilation-on-windows" class="headerlink" title="Test compilation on windows"></a>Test compilation on windows</h2><p>During npm install, some node modules with native extensions will be compiled to match the hosting OS and architecture(x86 or x64). If the application is developed on Mac OS, Linux and deploy to Azure website, first thing to do is to confirm that every module is compatible with windows platfom. </p>
-<p>##web.config file<br>Under the hood, Azure website hosts node.js apps with iisnode. You need a web.config to config iisnode. If you use git deployment, when Azure detects an app.js or server.js file, it will automatically generate a web.config. Or you can add a custom one manually. Open the web.config file, and check the handlers section. Make sure it points to the correct application entry point.</p>
-<pre><code>&lt;handlers&gt;
-    &lt;add name=&quot;iisnode&quot; path=&quot;app.js&quot; verb=&quot;*&quot; modules=&quot;iisnode&quot;/&gt;
-&lt;/handlers&gt;
-</code></pre><h2 id="Enviroment-variables"><a href="#Enviroment-variables" class="headerlink" title="Enviroment variables"></a>Enviroment variables</h2><p>You can set enviroment variables through website portal or Azure CLI. The easiest way to check their value is through website portal, under <strong>config</strong> section, choose app settings. Or if you are using Azure CLI, run</p>
-<pre><code>azure site config list your-site
-</code></pre><p>Make sure there is no PORT setting. iisnode will use this variable to pipe IIS to your app.<br>Also check value of WEBSITE_NODE_DEFAULT_VERSION, it sets default node version used by the target website.</p>
-<h2 id="Check-in-node-modules"><a href="#Check-in-node-modules" class="headerlink" title="Check in node_modules"></a>Check in node_modules</h2><p>When using git deployment, normally we don’t check in node_modules. However, according to this Azure documentation</p>
-<blockquote>
-<p>Azure Websites does not support all native modules and might fail at compiling those with very specific prerequisites. </p>
-</blockquote>
-<p>So if all the about steps don’t help, you might want to test it out by checking in you node_modules. Remember, before checkin, run npm install on a windows platform with some architecture of you website.</p>
-<h2 id="Enable-Application-log"><a href="#Enable-Application-log" class="headerlink" title="Enable Application log"></a>Enable Application log</h2><p>Add the following to your iisnode.yml</p>
-<pre><code>node_env: production
-loggingEnabled: true
-devErrorsEnabled: true
-</code></pre><p>Then you can use Azure CLI to live stream the logs</p>
-<pre><code>$ azure site log tail sampleBlog
-</code></pre><h2 id="Debug-with-Kudu"><a href="#Debug-with-Kudu" class="headerlink" title="Debug with Kudu"></a>Debug with Kudu</h2><p><a href="https://github.com/" target="_blank" rel="external">Kudu</a> is the engine behind git deployments in Azure Web Sites.<br>Every Azure web site has an associated ‘scm’ service site at <a href="https://your-site.scm.azurewebsites.net/" target="_blank" rel="external">https://your-site.scm.azurewebsites.net/</a>. It provides a set of tools for troubleshooting and analysis your node.js website. You can:</p>
-<ul>
-<li>Launch the <a href="https://github.com/projectkudu/kudu/wiki/Kudu-console" target="_blank" rel="external">diagnostic console</a></li>
-<li>Check runtime environment</li>
-<li>Monitor active node process</li>
-</ul>
-<p>Open the debug console, choose CMD or powershell.<br>Then start you app with node.exe directly</p>
-<pre><code>$ cd D:\home\site\wwwroot&gt; 
-$ node app.js
-</code></pre><p>If you see an error from a node module, it might be caused by either wrong node version or corrupt node_module.  Check the current node version </p>
-<pre><code>$ node -v
-</code></pre><p>make sure it is your target version. Run npm install for the failed module if necessary. Once the app starts from console, you can close it and restart your website. Open a browser and see your website start working.</p>
+        <h2 id="Registration-Service"><a href="#Registration-Service" class="headerlink" title="Registration Service"></a>Registration Service</h2><p>Node.js is a popular a server-side framework for building high performance backend. In this post we will be looking at creating a backend API using using Node, Express and Mongoose. It will handle user registration requests and publish a message to job queue.</p>
+<h3 id="Creating-the-App"><a href="#Creating-the-App" class="headerlink" title="Creating the App"></a>Creating the App</h3><p>Our project structure is like the following. We will keep this very simple for the demonstration purposes.</p>
+<pre><code>├── server.js
+└── src
+    ├── api.js
+    └── email_service.js
+├── config
+│   └── config.js
+├── model
+│   └── user.js
+├── package.json
+├── docker-compose.yml
+├── Dockerfile
+</code></pre><p>Fist,  create the package.json </p>
+<pre><code>npm init
+</code></pre><p>This will ask you a bunch of questions, and then write a package.json for you. Now install the packages we will be using in this project.</p>
+<pre><code>npm install --save express mongoose body-parser amqplib
+</code></pre><p>Then, we define a user model with Mongoose. Mongoose provides a schema-based way to model application data. It includes built-in type casting, validation, query building, business logic hooks and more, out of the box.</p>
+<p>   var mongoose = require(‘mongoose’);</p>
+<pre><code>var userSchema = new mongoose.Schema({
+  email : { 
+    type: String, 
+    trim: true, 
+    required: true, 
+    index: { unique: true, uniqueCaseInsensitive: true },
+    validate: {
+      validator: function(v) {
+            p =/^[a-zA-Z0-9.!#$%&amp;&apos;*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/i
+            p.test(v);
+        },
+          message: &apos;{VALUE} is not a valid email address!&apos;
+        }
+    },
+    created_at: { type: Date, default: Date.now },
+  }
+)
+
+module.exports = mongoose.model(&apos;User&apos;, userSchema);
+</code></pre><p>Now lets look at the api.js. In this file we define how our api responds to a client request to a particular endpoint, which is a URI (or path) and a specific HTTP request method (GET, POST, and so on).<br>Here we has a handler function that accepts a post request, creates a new user. Once the registration has completed, it publish an email sending job to message queue. </p>
+<p>app.js</p>
+<pre><code>app.post(&apos;/register&apos;, function(req, res) {
+    var user = new User(req.body);
+    user
+    .save()
+    .then(
+        function(u) {
+            email_service.send_welcome_email(u);
+            return res.json({success: true})
+        },
+        function(err) {
+            return res.status(400).json({sucess: false, data: req.body, error: err})
+        }
+    )
+});
+</code></pre><p>We will delegate the work of sending email task to the email_servie. Note the send_welcome_email is a non-block function. </p>
+<p>email_service.js</p>
+<pre><code>EmailService.prototype.send_welcome_email = function(customer) {
+    var self = this;
+
+    if (self.ch) {
+         process.nextTick(function() {
+                 send_to_queue(self.ch, email_queue, customer.email);
+         })
+    } else {
+        self.conn.createConfirmChannel( function(err, ch) {
+            if (err) {
+                return console.error(err);
+            }
+        self.ch = ch;
+        ch.on(&quot;error&quot;, function(err) { console.error(err)});
+        send_to_queue(self.ch, email_queue, customer.email)
+      })
+    }                                        
+}
+
+function send_to_queue(ch, q_name, content) {
+    ch.publish(&apos;&apos;, q_name, new Buffer(content), { persistent: true },
+        function (err, ok) {
+            if (err) {
+                console.error(&quot;[AMQP] publish &quot;, err);
+                pubChannel.connection.close();
+            }
+    })
+}    
+</code></pre><p>The email service publishes an email task to message queue. In next post, we will implement a work process that picks up an email task from the message queue and send an email out throught SMTP. </p>
 
       
     </div>
@@ -224,7 +277,7 @@ $ node app.js
       
       
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Azure/">Azure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/">Node.js</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/">Node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/architecture/">architecture</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/microservice/">microservice</a></li></ul>
 	</div>
 
       
@@ -248,7 +301,7 @@ $ node app.js
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
     </nav>
   
 </div>
