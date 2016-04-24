@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <title>Project-Euler-54-F# | Awakening Byte</title>
+  <meta name="description" content="You cannot travel the path until you become the path itself" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" type="text/css" href="/css/screen.css" />
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic|Open+Sans:700,400" />
+
+  <meta name="generator" content="Awakening Byte">
+
+  
+  
+  
+
+  
+</head>
+
+
+<body class="post-template">
+
+  <header class="site-head"  style="background-image: url(https://pbs.twimg.com/media/CS2ri2OUwAABH9s.jpg)" >
+    <div class="vertical">
+        <div class="site-head-content inner">
+             <a class="blog-logo" href="/"><img src="//blog.ghost.org/content/images/2013/Nov/bloglogo_1-1.png" alt="Blog Logo"/></a> 
+            <h1 class="blog-title">Awakening Byte</h1>
+            <h2 class="blog-description">You cannot travel the path until you become the path itself</h2>
+        </div>
+    </div>
+</header>
+  
+
+<main class="content" role="main">
+  <article class="post">
+    <span class="post-meta">
+      <time datetime="2016-04-11T15:27:12.000Z" itemprop="datePublished">
+          2016-04-11
+      </time>
+    
+    
+    | 
+    <a href='/tags/project-euler/'>project-euler</a>,
+    
+    <a href='/tags/F/'>F#</a>
+    
+    
+</span>
+    <h1 class="post-title">Project-Euler-54-F#</h1>
+    <section class="post-content">
+      <p>In previous post I showed a C# solution to the Poker-hands problem. Since I’ve become more and more interested in functional programming languages, I would like to create another solution in F# and give a comparison to the C# one.</p>
+<p>##Solution</p>
+<pre><code>open System
+open System.IO
+
+type Player = | Player1 | Player2
+
+let cards = [&apos;0&apos;;&apos;1&apos;;&apos;2&apos;; &apos;3&apos;; &apos;4&apos;; &apos;5&apos;; &apos;6&apos;; &apos;7&apos;; &apos;8&apos;; &apos;9&apos;; &apos;T&apos;; &apos;J&apos;; &apos;Q&apos;; &apos;K&apos;; &apos;A&apos;]
+let royal = cards |&gt; List.skip 10 |&gt; Array.ofList
+let cardOrder c = cards |&gt; List.findIndex ((=) c)
+let highToLow = cardOrder &gt;&gt; (-) 15
+
+let isInfix (hand: char array) =
+  let cardss = cards |&gt; Array.ofList |&gt; String
+
+  hand
+  |&gt; String
+  |&gt; fun s -&gt; cardss.Contains(s)
+  |&gt; (&amp;&amp;) (hand.Length = 5)
+
+let handValue str =
+  let freq      = Array.groupBy fst &gt;&gt; Array.map (fun (n, v) -&gt; (n, v.Length)) &gt;&gt; Array.sortBy (fun (c, l) -&gt; 100 * (5-l) + highToLow c)
+  let hand      = str    |&gt; Array.map (fun (s:string) -&gt; (s.[0], s.[1]))
+  let values    = hand   |&gt; Array.map fst |&gt; Array.sortBy cardOrder
+  let valuesH2L = values |&gt; Array.rev |&gt; String
+  let suits     = hand   |&gt; Array.map snd
+
+  let isFlush    = suits  |&gt; Array.distinct |&gt; Array.length |&gt; (=) 1 // same suit
+  let isStraight = values |&gt; isInfix // consecutive
+  let isRoyal    = values = royal
+
+  let expFreq e a = a |&gt; Array.map snd |&gt; function | v when v = e -&gt; a |&gt; Array.map fst |&gt; String |&gt; Some | _ -&gt; None
+
+  let (|FourOfAKind|_|)  = expFreq [|4;1|]
+  let (|ThreeOfAKind|_|) = expFreq [|3;1;1|]
+  let (|FullHouse|_|)    = expFreq [|3;2|]
+  let (|TwoPairs|_|)     = expFreq [|2;2;1|]
+  let (|OnePair|_|)      = expFreq [|2;1;1;1|]
+
+  match freq hand with
+  | _ when isFlush &amp;&amp; isRoyal     -&gt; &quot;900000&quot;
+  | _ when isFlush &amp;&amp; isStraight  -&gt; &quot;8&quot; + valuesH2L
+  | FourOfAKind s                 -&gt; &quot;7000&quot; + s
+  | FullHouse   s                 -&gt; &quot;6000&quot; + s
+  | _ when isFlush                -&gt; &quot;5&quot; + valuesH2L
+  | _ when isStraight             -&gt; &quot;4&quot; + valuesH2L
+  | ThreeOfAKind s                -&gt; &quot;300&quot; + s
+  | TwoPairs s                    -&gt; &quot;200&quot; + s
+  | OnePair s                     -&gt; &quot;10&quot; + s
+  | _ -&gt; &quot;0&quot; + valuesH2L
+
+
+let playHand line =
+  let h1 = line |&gt; Array.take 5 |&gt; handValue |&gt; List.ofSeq
+  let h2 = line |&gt; Array.skip 5 |&gt; handValue |&gt; List.ofSeq
+
+  let rec winner = function
+  | ((a, b)::xs) when cardOrder a &gt; cardOrder b -&gt; Player1
+  | ((a, b)::xs) when cardOrder a = cardOrder b -&gt; winner xs
+  | _ -&gt; Player2
+
+  List.zip h1 h2 |&gt; winner
+
+File.ReadAllLines(@&quot;p054_poker.txt&quot;)
+|&gt; Seq.map (fun s -&gt; s.Split &apos; &apos; |&gt; playHand)
+|&gt; Seq.filter ((=) Player1)
+|&gt; Seq.length
+|&gt; printf &quot;Player 1 won %d&quot;
+</code></pre><p>##Comparison</p>
+<p>   This implemetaion has only 66 lines of code which is much lesser than its C# conterpart.   In C# soultion, I defined an interface, an abstract base class to abstract and encapsulate game rules. The business logic is hidding in each sub-class with the overhead of inheritance. </p>
+<pre><code> ....
+ public class Full_House: Rank {
+    public Full_House(IEnumerable&lt;string&gt; cards) : base(cards) {
+
+    }
+    protected override bool Match() {
+
+        return cards.GroupBy(c =&gt; Mapper[c[0]], c=&gt; 1).Count(g =&gt; g.Count()==3) == 1 
+            &amp;&amp; cards.GroupBy(c =&gt; Mapper[c[0]], c=&gt; 1).Count(g =&gt; g.Count()==2) == 1;
+    }
+
+   protected override double Remainder { 
+       get{
+         return GetGroups(3).First().Key * 15 + GetGroups(2).First().Key;
+       }
+   }
+}   
+...
+</code></pre><p>In contrast, F#’s Discriminated unions enables a concise coding style when working with hierarchical data. Buisness logic is a collection of partially applied functions. This enables data to be processed streamly and results in an expressive and succinct code.</p>
+<pre><code>match freq hand with
+| _ when isFlush &amp;&amp; isRoyal     -&gt; &quot;900000&quot;
+| _ when isFlush &amp;&amp; isStraight  -&gt; &quot;8&quot; + valuesH2L
+| FourOfAKind s                 -&gt; &quot;7000&quot; + s
+| FullHouse   s                 -&gt; &quot;6000&quot; + s
+| _ when isFlush                -&gt; &quot;5&quot; + valuesH2L
+| _ when isStraight             -&gt; &quot;4&quot; + valuesH2L
+| ThreeOfAKind s                -&gt; &quot;300&quot; + s
+| TwoPairs s                    -&gt; &quot;200&quot; + s
+| OnePair s                     -&gt; &quot;10&quot; + s
+| _ -&gt; &quot;0&quot; + valuesH2L
+</code></pre>
+    </section>
+    <footer class="post-footer">
+      <section class="author">
+    <h4>George Chen</h4>
+    <p></p>
+</section>
+      <section class="share">
+    <h4>Share this post</h4>
+    <a class="icon-twitter" href="http://twitter.com/share?url=http://monstercoder.github.io/2016/project-euler-54-f/"
+       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://monstercoder.github.io/2016/project-euler-54-f/"
+       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="icon-google-plus" href="https://plus.google.com/share?url=http://monstercoder.github.io/2016/project-euler-54-f/"
+       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+</section>
+    </footer>
+  </article>
+  <nav class="pagination" role="pagination">
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2016/get-started-with-dotnet-core-on-docker/">
+        Get Started With .NET Core on Docker →
+    </a>
+    
+</nav>
+  <div id="comment" class="comments-area">
+    <h1 class="title"><a href="#disqus_comments" name="disqus_comments">Comments</a></h1>
+
+    
+</div>
+</main>
+
+
+  
+<footer class="site-footer">
+  
+  <div class="inner">
+     <section class="copyright">All content copyright <a href="/">Awakening Byte</a> &copy; 2014 &bull; All rights reserved.</section>
+     <section class="poweredby">Proudly published with <a class="icon-ghost" href="http://zespia.tw/hexo/">Hexo</a></section>
+  </div>
+</footer>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+
+
+
+
+
+
+</body>
+</html>
