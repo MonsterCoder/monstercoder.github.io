@@ -1,60 +1,79 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
   <title>Get Started With .NET Core on Docker | Awakening Byte</title>
-  <meta name="description" content="You cannot travel the path until you become the path itself" />
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <link rel="stylesheet" type="text/css" href="/css/screen.css" />
-  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic|Open+Sans:700,400" />
-
-  <meta name="generator" content="Awakening Byte">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="George Chen">
   
   
+    <meta name="description" content="New .NET Core is the biggest change since the invention of .NET platform. It is fully open-source,  componentised and is supported by Windows, Linux and Mac OSX. In this post I am going to give it a t">
   
-
+  <meta name="description" content="New .NET Core is the biggest change since the invention of .NET platform. It is fully open-source,  componentised and is supported by Windows, Linux and Mac OSX. In this post I am going to give it a t">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Get Started With .NET Core on Docker">
+<meta property="og:url" content="http://monstercoder.github.io/2016/get-started-with-dotnet-core-on-docker/index.html">
+<meta property="og:site_name" content="Awakening Byte">
+<meta property="og:description" content="New .NET Core is the biggest change since the invention of .NET platform. It is fully open-source,  componentised and is supported by Windows, Linux and Mac OSX. In this post I am going to give it a t">
+<meta property="og:updated_time" content="2016-04-24T17:21:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Get Started With .NET Core on Docker">
+<meta name="twitter:description" content="New .NET Core is the biggest change since the invention of .NET platform. It is fully open-source,  componentised and is supported by Windows, Linux and Mac OSX. In this post I am going to give it a t">
+  
+    <link rel="alternate" href="/atom.xml" title="Awakening Byte" type="application/atom+xml">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   
 </head>
 
-
-<body class="post-template">
-
-  <header class="site-head"  style="background-image: url(https://pbs.twimg.com/media/CS2ri2OUwAABH9s.jpg)" >
-    <div class="vertical">
-        <div class="site-head-content inner">
-             <a class="blog-logo" href="/"><img src="//blog.ghost.org/content/images/2013/Nov/bloglogo_1-1.png" alt="Blog Logo"/></a> 
-            <h1 class="blog-title">Awakening Byte</h1>
-            <h2 class="blog-description">You cannot travel the path until you become the path itself</h2>
-        </div>
-    </div>
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">Awakening Byte</a></h1>
+    <p><a href="/">You cannot travel the path until you become the path itself</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
 </header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2016/get-started-with-dotnet-core-on-docker/">
+  <time datetime="2016-04-12T01:22:56.000Z">
+    2016-04-11
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">Get Started With .NET Core on Docker</h1>
   
 
-<main class="content" role="main">
-  <article class="post">
-    <span class="post-meta">
-      <time datetime="2016-04-12T01:22:56.000Z" itemprop="datePublished">
-          2016-04-11
-      </time>
+  </header>
+  
+  <div class="entry">
     
-    
-    | 
-    <a href='/tags/docker/'>docker</a>,
-    
-    <a href='/tags/C/'>C#</a>,
-    
-    <a href='/tags/NET-Core/'>.NET Core</a>
-    
-    
-</span>
-    <h1 class="post-title">Get Started With .NET Core on Docker</h1>
-    <section class="post-content">
       <p>New .NET Core is the biggest change since the invention of .NET platform. It is fully open-source,  componentised and is supported by Windows, Linux and Mac OSX. In this post I am going to give it a test ride by creating a containerized C# appliction with the latest .NET CORE CLI tool. I want to get a feel of how this experience is close to working with node.js or ruby.</p>
 <h2 id="Enviroment"><a href="#Enviroment" class="headerlink" title="Enviroment"></a>Enviroment</h2><p>Instead of installing .NET Core and CLI tool locally, I am going to use a .NET container as both the build and runtime environment. Offical .NET Docker images are hosted at <a href="https://hub.docker.com/r/microsoft/dotnet" target="_blank" rel="external">https://hub.docker.com/r/microsoft/dotnet</a>.  Instructions on how to install Docker can be found from here: <a href="http://docs.docker.com/mac/started/" target="_blank" rel="external">Mac</a> , <a href="http://docs.docker.com/windows/started/" target="_blank" rel="external">Windows</a>, <a href="http://docs.docker.com/linux/started/" target="_blank" rel="external">Linux</a>.</p>
 <p>##Application</p>
@@ -133,68 +152,49 @@ dotnet test
 </code></pre><p>Following the green-red-refactory process, add tests and implementation untill all scenarios are coverd. Then we get a solution. The final code can be found <a href="https://github.com/MonsterCoder/Project_euler_problems/tree/master/54/CSharp" target="_blank" rel="external">here</a>. </p>
 <h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>In this post I have shown how we can develop and run an application based on .NET Core in a Docker container. Although be in the very early stages, the .NET Command Line Interface tool seems to be as easy to use as NPM or bundler.</p>
 
-    </section>
-    <footer class="post-footer">
-      <section class="author">
-    <h4>George Chen</h4>
-    <p></p>
-</section>
-      <section class="share">
-    <h4>Share this post</h4>
-    <a class="icon-twitter" href="http://twitter.com/share?url=http://monstercoder.github.io/2016/get-started-with-dotnet-core-on-docker/"
-       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-        <span class="hidden">Twitter</span>
-    </a>
-    <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://monstercoder.github.io/2016/get-started-with-dotnet-core-on-docker/"
-       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-        <span class="hidden">Facebook</span>
-    </a>
-    <a class="icon-google-plus" href="https://plus.google.com/share?url=http://monstercoder.github.io/2016/get-started-with-dotnet-core-on-docker/"
-       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-        <span class="hidden">Google+</span>
-    </a>
-</section>
-    </footer>
-  </article>
-  <nav class="pagination" role="pagination">
     
-    <a class="newer-posts" href="/2016/run-gitlab-on-Qnap451-nas/">
-        ← Run GitLab on QNAP NAS With Container
-    </a>
-    
-    <span class="page-number">•</span>
-    
-    <a class="older-posts" href="/2016/project-euler-54-f/">
-        Project Euler - Poker Hands (2) - F# →
-    </a>
-    
-</nav>
-  <div id="comment" class="comments-area">
-    <h1 class="title"><a href="#disqus_comments" name="disqus_comments">Comments</a></h1>
-
-    
-</div>
-</main>
-
-
-  
-<footer class="site-footer">
-  
-  <div class="inner">
-     <section class="copyright">All content copyright <a href="/">Awakening Byte</a> &copy; 2014 &bull; All rights reserved.</section>
-     <section class="poweredby">Proudly published with <a class="icon-ghost" href="http://zespia.tw/hexo/">Hexo</a></section>
   </div>
-</footer>
+  <footer>
+    
+      
+      
+  <div class="tags">
+    <a class="tags-link" href="/tags/NET-Core/">.NET Core</a>, <a class="tags-link" href="/tags/C/">C#</a>, <a class="tags-link" href="/tags/docker/">docker</a>
+  </div>
 
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
 
-<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
-<script type="text/javascript" src="/js/index.js"></script>
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2016 <a href="/">George Chen</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
 
 
 
 
-
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
 
 </body>
 </html>

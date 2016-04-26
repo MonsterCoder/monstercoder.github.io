@@ -1,62 +1,79 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
   <title>Build a Backend With Node.js, Container and Azure (3) | Awakening Byte</title>
-  <meta name="description" content="You cannot travel the path until you become the path itself" />
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <link rel="stylesheet" type="text/css" href="/css/screen.css" />
-  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic|Open+Sans:700,400" />
-
-  <meta name="generator" content="Awakening Byte">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="George Chen">
   
   
+    <meta name="description" content="In last post, We have created an API that accepts registration request, saves user information into database. Once a registration completed, we want to send a welcome email to the user. Sending email">
   
-
+  <meta name="description" content="In last post, We have created an API that accepts registration request, saves user information into database. Once a registration completed, we want to send a welcome email to the user. Sending email">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Build a Backend With Node.js, Container and Azure (3)">
+<meta property="og:url" content="http://monstercoder.github.io/2016/3/index.html">
+<meta property="og:site_name" content="Awakening Byte">
+<meta property="og:description" content="In last post, We have created an API that accepts registration request, saves user information into database. Once a registration completed, we want to send a welcome email to the user. Sending email">
+<meta property="og:updated_time" content="2016-04-09T19:23:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Build a Backend With Node.js, Container and Azure (3)">
+<meta name="twitter:description" content="In last post, We have created an API that accepts registration request, saves user information into database. Once a registration completed, we want to send a welcome email to the user. Sending email">
+  
+    <link rel="alternate" href="/atom.xml" title="Awakening Byte" type="application/atom+xml">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   
 </head>
 
-
-<body class="post-template">
-
-  <header class="site-head"  style="background-image: url(https://pbs.twimg.com/media/CS2ri2OUwAABH9s.jpg)" >
-    <div class="vertical">
-        <div class="site-head-content inner">
-             <a class="blog-logo" href="/"><img src="//blog.ghost.org/content/images/2013/Nov/bloglogo_1-1.png" alt="Blog Logo"/></a> 
-            <h1 class="blog-title">Awakening Byte</h1>
-            <h2 class="blog-description">You cannot travel the path until you become the path itself</h2>
-        </div>
-    </div>
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">Awakening Byte</a></h1>
+    <p><a href="/">You cannot travel the path until you become the path itself</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
 </header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2016/3/">
+  <time datetime="2016-04-09T19:08:38.000Z">
+    2016-04-09
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">Build a Backend With Node.js, Container and Azure (3)</h1>
   
 
-<main class="content" role="main">
-  <article class="post">
-    <span class="post-meta">
-      <time datetime="2016-04-09T19:08:38.000Z" itemprop="datePublished">
-          2016-04-09
-      </time>
+  </header>
+  
+  <div class="entry">
     
-    
-    | 
-    <a href='/tags/Node-js/'>Node.js</a>,
-    
-    <a href='/tags/microservice/'>microservice</a>,
-    
-    <a href='/tags/docker/'>docker</a>,
-    
-    <a href='/tags/architecture/'>architecture</a>
-    
-    
-</span>
-    <h1 class="post-title">Build a Backend With Node.js, Container and Azure (3)</h1>
-    <section class="post-content">
       <p>In last post, We have created an API that accepts registration request, saves user information into database. Once a registration completed, we want to send a welcome email to the user. Sending email is a time consuming task, it should be done asynchronously outside the user request/response cycle. This enables web requests to return immediately, results in better response time and higher throughput. </p>
 <h3 id="Email-worker"><a href="#Email-worker" class="headerlink" title="Email worker"></a>Email worker</h3><p>In this post we are going to create an email worker that runs in a seperated process, pulls tasks from message queue and sends emails. </p>
 <pre><code>var config = require(&apos;./config/config&apos;)
@@ -117,68 +134,49 @@ var processor = start_worker();
 </code></pre><p>Note that we are using the same repository as api. The EmailService is used by both api and work for message publish/subscribe. </p>
 <p>In next post, we will put everything together. Start a dev database, message queue, launch the API server, run the task work.</p>
 
-    </section>
-    <footer class="post-footer">
-      <section class="author">
-    <h4>George Chen</h4>
-    <p></p>
-</section>
-      <section class="share">
-    <h4>Share this post</h4>
-    <a class="icon-twitter" href="http://twitter.com/share?url=http://monstercoder.github.io/2016/3/"
-       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-        <span class="hidden">Twitter</span>
-    </a>
-    <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://monstercoder.github.io/2016/3/"
-       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-        <span class="hidden">Facebook</span>
-    </a>
-    <a class="icon-google-plus" href="https://plus.google.com/share?url=http://monstercoder.github.io/2016/3/"
-       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-        <span class="hidden">Google+</span>
-    </a>
-</section>
-    </footer>
-  </article>
-  <nav class="pagination" role="pagination">
     
-    <a class="newer-posts" href="/2016/project-euler-54-f/">
-        ← Project Euler - Poker Hands (2) - F#
-    </a>
-    
-    <span class="page-number">•</span>
-    
-    <a class="older-posts" href="/2016/project-euler-54/">
-        Project Euler - Poker Hands (1) - C# Solution →
-    </a>
-    
-</nav>
-  <div id="comment" class="comments-area">
-    <h1 class="title"><a href="#disqus_comments" name="disqus_comments">Comments</a></h1>
-
-    
-</div>
-</main>
-
-
-  
-<footer class="site-footer">
-  
-  <div class="inner">
-     <section class="copyright">All content copyright <a href="/">Awakening Byte</a> &copy; 2014 &bull; All rights reserved.</section>
-     <section class="poweredby">Proudly published with <a class="icon-ghost" href="http://zespia.tw/hexo/">Hexo</a></section>
   </div>
-</footer>
+  <footer>
+    
+      
+      
+  <div class="tags">
+    <a class="tags-link" href="/tags/Node-js/">Node.js</a>, <a class="tags-link" href="/tags/architecture/">architecture</a>, <a class="tags-link" href="/tags/docker/">docker</a>, <a class="tags-link" href="/tags/microservice/">microservice</a>
+  </div>
 
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
 
-<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
-<script type="text/javascript" src="/js/index.js"></script>
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2016 <a href="/">George Chen</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
 
 
 
 
-
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
 
 </body>
 </html>
