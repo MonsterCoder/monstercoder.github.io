@@ -2,82 +2,65 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="chrome=1">
   
   <title>Awakening Byte</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  
-    <meta name="author" content="George Chen">
+  <meta name="author" content="George Chen">
   
   
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Awakening Byte">
-<meta property="og:url" content="http://monstercoder.github.io/index.html">
-<meta property="og:site_name" content="Awakening Byte">
-<meta property="og:description">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Awakening Byte">
-<meta name="twitter:description">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
   
-    <link rel="alternate" href="/atom.xml" title="Awakening Byte" type="application/atom+xml">
+  <meta property="og:site_name" content="Awakening Byte"/>
+
   
+    <meta property="og:image" content="undefined"/>
   
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  
-  <link rel="stylesheet" href="/css/style.css">
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Awakening Byte" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   
+
 </head>
 
+
 <body>
-  <div class="wrapper">
-    <header id="header">
-  <div class="title">
-    <h1><a href="/">Awakening Byte</a></h1>
-    <p><a href="/">You cannot travel the path until you become the path itself</a></p>
-  </div>
-  <nav class="nav">
-    <ul>
-      
-        <li><a href="/">Home</a></li>
-      
-        <li><a href="/archives">Archives</a></li>
-      
-      
-        <li><a href="/atom.xml">RSS</a></li>
-      
-    </ul>
-    <div class="clearfix"></div>
-  </nav>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Awakening Byte</a></h1>
+  <h2><a href="/">You cannot travel the path until you become the path itself</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
   <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
 </header>
-    <div class="content">
-
-
-
-
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
   
-    <article class="post">
-  <header>
-    
-      <div class="icon"></div>
-      <a href="/2016/run-gitlab-on-Qnap451-nas/">
-  <time datetime="2016-04-13T00:53:41.000Z">
-    2016-04-12
-  </time>
-</a>
-    
-    
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-13T00:53:41.000Z"><a href="/2016/run-gitlab-on-Qnap451-nas/">2016-04-12</a></time>
+      
+      
   
     <h1 class="title"><a href="/2016/run-gitlab-on-Qnap451-nas/">Run GitLab on QNAP NAS With Container</a></h1>
   
 
-  </header>
-  
-  <div class="entry">
-    
-      <p>GitLab is a web-based Git repository manager with Git repository management, code reviews, issue tracking, wikis. It is very similar to GitHub but can be hosted on your own server. It will be awesome to have an on-permise git server for my private projects and personal documents. I can also use it to mirror remote repositories hosted on GitHub. Recently I bought a QNAP 451 NAS. It has a feature called Container Station, which integrates Linux Containers (LXC) and Docker virtualisation technologies. Container Station allows me to operate multiple isolated Linux® systems on a QNAP NAS. This makes this NAS a perfect host for my git server.</p>
+    </header>
+    <div class="entry">
+      
+        <p>GitLab is a web-based Git repository manager with Git repository management, code reviews, issue tracking, wikis. It is very similar to GitHub but can be hosted on your own server. It will be awesome to have an on-permise git server for my private projects and personal documents. I can also use it to mirror remote repositories hosted on GitHub. Recently I bought a QNAP 451 NAS. It has a feature called Container Station, which integrates Linux Containers (LXC) and Docker virtualisation technologies. Container Station allows me to operate multiple isolated Linux® systems on a QNAP NAS. This makes this NAS a perfect host for my git server.</p>
 <h2 id="Create-a-GitLab-container"><a href="#Create-a-GitLab-container" class="headerlink" title="Create a GitLab container"></a>Create a GitLab container</h2><p>First you need to have Container Station Installed. <a href="https://www.qnap.com/i/en/tutorial/con_show.php?op=showone&amp;cid=179" target="_blank" rel="external">Here</a> you can find detailed instructions on how to do that.</p>
 <p><img src="/images/AppCenter.jpg" alt="App Store"></p>
 <p>Then open Container Station, click <code>Create Container</code>, choose GitLib which happens to be the first one in list.</p>
@@ -116,39 +99,38 @@ e0805483da90        sameersbn/gitlab:8.2.3        &quot;/sbin/entrypoint.sh &quo
 <p><code>Network port mappings are not the only way Docker containers can connect to one another. Docker also has a linking system that allows you to link multiple containers together and send connection information from one to another. When containers are linked, information about a source container can be sent to a recipient container. This allows the recipient to see selected data describing aspects of the source container</code></p>
 <h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>Thanks for Container Station, setting up a GitLab server on QNAP NAS is a straight forward and joyful job. QNAP does an excellent job in integrating Docker virtualization with its QTS operating system. If you need more control, you still have full access to the Docker engine which QNAP Container Station built on top.</p>
 
-    
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
   </div>
-  <footer class="end-sep">
-    
-      
-      
-    
-    <div class="clearfix"></div>
-  </footer>
 </article>
 
 
+
+
+  <article class="post">
   
-    <article class="post">
-  <header>
-    
-      <div class="icon"></div>
-      <a href="/2016/get-started-with-dotnet-core-on-docker/">
-  <time datetime="2016-04-12T01:22:56.000Z">
-    2016-04-11
-  </time>
-</a>
-    
-    
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-12T01:22:56.000Z"><a href="/2016/get-started-with-dotnet-core-on-docker/">2016-04-11</a></time>
+      
+      
   
     <h1 class="title"><a href="/2016/get-started-with-dotnet-core-on-docker/">Get Started With .NET Core on Docker</a></h1>
   
 
-  </header>
-  
-  <div class="entry">
-    
-      <p>New .NET Core is the biggest change since the invention of .NET platform. It is fully open-source,  componentised and is supported by Windows, Linux and Mac OSX. In this post I am going to give it a test ride by creating a containerized C# appliction with the latest .NET CORE CLI tool. I want to get a feel of how this experience is close to working with node.js or ruby.</p>
+    </header>
+    <div class="entry">
+      
+        <p>New .NET Core is the biggest change since the invention of .NET platform. It is fully open-source,  componentised and is supported by Windows, Linux and Mac OSX. In this post I am going to give it a test ride by creating a containerized C# appliction with the latest .NET CORE CLI tool. I want to get a feel of how this experience is close to working with node.js or ruby.</p>
 <h2 id="Enviroment"><a href="#Enviroment" class="headerlink" title="Enviroment"></a>Enviroment</h2><p>Instead of installing .NET Core and CLI tool locally, I am going to use a .NET container as both the build and runtime environment. Offical .NET Docker images are hosted at <a href="https://hub.docker.com/r/microsoft/dotnet" target="_blank" rel="external">https://hub.docker.com/r/microsoft/dotnet</a>.  Instructions on how to install Docker can be found from here: <a href="http://docs.docker.com/mac/started/" target="_blank" rel="external">Mac</a> , <a href="http://docs.docker.com/windows/started/" target="_blank" rel="external">Windows</a>, <a href="http://docs.docker.com/linux/started/" target="_blank" rel="external">Linux</a>.</p>
 <p>##Application</p>
 <p>I am building a solution to solve <a href="https://projecteuler.net/problem=54" target="_blank" rel="external">Poker hands problem</a>. First, Lets get started by adding a project directory.</p>
@@ -226,39 +208,38 @@ dotnet test
 </code></pre><p>Following the green-red-refactory process, add tests and implementation untill all scenarios are coverd. Then we get a solution. The final code can be found <a href="https://github.com/MonsterCoder/Project_euler_problems/tree/master/54/CSharp" target="_blank" rel="external">here</a>. </p>
 <h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>In this post I have shown how we can develop and run an application based on .NET Core in a Docker container. Although be in the very early stages, the .NET Command Line Interface tool seems to be as easy to use as NPM or bundler.</p>
 
-    
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
   </div>
-  <footer class="end-sep">
-    
-      
-      
-    
-    <div class="clearfix"></div>
-  </footer>
 </article>
 
 
+
+
+  <article class="post">
   
-    <article class="post">
-  <header>
-    
-      <div class="icon"></div>
-      <a href="/2016/project-euler-54-f/">
-  <time datetime="2016-04-10T15:27:12.000Z">
-    2016-04-10
-  </time>
-</a>
-    
-    
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-10T15:27:12.000Z"><a href="/2016/project-euler-54-f/">2016-04-10</a></time>
+      
+      
   
     <h1 class="title"><a href="/2016/project-euler-54-f/">Project Euler - Poker Hands (2) - F#</a></h1>
   
 
-  </header>
-  
-  <div class="entry">
-    
-      <p>In previous post I showed a C# solution to the Poker-hands problem. Since I’ve become more and more interested in functional programming languages, I would like to create another solution in F# and give a comparison to the C# one.</p>
+    </header>
+    <div class="entry">
+      
+        <p>In previous post I showed a C# solution to the Poker-hands problem. Since I’ve become more and more interested in functional programming languages, I would like to create another solution in F# and give a comparison to the C# one.</p>
 <p>##Solution</p>
 <pre><code>open System
 open System.IO
@@ -359,39 +340,38 @@ File.ReadAllLines(@&quot;p054_poker.txt&quot;)
 | OnePair s                     -&gt; &quot;10&quot; + s
 | _ -&gt; &quot;0&quot; + valuesH2L
 </code></pre>
-    
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
   </div>
-  <footer class="end-sep">
-    
-      
-      
-    
-    <div class="clearfix"></div>
-  </footer>
 </article>
 
 
+
+
+  <article class="post">
   
-    <article class="post">
-  <header>
-    
-      <div class="icon"></div>
-      <a href="/2016/3/">
-  <time datetime="2016-04-09T19:08:38.000Z">
-    2016-04-09
-  </time>
-</a>
-    
-    
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-09T19:08:38.000Z"><a href="/2016/3/">2016-04-09</a></time>
+      
+      
   
     <h1 class="title"><a href="/2016/3/">Build a Backend With Node.js, Container and Azure (3)</a></h1>
   
 
-  </header>
-  
-  <div class="entry">
-    
-      <p>In last post, We have created an API that accepts registration request, saves user information into database. Once a registration completed, we want to send a welcome email to the user. Sending email is a time consuming task, it should be done asynchronously outside the user request/response cycle. This enables web requests to return immediately, results in better response time and higher throughput. </p>
+    </header>
+    <div class="entry">
+      
+        <p>In last post, We have created an API that accepts registration request, saves user information into database. Once a registration completed, we want to send a welcome email to the user. Sending email is a time consuming task, it should be done asynchronously outside the user request/response cycle. This enables web requests to return immediately, results in better response time and higher throughput. </p>
 <h3 id="Email-worker"><a href="#Email-worker" class="headerlink" title="Email worker"></a>Email worker</h3><p>In this post we are going to create an email worker that runs in a seperated process, pulls tasks from message queue and sends emails. </p>
 <pre><code>var config = require(&apos;./config/config&apos;)
 var nodemailer = require(&apos;nodemailer&apos;);
@@ -451,39 +431,38 @@ var processor = start_worker();
 </code></pre><p>Note that we are using the same repository as api. The EmailService is used by both api and work for message publish/subscribe. </p>
 <p>In next post, we will put everything together. Start a dev database, message queue, launch the API server, run the task work.</p>
 
-    
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
   </div>
-  <footer class="end-sep">
-    
-      
-      
-    
-    <div class="clearfix"></div>
-  </footer>
 </article>
 
 
+
+
+  <article class="post">
   
-    <article class="post">
-  <header>
-    
-      <div class="icon"></div>
-      <a href="/2016/project-euler-54/">
-  <time datetime="2016-04-03T17:12:14.000Z">
-    2016-04-03
-  </time>
-</a>
-    
-    
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-03T17:12:14.000Z"><a href="/2016/project-euler-54/">2016-04-03</a></time>
+      
+      
   
     <h1 class="title"><a href="/2016/project-euler-54/">Project Euler - Poker Hands (1) - C# Solution</a></h1>
   
 
-  </header>
-  
-  <div class="entry">
-    
-      <p>To see the real power of a functional langulage, I would apply it to a complicate problem. The problem 54, <a href="https://projecteuler.net/problem=54" target="_blank" rel="external">porker hands</a> looks a good candidate for this advanture.</p>
+    </header>
+    <div class="entry">
+      
+        <p>To see the real power of a functional langulage, I would apply it to a complicate problem. The problem 54, <a href="https://projecteuler.net/problem=54" target="_blank" rel="external">porker hands</a> looks a good candidate for this advanture.</p>
 <p>##Problem</p>
 <blockquote>
 <p>In the card game poker, a hand consists of five cards and are ranked, from lowest to highest, in the following way:</p>
@@ -709,43 +688,376 @@ public void Full_house_vs_flash()
 <h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>   We see some of the benifits of OOP here. A clear modular structure good for defining abstract types where implementation details are hidden and the unit has a clearly defined interface. Implementation can be shared between classes. </p>
 <p>However, for algorithm focused problems, function languages normally produce a more concise, efficient solution. In post, I will revisit this problem  with a functional solution</p>
 
-    
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
   </div>
-  <footer class="end-sep">
-    
-      
-      
-    
-    <div class="clearfix"></div>
-  </footer>
 </article>
 
 
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-01T16:07:57.000Z"><a href="/2016/project-euler/">2016-04-01</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/project-euler/">Project Euler Problems</a></h1>
   
 
-  <nav id="pagination">
+    </header>
+    <div class="entry">
+      
+        <p>First time I came across a project-euler problem was at Stack Overflow. While answering an algorithem question, I found the <a href="https://projecteuler.net" target="_blank" rel="external">Project Euler</a> provides a fun way to learn new concepts and keep my problem solving and mathematics skills sharp. </p>
+<blockquote>
+<p>Project Euler is a series of challenging mathematical/computer programming problems that will require more than just mathematical insights to solve. Although mathematics will help you arrive at elegant and efficient methods, the use of a computer and programming skills will be required to solve most problems.</p>
+</blockquote>
+<p>So I decide to solve one problem a day and keep my solutions here. To spicy things up, I want solve each problem with two different languages. One imperative language that I am already comfortable with,  such as C#, ruby, java, javascript. Another one, I would use a functional language. </p>
+<h3 id="Problem-1-Multiples-of-3-and-5"><a href="#Problem-1-Multiples-of-3-and-5" class="headerlink" title="Problem 1: Multiples of 3 and 5"></a>Problem 1: Multiples of 3 and 5</h3><blockquote>
+<p>If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23.<br>Find the sum of all the multiples of 3 or 5 below 1000.</p>
+</blockquote>
+<h4 id="Solution-1"><a href="#Solution-1" class="headerlink" title="Solution 1"></a>Solution 1</h4><p>C#</p>
+<p>It could be something like this</p>
+<pre><code>var result = 0;
+
+for(var i =1; i &lt; 1000; i ++) {
+  if (i % 3 == 0 || 1 % 5 ==0 ) {
+    result += i;
+  }
+}
+</code></pre><p>But NO, I really don’t want see any for-loop or while-loop here. Using C# doesn’t mean you cannot do it in a concise, declaritive style. Here you go:</p>
+<pre><code>Enumerable
+.Range(1, 999)
+.Where(n =&gt; (n % 3) * (n % 5) ==0)
+.Sum();
+</code></pre><h4 id="Solution-2"><a href="#Solution-2" class="headerlink" title="Solution 2"></a>Solution 2</h4><p>Lets do it in a real functional language.</p>
+<p>F#</p>
+<pre><code>[1..999] |&gt; List.filter (fun n -&gt; (n % 5) * (n % 3) = 0 ) |&gt; List.sum
+</code></pre>
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
   
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-01-11T18:12:14.000Z"><a href="/2016/2/">2016-01-11</a></time>
+      
+      
   
-    <a href="/page/2/" class="next">Next</a>
+    <h1 class="title"><a href="/2016/2/">Build a Backend With Node.js, Container and Azure (2)</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Node.js is a popular a server-side framework for building high performance backend. In this post we will be looking at creating a backend API using using Node, Express and Mongoose. It will handle user registration requests and publish a message to job queue.</p>
+<h3 id="Creating-the-App"><a href="#Creating-the-App" class="headerlink" title="Creating the App"></a>Creating the App</h3><p>Our project structure is like the following. We will keep this very simple for the demonstration purposes.</p>
+<pre><code>├── server.js
+└── src
+    ├── api.js
+    └── email_service.js
+├── config
+│   └── config.js
+├── model
+│   └── user.js
+├── package.json
+├── docker-compose.yml
+├── Dockerfile
+</code></pre><p>Fist,  create the package.json </p>
+<pre><code>npm init
+</code></pre><p>This will ask you a bunch of questions, and then write a package.json for you. Now install the packages we will be using in this project.</p>
+<pre><code>npm install --save express mongoose body-parser amqplib
+</code></pre><p>Then, we define a user model with Mongoose. Mongoose provides a schema-based way to model application data. It includes built-in type casting, validation, query building, business logic hooks and more, out of the box.</p>
+<p>   var mongoose = require(‘mongoose’);</p>
+<pre><code>var userSchema = new mongoose.Schema({
+  email : { 
+    type: String, 
+    trim: true, 
+    required: true, 
+    index: { unique: true, uniqueCaseInsensitive: true },
+    validate: {
+      validator: function(v) {
+            p =/^[a-zA-Z0-9.!#$%&amp;&apos;*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/i
+            p.test(v);
+        },
+          message: &apos;{VALUE} is not a valid email address!&apos;
+        }
+    },
+    created_at: { type: Date, default: Date.now },
+  }
+)
+
+module.exports = mongoose.model(&apos;User&apos;, userSchema);
+</code></pre><p>Now lets look at the api.js. In this file we define how our api responds to a client request to a particular endpoint, which is a URI (or path) and a specific HTTP request method (GET, POST, and so on).<br>Here we has a handler function that accepts a post request, creates a new user. Once the registration has completed, it publish an email sending job to message queue. </p>
+<p>app.js</p>
+<pre><code>app.post(&apos;/register&apos;, function(req, res) {
+    var user = new User(req.body);
+    user
+    .save()
+    .then(
+        function(u) {
+            email_service.send_welcome_email(u);
+            return res.json({success: true})
+        },
+        function(err) {
+            return res.status(400).json({sucess: false, data: req.body, error: err})
+        }
+    )
+});
+</code></pre><p>We will delegate the work of sending email task to the email_servie. Note the send_welcome_email is a non-block function. </p>
+<p>email_service.js</p>
+<pre><code>EmailService.prototype.send_welcome_email = function(customer) {
+    var self = this;
+
+    if (self.ch) {
+         process.nextTick(function() {
+                 send_to_queue(self.ch, email_queue, customer.email);
+         })
+    } else {
+        self.conn.createConfirmChannel( function(err, ch) {
+            if (err) {
+                return console.error(err);
+            }
+        self.ch = ch;
+        ch.on(&quot;error&quot;, function(err) { console.error(err)});
+        send_to_queue(self.ch, email_queue, customer.email)
+      })
+    }                                        
+}
+
+function send_to_queue(ch, q_name, content) {
+    ch.publish(&apos;&apos;, q_name, new Buffer(content), { persistent: true },
+        function (err, ok) {
+            if (err) {
+                console.error(&quot;[AMQP] publish &quot;, err);
+                pubChannel.connection.close();
+            }
+    })
+}    
+</code></pre><p>The email service publishes an email task to message queue. In next post, we will implement a work process that picks up an email task from the message queue and send an email out throught SMTP. </p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-12-22T05:33:02.000Z"><a href="/2015/deploy-node-app-to-azure-website/">2015-12-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2015/deploy-node-app-to-azure-website/">Troubleshoot Your node.js App Deployment on Azure Website</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Deploying Node applications to Azure website seems simple. Just set up continuous deployment on the Azure Portal. Azure will build, test and automatically depoly your app when you check in code. Everything runs so well until you open a browser, navigate to the webisite url and see this: 500 internal server error. That was exactly the case we had in last project. The application was written in node &amp; express with dependancies to 52 npm packages including babel, redis, new relic, gulp, webpack. It works like a charm on local servers, just not on Azure website with git deployment. As usual, most documentation we found online are about “Hello world” which won’t help much with a production problem. Here are some of the steps we used to diagnose and analysis the deploy problem and make it work.</p>
+<h2 id="Test-compilation-on-windows"><a href="#Test-compilation-on-windows" class="headerlink" title="Test compilation on windows"></a>Test compilation on windows</h2><p>During npm install, some node modules with native extensions will be compiled to match the hosting OS and architecture(x86 or x64). If the application is developed on Mac OS, Linux and deploy to Azure website, first thing to do is to confirm that every module is compatible with windows platfom. </p>
+<p>##web.config file<br>Under the hood, Azure website hosts node.js apps with iisnode. You need a web.config to config iisnode. If you use git deployment, when Azure detects an app.js or server.js file, it will automatically generate a web.config. Or you can add a custom one manually. Open the web.config file, and check the handlers section. Make sure it points to the correct application entry point.</p>
+<pre><code>&lt;handlers&gt;
+    &lt;add name=&quot;iisnode&quot; path=&quot;app.js&quot; verb=&quot;*&quot; modules=&quot;iisnode&quot;/&gt;
+&lt;/handlers&gt;
+</code></pre><h2 id="Enviroment-variables"><a href="#Enviroment-variables" class="headerlink" title="Enviroment variables"></a>Enviroment variables</h2><p>You can set enviroment variables through website portal or Azure CLI. The easiest way to check their value is through website portal, under <strong>config</strong> section, choose app settings. Or if you are using Azure CLI, run</p>
+<pre><code>azure site config list your-site
+</code></pre><p>Make sure there is no PORT setting. iisnode will use this variable to pipe IIS to your app.<br>Also check value of WEBSITE_NODE_DEFAULT_VERSION, it sets default node version used by the target website.</p>
+<h2 id="Check-in-node-modules"><a href="#Check-in-node-modules" class="headerlink" title="Check in node_modules"></a>Check in node_modules</h2><p>When using git deployment, normally we don’t check in node_modules. However, according to this Azure documentation</p>
+<blockquote>
+<p>Azure Websites does not support all native modules and might fail at compiling those with very specific prerequisites. </p>
+</blockquote>
+<p>So if all the about steps don’t help, you might want to test it out by checking in you node_modules. Remember, before checkin, run npm install on a windows platform with some architecture of you website.</p>
+<h2 id="Enable-Application-log"><a href="#Enable-Application-log" class="headerlink" title="Enable Application log"></a>Enable Application log</h2><p>Add the following to your iisnode.yml</p>
+<pre><code>node_env: production
+loggingEnabled: true
+devErrorsEnabled: true
+</code></pre><p>Then you can use Azure CLI to live stream the logs</p>
+<pre><code>$ azure site log tail sampleBlog
+</code></pre><h2 id="Debug-with-Kudu"><a href="#Debug-with-Kudu" class="headerlink" title="Debug with Kudu"></a>Debug with Kudu</h2><p><a href="https://github.com/" target="_blank" rel="external">Kudu</a> is the engine behind git deployments in Azure Web Sites.<br>Every Azure web site has an associated ‘scm’ service site at <a href="https://your-site.scm.azurewebsites.net/" target="_blank" rel="external">https://your-site.scm.azurewebsites.net/</a>. It provides a set of tools for troubleshooting and analysis your node.js website. You can:</p>
+<ul>
+<li>Launch the <a href="https://github.com/projectkudu/kudu/wiki/Kudu-console" target="_blank" rel="external">diagnostic console</a></li>
+<li>Check runtime environment</li>
+<li>Monitor active node process</li>
+</ul>
+<p>Open the debug console, choose CMD or powershell.<br>Then start you app with node.exe directly</p>
+<pre><code>$ cd D:\home\site\wwwroot&gt; 
+$ node app.js
+</code></pre><p>If you see an error from a node module, it might be caused by either wrong node version or corrupt node_module.  Check the current node version </p>
+<pre><code>$ node -v
+</code></pre><p>make sure it is your target version. Run npm install for the failed module if necessary. Once the app starts from console, you can close it and restart your website. Open a browser and see your website start working.</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-08-13T23:12:03.000Z"><a href="/2015/1/">2015-08-13</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2015/1/">Build a Backend With Node.js, Container and Azure (1)</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>These years I have worked with several projects with non-profite organizations and Startups. Here are some common features to these projects.</p>
+<ul>
+<li>Scalability: it starts from small, but need scale up easily</li>
+<li>Agility: be able to move to different platforms</li>
+<li>Flexiblity: components and features might be expanded or replaced</li>
+<li>Management &amp; Operations: not to keep own infrastructure </li>
+<li>Limited budget</li>
+</ul>
+<p>Rails and Heroku are used to be my first choice for these. RoR is an amazing framework with a strong ecosystem.  While Heroku offers instant deployment, easy scaling and requires little manitainace. </p>
+<p>Until last year, I swithced to Node.js and docker container for even more simplicity and scalability.<br>Lets uses an example to prove it.</p>
+<h2 id="example-application"><a href="#example-application" class="headerlink" title="example application"></a>example application</h2><p>Lets say we are going to build a REST API for user registration. User sign-up your service with a mobile or web client which will call the API. After a successful sginup, the backend will send the user a welcome email with a confirmation link. </p>
+<p>It contains the following services:</p>
+<ul>
+<li>Registration API</li>
+<li>MongoDB</li>
+<li>Email-worker</li>
+<li>Message Queue</li>
+</ul>
+<h2 id="setup"><a href="#setup" class="headerlink" title="setup"></a>setup</h2><h3 id="install-node-js"><a href="#install-node-js" class="headerlink" title="install node.js"></a>install node.js</h3><p>First we need to install node and updating npm on our dev machine. <a href="https://docs.npmjs.com/getting-started/installing-node" target="_blank" rel="external">link</a> </p>
+<h3 id="start-MongoDB-and-RabbitMQ-services"><a href="#start-MongoDB-and-RabbitMQ-services" class="headerlink" title="start MongoDB and RabbitMQ services"></a>start MongoDB and RabbitMQ services</h3><p>Login to Microsoft Azure porta<br>(if you don’t have an Azure Subscription, get a <a href="https://azure.microsoft.com/en-us/pricing/free-trial/" target="_blank" rel="external">free trial</a>)</p>
+<p>Go to  “Virtual Machines” and create a vm from Docker on Unbuntu Server image</p>
+<p>SSH into your new created VM</p>
+<p>then start services with the following command</p>
+<pre><code>$ docker run -d --name mongo-server -p 27017:27017 mongo:3
+$ docker run -d --name rabbit-server -p 15672:15672 -p 4369:4369 -p 5671:5671 -p 5672:5672 -p 25672:25672 --hostname rabbit  -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=admin rabbitmq:3-management
+</code></pre><p>run</p>
+<pre><code>$ docker ps
+</code></pre><p>you should see containers of MongoDB and RabbitMQ are up and running.</p>
+<h2 id="REST-API"><a href="#REST-API" class="headerlink" title="REST API"></a>REST API</h2><p>in next post, we are going to implement an REST API servic using Node.js and deploy to it Azure website. Keep tuned.</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+<nav id="pagination">
+  
   
   <div class="clearfix"></div>
-</nav>
+</nav></div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:monstercoder.github.io">
+  </form>
+</div>
 
+  
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/NET-Core/">.NET Core</a><small>1</small></li>
+  
+    <li><a href="/tags/Azure/">Azure</a><small>1</small></li>
+  
+    <li><a href="/tags/C/">C#</a><small>3</small></li>
+  
+    <li><a href="/tags/Container/">Container</a><small>1</small></li>
+  
+    <li><a href="/tags/F/">F#</a><small>2</small></li>
+  
+    <li><a href="/tags/GitLab/">GitLab</a><small>1</small></li>
+  
+    <li><a href="/tags/Node-js/">Node.js</a><small>4</small></li>
+  
+    <li><a href="/tags/architecture/">architecture</a><small>3</small></li>
+  
+    <li><a href="/tags/docker/">docker</a><small>5</small></li>
+  
+    <li><a href="/tags/microservice/">microservice</a><small>3</small></li>
+  
+    <li><a href="/tags/project-euler/">project-euler</a><small>3</small></li>
+  
+  </ul>
 </div>
+
+</aside>
+    <div class="clearfix"></div>
   </div>
-  <footer id="footer"><div class="copyright">
+  <footer id="footer" class="inner"><div class="alignleft">
   
-  &copy; 2016 <a href="/">George Chen</a>
+  &copy; 2016 George Chen
   
-</div>
-<div class="theme-copyright">
-  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
-   | 
-  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
 </div>
 <div class="clearfix"></div></footer>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
-<script src="/js/scale.fix.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 
@@ -755,9 +1067,9 @@ public void Full_house_vs_flash()
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
 <script src="/fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
-  (function($){
-    $('.fancybox').fancybox();
-  })(jQuery);
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
 </script>
 
 </body>
