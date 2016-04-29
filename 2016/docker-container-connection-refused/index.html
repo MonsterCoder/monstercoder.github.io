@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Project Euler Problems | Awakening Byte</title>
+  <title>Docker Container Connection Refused | Awakening Byte</title>
   <meta name="author" content="George Chen">
   
-  <meta name="description" content="First time I came across a project-euler problem was at Stack Overflow. While answering an algorithem question, I found the Project Euler provides a f">
+  <meta name="description" content="I’ve been playing with .NET Core CLI recently and came across cli-samples on github. The projects in this repository show working examples using the d">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Project Euler Problems"/>
+  <meta property="og:title" content="Docker Container Connection Refused"/>
   <meta property="og:site_name" content="Awakening Byte"/>
 
   
@@ -54,42 +54,77 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-01T16:07:57.000Z"><a href="/2016/project-euler/">2016-04-01</a></time>
+        <time datetime="2016-04-29T05:03:59.000Z"><a href="/2016/docker-container-connection-refused/">2016-04-29</a></time>
       
       
   
-    <h1 class="title">Project Euler Problems</h1>
+    <h1 class="title">Docker Container Connection Refused</h1>
   
 
     </header>
     <div class="entry">
       
-        <p>First time I came across a project-euler problem was at Stack Overflow. While answering an algorithem question, I found the <a href="https://projecteuler.net" target="_blank" rel="external">Project Euler</a> provides a fun way to learn new concepts and keep my problem solving and mathematics skills sharp. </p>
-<blockquote>
-<p>Project Euler is a series of challenging mathematical/computer programming problems that will require more than just mathematical insights to solve. Although mathematics will help you arrive at elegant and efficient methods, the use of a computer and programming skills will be required to solve most problems.</p>
-</blockquote>
-<p>So I decide to solve one problem a day and keep my solutions here. To spicy things up, I want solve each problem with two different languages. One imperative language that I am already comfortable with,  such as C#, ruby, java, javascript. Another one, I would use a functional language. </p>
-<h3 id="Problem-1-Multiples-of-3-and-5"><a href="#Problem-1-Multiples-of-3-and-5" class="headerlink" title="Problem 1: Multiples of 3 and 5"></a>Problem 1: Multiples of 3 and 5</h3><blockquote>
-<p>If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23.<br>Find the sum of all the multiples of 3 or 5 below 1000.</p>
-</blockquote>
-<h4 id="Solution-1"><a href="#Solution-1" class="headerlink" title="Solution 1"></a>Solution 1</h4><p>C#</p>
-<p>It could be something like this</p>
-<pre><code>var result = 0;
+        <p>I’ve been playing with .NET Core CLI recently and came across <a href="https://github.com/aspnet/cli-samples" target="_blank" rel="external">cli-samples</a> on github. The projects in this repository show working examples using the dotnet CLI and ASP.NET 5. Everything runs well on Mac OS. Then I decided to make a docker image from the HelloMvc project.</p>
+<p>The Dockerfile is quite simple</p>
+<pre><code>FROM microsoft/dotnet-preview
+RUN mkdir /src
+WORKDIR /src
+ADD . /src
+RUN dotnet restore
+RUN dotnet build
+CMD dotnet run
+</code></pre><p>Built and runned with port 5000 exposed </p>
+<pre><code>docker run --rm  -v $(pwd):/src -p 5000:5000 -w /src HelloMvc
+</code></pre><p>The application started and was listening on port 5000. Looks good.</p>
+<pre><code>Project HelloMvc (.NETCoreApp,Version=v1.0) will be compiled because inputs were modified
+Compiling HelloMvc for .NETCoreApp,Version=v1.0
+/src/HelloMvc/project.json(6,26): warning DOTNET1015: The &apos;compilationOptions&apos; option is deprecated. Use &apos;buildOptions&apos; instead.
 
-for(var i =1; i &lt; 1000; i ++) {
-  if (i % 3 == 0 || 1 % 5 ==0 ) {
-    result += i;
-  }
+Compilation succeeded.
+    1 Warning(s)
+    0 Error(s)
+
+Time elapsed 00:00:07.9852201
+
+dbug: Microsoft.AspNetCore.Hosting.Internal.WebHost[3]
+      Hosting starting
+dbug: Microsoft.AspNetCore.Hosting.Internal.WebHost[4]
+      Hosting started
+Hosting environment: Production
+Content root path: /src/HelloMvc
+Now listening on: http://localhost:5000
+Application started. Press Ctrl+C to shut down.
+</code></pre><p>The ip address of docker machine is</p>
+<pre><code>docker-machine ip default
+
+192.168.99.100
+</code></pre><p>However, when I opened a browser and typed in <a href="http://192.168.99.100:5000" target="_blank" rel="external">http://192.168.99.100:5000</a>, I saw this</p>
+<pre><code>This site can’t be reached
+
+192.168.99.100 refused to connect.
+</code></pre><p>What is going on? It worked well without container, and port 5000 is exposed to outside access. When list the active containers, I can see that the port binding is from 0.0.0.0:5000 to 5000, which allows inbound access from all netword interfaces.</p>
+<pre><code>docker ps
+
+CONTAINER ID        IMAGE                      COMMAND             CREATED             STATUS              PORTS                 
+c94a021995d9        HelloMvc   &quot;dotnet run&quot;         12 seconds ago      Up 11 seconds       0.0.0.0:5000-&gt;5000/tcp  
+</code></pre><p>However, the MVC application listens to 127.0.0.1:5000 by default, which is a loopback ip address. As a result, it only acceps connection requets within the current host. Connections from outside the container will be simply refused. I need to make it listen to all network interferface by listening to 0.0.0.0. All that need to be changed was the program.cs</p>
+<pre><code>public class Program
+{
+    public static void Main(string[] args)
+    {
+        var host = new WebHostBuilder()
+                    .UseKestrel()
+                    .UseContentRoot(Directory.GetCurrentDirectory())
+                    .UseIISIntegration()
+                    .UseStartup&lt;Startup&gt;()
+                    .UseUrls(&quot;http://0.0.0.0:5000&quot;)
+                    .Build();
+
+        host.Run();
+    }
 }
-</code></pre><p>But NO, I really don’t want see any for-loop or while-loop here. Using C# doesn’t mean you cannot do it in a concise, declaritive style. Here you go:</p>
-<pre><code>Enumerable
-.Range(1, 999)
-.Where(n =&gt; (n % 3) * (n % 5) ==0)
-.Sum();
-</code></pre><h4 id="Solution-2"><a href="#Solution-2" class="headerlink" title="Solution 2"></a>Solution 2</h4><p>Lets do it in a real functional language.</p>
-<p>F#</p>
-<pre><code>[1..999] |&gt; List.filter (fun n -&gt; (n % 5) * (n % 3) = 0 ) |&gt; List.sum
-</code></pre>
+</code></pre><p>Hope this may save someone a few hours of time.</p>
+
       
     </div>
     <footer>
@@ -98,7 +133,7 @@ for(var i =1; i &lt; 1000; i ++) {
         
   
   <div class="tags">
-    <a href="/tags/C/">C#</a>, <a href="/tags/project-euler/">project-euler</a>, <a href="/tags/F/">F#</a>
+    <a href="/tags/docker/">docker</a>, <a href="/tags/ASP-Net-Core/">ASP.Net Core</a>, <a href="/tags/NET-Core/">.NET Core</a>, <a href="/tags/NET-Core-CLI/">.NET Core CLI</a>
   </div>
 
         
@@ -141,7 +176,7 @@ for(var i =1; i &lt; 1000; i ++) {
   }(document, 'script', 'facebook-jssdk'));
 </script>
 
-<div class="fb-comments" data-href="http://monstercoder.github.io/2016/project-euler/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+<div class="fb-comments" data-href="http://monstercoder.github.io/2016/docker-container-connection-refused/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
       
   
 </section>
