@@ -63,7 +63,7 @@
     </header>
     <div class="entry">
       
-        <p>I’ve been playing with .NET Core CLI recently and came across <a href="https://github.com/aspnet/cli-samples" target="_blank" rel="external">cli-samples</a> on github. The projects in this repository show working examples using the dotnet CLI and ASP.NET 5. Everything runs well on Mac OS. Then I decided to make a docker image from the HelloMvc project.</p>
+        <p>I’ve been playing with .NET Core CLI recently and came across <a href="https://github.com/aspnet/cli-samples" target="_blank" rel="external">cli-samples</a> on Github. The projects in this repository show working examples using the dotnet CLI and ASP.NET 5. Everything runs well on Mac OS. Then I decided to make a docker image from the HelloMvc project.</p>
 <p>The Dockerfile is quite simple</p>
 <pre><code>FROM microsoft/dotnet-preview
 RUN mkdir /src
@@ -93,7 +93,7 @@ Hosting environment: Production
 Content root path: /src/HelloMvc
 Now listening on: http://localhost:5000
 Application started. Press Ctrl+C to shut down.
-</code></pre><p>The ip address of docker machine is</p>
+</code></pre><p>The IP address of docker machine is</p>
 <pre><code>docker-machine ip default
 
 192.168.99.100
@@ -101,12 +101,12 @@ Application started. Press Ctrl+C to shut down.
 <pre><code>This site can’t be reached
 
 192.168.99.100 refused to connect.
-</code></pre><p>What is going on? It worked well without container, and port 5000 is exposed to outside access. When list the active containers, I can see that the port binding is from 0.0.0.0:5000 to 5000, which allows inbound access from all netword interfaces.</p>
+</code></pre><p>What is going on? It worked well without container, and port 5000 is exposed to outside access. When listing the active containers, I can see that the port binding is from 0.0.0.0:5000 to 5000, which allows inbound access from all network interfaces.</p>
 <pre><code>docker ps
 
 CONTAINER ID        IMAGE                      COMMAND             CREATED             STATUS              PORTS                 
 c94a021995d9        HelloMvc   &quot;dotnet run&quot;         12 seconds ago      Up 11 seconds       0.0.0.0:5000-&gt;5000/tcp  
-</code></pre><p>However, the MVC application listens to 127.0.0.1:5000 by default, which is a loopback ip address. As a result, it only acceps connection requets within the current host. Connections from outside the container will be simply refused. I need to make it listen to all network interferface by listening to 0.0.0.0. All that need to be changed was the program.cs</p>
+</code></pre><p>However, the MVC application listens to 127.0.0.1:5000 by default, which is a loopback IP address. As a result, it only acceps connection requets within the current host. Connections from outside the container will be simply refused. I need to make it listen to all network interface by listening to 0.0.0.0. All that need to be changed was the program.cs</p>
 <pre><code>public class Program
 {
     public static void Main(string[] args)
@@ -155,10 +155,10 @@ c94a021995d9        HelloMvc   &quot;dotnet run&quot;         12 seconds ago    
     </header>
     <div class="entry">
       
-        <p>GitLab is a web-based Git repository manager with Git repository management, code reviews, issue tracking, wikis. It is very similar to GitHub but can be hosted on your own server. It will be awesome to have an on-permise git server for my private projects and personal documents. I can also use it to mirror remote repositories hosted on GitHub. Recently I bought a QNAP 451 NAS. It has a feature called Container Station, which integrates Linux Containers (LXC) and Docker virtualisation technologies. Container Station allows me to operate multiple isolated Linux® systems on a QNAP NAS. This makes this NAS a perfect host for my git server.</p>
+        <p>GitLab is a web-based Git repository manager with Git repository management, code reviews, issue tracking, wikis. It is very similar to GitHub but can be hosted on your own server. It will be awesome to have an on-premise git server for my private projects and personal documents. I can also use it to mirror remote repositories hosted on GitHub. Recently I bought a QNAP 451 NAS. It has a feature called Container Station, which integrates Linux Containers (LXC) and Docker virtualisation technologies. Container Station allows me to operate multiple isolated Linux® systems on a QNAP NAS. This makes this NAS a perfect host for my git server.</p>
 <h2 id="Create-a-GitLab-container"><a href="#Create-a-GitLab-container" class="headerlink" title="Create a GitLab container"></a>Create a GitLab container</h2><p>First you need to have Container Station Installed. <a href="https://www.qnap.com/i/en/tutorial/con_show.php?op=showone&amp;cid=179" target="_blank" rel="external">Here</a> you can find detailed instructions on how to do that.</p>
 <p><img src="/images/AppCenter.jpg" alt="App Store"></p>
-<p>Then open Container Station, click <code>Create Container</code>, choose GitLib which happens to be the first one in list.</p>
+<p>Then open Container Station, click <code>Create Container</code>, choose GitLib which happens to be the first one in the list.</p>
 <p><img src="/images/ContainerStation.jpg" alt="App Store"></p>
 <p><img src="/images/Create.jpg" alt="App Store"></p>
 <p>Docker images are pulled from the popular docker registry <a href="https://hub.docker.com/" target="_blank" rel="external">Dockerhub</a>. It is interesting to see that QNAP Container Station knows to launch the GitLib image with <a href="https://docs.docker.com/compose/" target="_blank" rel="external">docker-compose</a>. Which results in creating three containers. These three containers provide a complete GitLab service. </p>
@@ -167,7 +167,7 @@ gitlab1_postgresql_1
 gitlab1_redis_1
 </code></pre><p>Each container can be individually configured from UI. </p>
 <p><img src="/images/settings.jpg" alt="App Store"></p>
-<p>Open a web brower and go to <a href="http://10.0.1.25:10080/" target="_blank" rel="external">http://10.0.1.25:10080/</a>, log in(default username / password: root / 5iveL! Fe) to start using GitLab.</p>
+<p>Open a web browser and go to <a href="http://10.0.1.25:10080/" target="_blank" rel="external">http://10.0.1.25:10080/</a>, log in(default username / password: root / 5iveL! Fe) to start using GitLab.</p>
 <p><img src="/images/gitlab2.jpg" alt="App Store"></p>
 <p>I want to  checkout out what is running under the hood. Open a terminal and SSH into the NAS, list all the running containers.</p>
 <pre><code>ssh root@10.0.1.25
@@ -256,7 +256,7 @@ project.json
        }
     }
 }
-</code></pre><p><code>emitEntryPoint</code> is set to true, which tells .NET runtime to invoke Main method as entry point when the application runs. For class libraries, this setting is not needed.<br>In dependencies section, there is NETStandard.Library. This is a reference NuGet Package that references other packages such as System.Console, System.Collections. Unlike .NET framewokr, .NET Core is pay-to-play. To use Console, Collections, Linq and other features in code, corresponding packages must be installed as dependencies. The frameworks section lists all the Frameworks this application supports. Since I am targeting .NET Core only, just netstandardapp1.5 is included. The imports section maps old dnxcore50 to this new moniker. It is also possible to add “net46” to frameworks section. that will enable the application to support .NET framework 4.6. However, doing so will make this application lose its ability to run on a linux runtime. </p>
+</code></pre><p><code>emitEntryPoint</code> is set to true, which tells .NET runtime to invoke Main method as entry point when the application runs. For class libraries, this setting is not needed.<br>In dependencies section, there is NETStandard.Library. This is a reference NuGet Package that references other packages such as System.Console, System.Collections. Unlike .NET framewokr, .NET Core is pay-to-play. To use Console, Collections, Linq and other features in code, corresponding packages must be installed as dependencies. The frameworks section lists all the Frameworks this application supports. Since I am targeting .NET Core only, just netstandardapp1.5 is included. The imports section maps old dnxcore50 to this new moniker. It is also possible to add “net46” to frameworks section. That will enable the application to support .NET framework 4.6. However, doing so will make this application lose its ability to run on a Linux runtime. </p>
 <p>To make this application a self-contained docker image, we need a Dockfile</p>
 <pre><code>FROM microsoft/dotnet:0.0.1-alpha
 RUN mkdir /src
@@ -269,7 +269,7 @@ dotnet build
 dotnet run
 </code></pre><h2 id="Run-the-application"><a href="#Run-the-application" class="headerlink" title="Run the application"></a>Run the application</h2><pre><code>docker build -t problem54 .
 docker run -rm -v $(pwd):/src --rm  problem54 
-</code></pre><p>if everything goes well, you are going to see “Hello World” printed out in the terminal. Not a very exciting application so far. </p>
+</code></pre><p>If everything goes well, you are going to see “Hello World” printed out in the terminal. Not a very exciting application so far. </p>
 <h2 id="Unit-testing"><a href="#Unit-testing" class="headerlink" title="Unit testing"></a>Unit testing</h2><p>My first attempt was to use NUnit. However, NUnit console (and the underlying NUnit Engine) do not support running unit tests against .NET core yet. There is a work around according to this <a href="http://stackoverflow.com/questions/36578232/run-nunit-tests-in-dotnet-core" target="_blank" rel="external">answer</a> to my question on Stack Overflow. I gave it a try and it did work. Then I switched to XUnit which comes with a runner supports .NET Core. To use XUnit, add <code>xunit</code> and <code>dotnet-test-xunit</code> into dependencies section:</p>
 <pre><code>&quot;dependencies&quot;: {
    &quot;xunit&quot;: &quot;2.1.0&quot;
@@ -300,7 +300,7 @@ dotnet build
 dotnet test
 </code></pre><p>Run tests:</p>
 <pre><code>docker run -rm -v $(pwd):/src --rm  problem54 
-</code></pre><p>Following the green-red-refactory process, add tests and implementation untill all scenarios are coverd. Then we get a solution. The final code can be found <a href="https://github.com/MonsterCoder/Project_euler_problems/tree/master/54/CSharp" target="_blank" rel="external">here</a>. </p>
+</code></pre><p>Following the green-red-refactory process, add tests and implementation until all scenarios are covered. Then we get a solution. The final code can be found <a href="https://github.com/MonsterCoder/Project_euler_problems/tree/master/54/CSharp" target="_blank" rel="external">here</a>. </p>
 <h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>In this post I have shown how we can develop and run an application based on .NET Core in a Docker container. Although be in the very early stages, the .NET Command Line Interface tool seems to be as easy to use as NPM or bundler.</p>
 
       
@@ -466,8 +466,8 @@ File.ReadAllLines(@&quot;p054_poker.txt&quot;)
     </header>
     <div class="entry">
       
-        <p>In last post, We have created an API that accepts registration request, saves user information into database. Once a registration completed, we want to send a welcome email to the user. Sending email is a time consuming task, it should be done asynchronously outside the user request/response cycle. This enables web requests to return immediately, results in better response time and higher throughput. </p>
-<h3 id="Email-worker"><a href="#Email-worker" class="headerlink" title="Email worker"></a>Email worker</h3><p>In this post we are going to create an email worker that runs in a seperated process, pulls tasks from message queue and sends emails. </p>
+        <p>In the last post, We have created an API that accepts registration request, saves user information into the database. Once a registration is completed, we want to send a welcome email to the user. Sending email is a time-consuming task, it should be done asynchronously outside the user request/response cycle. This enables web requests to return immediately, results in better response time and higher throughput. </p>
+<h3 id="Email-worker"><a href="#Email-worker" class="headerlink" title="Email worker"></a>Email worker</h3><p>In this post we are going to create an email worker that runs in a separate process, pulls tasks from the message queue and sends emails. </p>
 <pre><code>var config = require(&apos;./config/config&apos;)
 var nodemailer = require(&apos;nodemailer&apos;);
 
@@ -658,7 +658,7 @@ public abstract class Rank : IRank {
         return cards.GroupBy(c =&gt; Mapper[c[0]], c=&gt; 1).Where(g =&gt; g.Count() == level).OrderBy(c =&gt; c.Key);
     }
 }
-</code></pre><p>We use Rank class to abstract the game rules. Each child class encapsulates a certain cards pattern and its corresponding weight. When game starts, all rank instances are evaluated.  If the current hand matchs a rank’s pattern, a score will be returned. The first item will be the rank’s order(significance), and the second item is a caculated number used to compare hands with the same rank. Otherwise, a <code>Tuple&lt;0,0&gt;</code> will be returned.</p>
+</code></pre><p>We use Rank class to abstract the game rules. Each child class encapsulates a certain cards pattern and its corresponding weight. When the game starts, all rank instances are evaluated.  If the current hand matches a rank’s pattern, a score will be returned. The first item will be the rank’s order(significance), and the second item is a caculated number used to compare hands with the same rank. Otherwise, a <code>Tuple&lt;0,0&gt;</code> will be returned.</p>
 <pre><code>public class Game {
 
     // return 1 if player wins, otherwise return 0;
@@ -814,11 +814,11 @@ public void Full_house_vs_flash()
     </header>
     <div class="entry">
       
-        <p>First time I came across a project-euler problem was at Stack Overflow. While answering an algorithem question, I found the <a href="https://projecteuler.net" target="_blank" rel="external">Project Euler</a> provides a fun way to learn new concepts and keep my problem solving and mathematics skills sharp. </p>
+        <p>First time I came across a project-euler problem was at Stack Overflow. While answering an algorithm question, I found the <a href="https://projecteuler.net" target="_blank" rel="external">Project Euler</a> provides a fun way to learn new concepts and keep my problem solving and mathematics skills sharp. </p>
 <blockquote>
 <p>Project Euler is a series of challenging mathematical/computer programming problems that will require more than just mathematical insights to solve. Although mathematics will help you arrive at elegant and efficient methods, the use of a computer and programming skills will be required to solve most problems.</p>
 </blockquote>
-<p>So I decide to solve one problem a day and keep my solutions here. To spicy things up, I want solve each problem with two different languages. One imperative language that I am already comfortable with,  such as C#, ruby, java, javascript. Another one, I would use a functional language. </p>
+<p>So I decide to solve one problem a day and keep my solutions here. To spice things up, I want to solve each problem with two different languages. One imperative language that I am already comfortable with,  such as C#, ruby, java, javascript. Another one, I would use a functional language. </p>
 <h3 id="Problem-1-Multiples-of-3-and-5"><a href="#Problem-1-Multiples-of-3-and-5" class="headerlink" title="Problem 1: Multiples of 3 and 5"></a>Problem 1: Multiples of 3 and 5</h3><blockquote>
 <p>If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23.<br>Find the sum of all the multiples of 3 or 5 below 1000.</p>
 </blockquote>
@@ -831,7 +831,7 @@ for(var i =1; i &lt; 1000; i ++) {
     result += i;
   }
 }
-</code></pre><p>But NO, I really don’t want see any for-loop or while-loop here. Using C# doesn’t mean you cannot do it in a concise, declaritive style. Here you go:</p>
+</code></pre><p>But NO, I really don’t want to see any for-loop or while-loop here. Using C# doesn’t mean you cannot do it in a concise, declarative style. Here you go:</p>
 <pre><code>Enumerable
 .Range(1, 999)
 .Where(n =&gt; (n % 3) * (n % 5) ==0)
@@ -871,7 +871,7 @@ for(var i =1; i &lt; 1000; i ++) {
     </header>
     <div class="entry">
       
-        <p>Node.js is a popular a server-side framework for building high performance backend. In this post we will be looking at creating a backend API using using Node, Express and Mongoose. It will handle user registration requests and publish a message to job queue.</p>
+        <p>Node.js is a popular a server-side framework for building high performance backend. In this post we will be looking at creating a backend API using Node, Express and Mongoose. It will handle user registration requests and publish a message to job queue.</p>
 <h3 id="Creating-the-App"><a href="#Creating-the-App" class="headerlink" title="Creating the App"></a>Creating the App</h3><p>Our project structure is like the following. We will keep this very simple for the demonstration purposes.</p>
 <pre><code>├── server.js
 └── src
@@ -909,7 +909,7 @@ for(var i =1; i &lt; 1000; i ++) {
 )
 
 module.exports = mongoose.model(&apos;User&apos;, userSchema);
-</code></pre><p>Now lets look at the api.js. In this file we define how our api responds to a client request to a particular endpoint, which is a URI (or path) and a specific HTTP request method (GET, POST, and so on).<br>Here we has a handler function that accepts a post request, creates a new user. Once the registration has completed, it publish an email sending job to message queue. </p>
+</code></pre><p>Now lets look at the api.js. In this file we define how our api responds to a client request to a particular endpoint, which is a URI (or path) and a specific HTTP request method (GET, POST, and so on).<br>Here we has a handler function that accepts a post request, creates a new user. Once the registration has completed, it publish an email sending the job to the message queue. </p>
 <p>app.js</p>
 <pre><code>app.post(&apos;/register&apos;, function(req, res) {
     var user = new User(req.body);
@@ -955,7 +955,7 @@ function send_to_queue(ch, q_name, content) {
             }
     })
 }    
-</code></pre><p>The email service publishes an email task to message queue. In next post, we will implement a work process that picks up an email task from the message queue and send an email out throught SMTP. </p>
+</code></pre><p>The email service publishes an email task to the message queue. In next post, we will implement a work process that picks up an email task from the message queue and sends an email out through SMTP. </p>
 
       
     </div>
@@ -988,20 +988,20 @@ function send_to_queue(ch, q_name, content) {
     </header>
     <div class="entry">
       
-        <p>Deploying Node applications to Azure website seems simple. Just set up continuous deployment on the Azure Portal. Azure will build, test and automatically depoly your app when you check in code. Everything runs so well until you open a browser, navigate to the webisite url and see this: 500 internal server error. That was exactly the case we had in last project. The application was written in node &amp; express with dependancies to 52 npm packages including babel, redis, new relic, gulp, webpack. It works like a charm on local servers, just not on Azure website with git deployment. As usual, most documentation we found online are about “Hello world” which won’t help much with a production problem. Here are some of the steps we used to diagnose and analysis the deploy problem and make it work.</p>
-<h2 id="Test-compilation-on-windows"><a href="#Test-compilation-on-windows" class="headerlink" title="Test compilation on windows"></a>Test compilation on windows</h2><p>During npm install, some node modules with native extensions will be compiled to match the hosting OS and architecture(x86 or x64). If the application is developed on Mac OS, Linux and deploy to Azure website, first thing to do is to confirm that every module is compatible with windows platfom. </p>
+        <p>Deploying Node applications to Azure website seems simple. Just set up continuous deployment on the Azure Portal. Azure will build, test and automatically deploy your app when you check in code. Everything runs so well until you open a browser, navigate to the website url and see this: 500 internal server error. That was exactly the case we had in the last project. The application was written in node &amp; express with dependancies to 52 npm packages including babel, redis, new relic, gulp, webpack. It works like a charm on local servers, just not on Azure website with git deployment. As usual, most documentation we found online are about “Hello world” which won’t help much with a production problem. Here are some of the steps we used to diagnose and analysis the deploy problem and make it work.</p>
+<h2 id="Test-compilation-on-windows"><a href="#Test-compilation-on-windows" class="headerlink" title="Test compilation on windows"></a>Test compilation on windows</h2><p>During npm install, some node modules with native extensions will be compiled to match the hosting OS and architecture(x86 or x64). If the application is developed on Mac OS, Linux and deploy to Azure website, first thing to do is to confirm that every module is compatible with Windows platform. </p>
 <p>##web.config file<br>Under the hood, Azure website hosts node.js apps with iisnode. You need a web.config to config iisnode. If you use git deployment, when Azure detects an app.js or server.js file, it will automatically generate a web.config. Or you can add a custom one manually. Open the web.config file, and check the handlers section. Make sure it points to the correct application entry point.</p>
 <pre><code>&lt;handlers&gt;
     &lt;add name=&quot;iisnode&quot; path=&quot;app.js&quot; verb=&quot;*&quot; modules=&quot;iisnode&quot;/&gt;
 &lt;/handlers&gt;
-</code></pre><h2 id="Enviroment-variables"><a href="#Enviroment-variables" class="headerlink" title="Enviroment variables"></a>Enviroment variables</h2><p>You can set enviroment variables through website portal or Azure CLI. The easiest way to check their value is through website portal, under <strong>config</strong> section, choose app settings. Or if you are using Azure CLI, run</p>
+</code></pre><h2 id="Environment-variables"><a href="#Environment-variables" class="headerlink" title="Environment variables"></a>Environment variables</h2><p>You can set environment variables through a website portal or Azure CLI. The easiest way to check their value is through website portal, under <strong>config</strong> section, choose app settings. Or if you are using Azure CLI, run</p>
 <pre><code>azure site config list your-site
 </code></pre><p>Make sure there is no PORT setting. iisnode will use this variable to pipe IIS to your app.<br>Also check value of WEBSITE_NODE_DEFAULT_VERSION, it sets default node version used by the target website.</p>
 <h2 id="Check-in-node-modules"><a href="#Check-in-node-modules" class="headerlink" title="Check in node_modules"></a>Check in node_modules</h2><p>When using git deployment, normally we don’t check in node_modules. However, according to this Azure documentation</p>
 <blockquote>
 <p>Azure Websites does not support all native modules and might fail at compiling those with very specific prerequisites. </p>
 </blockquote>
-<p>So if all the about steps don’t help, you might want to test it out by checking in you node_modules. Remember, before checkin, run npm install on a windows platform with some architecture of you website.</p>
+<p>So if all the about steps don’t help, you might want to test it out by checking in you node_modules. Remember, before checkin, run npm install on a Windows platform with some architecture of you website.</p>
 <h2 id="Enable-Application-log"><a href="#Enable-Application-log" class="headerlink" title="Enable Application log"></a>Enable Application log</h2><p>Add the following to your iisnode.yml</p>
 <pre><code>node_env: production
 loggingEnabled: true
@@ -1019,7 +1019,7 @@ devErrorsEnabled: true
 $ node app.js
 </code></pre><p>If you see an error from a node module, it might be caused by either wrong node version or corrupt node_module.  Check the current node version </p>
 <pre><code>$ node -v
-</code></pre><p>make sure it is your target version. Run npm install for the failed module if necessary. Once the app starts from console, you can close it and restart your website. Open a browser and see your website start working.</p>
+</code></pre><p>Make sure it is your target version. Run npm install for the failed module if necessary. Once the app starts from console, you can close it and restart your website. Open a browser and see your website start working.</p>
 
       
     </div>
@@ -1052,17 +1052,17 @@ $ node app.js
     </header>
     <div class="entry">
       
-        <p>These years I have worked with several projects with non-profite organizations and Startups. Here are some common features to these projects.</p>
+        <p>These years I have worked with several projects with non-profit organizations and Startups. Here are some common features to these projects.</p>
 <ul>
 <li>Scalability: it starts from small, but need scale up easily</li>
 <li>Agility: be able to move to different platforms</li>
-<li>Flexiblity: components and features might be expanded or replaced</li>
+<li>Flexibility: components and features might be expanded or replaced</li>
 <li>Management &amp; Operations: not to keep own infrastructure </li>
 <li>Limited budget</li>
 </ul>
-<p>Rails and Heroku are used to be my first choice for these. RoR is an amazing framework with a strong ecosystem.  While Heroku offers instant deployment, easy scaling and requires little manitainace. </p>
-<p>Until last year, I swithced to Node.js and docker container for even more simplicity and scalability.<br>Lets uses an example to prove it.</p>
-<h2 id="example-application"><a href="#example-application" class="headerlink" title="example application"></a>example application</h2><p>Lets say we are going to build a REST API for user registration. User sign-up your service with a mobile or web client which will call the API. After a successful sginup, the backend will send the user a welcome email with a confirmation link. </p>
+<p>Rails and Heroku are used to be my first choice for these. RoR is an amazing framework with a strong ecosystem. While Heroku offers instant deployment, easy scaling and requires little maintainable.</p>
+<p>Until last year, I switched to Node.js and Docker container for even more simplicity and scalability. Lets uses an example to prove it.</p>
+<h2 id="Example-application"><a href="#Example-application" class="headerlink" title="Example application"></a>Example application</h2><p>Let’s say we are going to build a REST API for user registration. User sign-up your service with a mobile or web client which will call the API. After a successful signup, the backend will send the user a welcome email with a confirmation link.</p>
 <p>It contains the following services:</p>
 <ul>
 <li>Registration API</li>
@@ -1080,7 +1080,7 @@ $ docker run -d --name rabbit-server -p 15672:15672 -p 4369:4369 -p 5671:5671 -p
 </code></pre><p>run</p>
 <pre><code>$ docker ps
 </code></pre><p>you should see containers of MongoDB and RabbitMQ are up and running.</p>
-<h2 id="REST-API"><a href="#REST-API" class="headerlink" title="REST API"></a>REST API</h2><p>in next post, we are going to implement an REST API servic using Node.js and deploy to it Azure website. Keep tuned.</p>
+<h2 id="REST-API"><a href="#REST-API" class="headerlink" title="REST API"></a>REST API</h2><p>in next post, we are going to implement a REST API service using Node.js and deploy to it Azure website. Keep tuned.</p>
 
       
     </div>

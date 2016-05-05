@@ -165,7 +165,7 @@ public abstract class Rank : IRank {
         return cards.GroupBy(c =&gt; Mapper[c[0]], c=&gt; 1).Where(g =&gt; g.Count() == level).OrderBy(c =&gt; c.Key);
     }
 }
-</code></pre><p>We use Rank class to abstract the game rules. Each child class encapsulates a certain cards pattern and its corresponding weight. When game starts, all rank instances are evaluated.  If the current hand matchs a rank’s pattern, a score will be returned. The first item will be the rank’s order(significance), and the second item is a caculated number used to compare hands with the same rank. Otherwise, a <code>Tuple&lt;0,0&gt;</code> will be returned.</p>
+</code></pre><p>We use Rank class to abstract the game rules. Each child class encapsulates a certain cards pattern and its corresponding weight. When the game starts, all rank instances are evaluated.  If the current hand matches a rank’s pattern, a score will be returned. The first item will be the rank’s order(significance), and the second item is a caculated number used to compare hands with the same rank. Otherwise, a <code>Tuple&lt;0,0&gt;</code> will be returned.</p>
 <pre><code>public class Game {
 
     // return 1 if player wins, otherwise return 0;

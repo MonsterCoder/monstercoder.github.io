@@ -95,7 +95,7 @@ project.json
        }
     }
 }
-</code></pre><p><code>emitEntryPoint</code> is set to true, which tells .NET runtime to invoke Main method as entry point when the application runs. For class libraries, this setting is not needed.<br>In dependencies section, there is NETStandard.Library. This is a reference NuGet Package that references other packages such as System.Console, System.Collections. Unlike .NET framewokr, .NET Core is pay-to-play. To use Console, Collections, Linq and other features in code, corresponding packages must be installed as dependencies. The frameworks section lists all the Frameworks this application supports. Since I am targeting .NET Core only, just netstandardapp1.5 is included. The imports section maps old dnxcore50 to this new moniker. It is also possible to add “net46” to frameworks section. that will enable the application to support .NET framework 4.6. However, doing so will make this application lose its ability to run on a linux runtime. </p>
+</code></pre><p><code>emitEntryPoint</code> is set to true, which tells .NET runtime to invoke Main method as entry point when the application runs. For class libraries, this setting is not needed.<br>In dependencies section, there is NETStandard.Library. This is a reference NuGet Package that references other packages such as System.Console, System.Collections. Unlike .NET framewokr, .NET Core is pay-to-play. To use Console, Collections, Linq and other features in code, corresponding packages must be installed as dependencies. The frameworks section lists all the Frameworks this application supports. Since I am targeting .NET Core only, just netstandardapp1.5 is included. The imports section maps old dnxcore50 to this new moniker. It is also possible to add “net46” to frameworks section. That will enable the application to support .NET framework 4.6. However, doing so will make this application lose its ability to run on a Linux runtime. </p>
 <p>To make this application a self-contained docker image, we need a Dockfile</p>
 <pre><code>FROM microsoft/dotnet:0.0.1-alpha
 RUN mkdir /src
@@ -108,7 +108,7 @@ dotnet build
 dotnet run
 </code></pre><h2 id="Run-the-application"><a href="#Run-the-application" class="headerlink" title="Run the application"></a>Run the application</h2><pre><code>docker build -t problem54 .
 docker run -rm -v $(pwd):/src --rm  problem54 
-</code></pre><p>if everything goes well, you are going to see “Hello World” printed out in the terminal. Not a very exciting application so far. </p>
+</code></pre><p>If everything goes well, you are going to see “Hello World” printed out in the terminal. Not a very exciting application so far. </p>
 <h2 id="Unit-testing"><a href="#Unit-testing" class="headerlink" title="Unit testing"></a>Unit testing</h2><p>My first attempt was to use NUnit. However, NUnit console (and the underlying NUnit Engine) do not support running unit tests against .NET core yet. There is a work around according to this <a href="http://stackoverflow.com/questions/36578232/run-nunit-tests-in-dotnet-core" target="_blank" rel="external">answer</a> to my question on Stack Overflow. I gave it a try and it did work. Then I switched to XUnit which comes with a runner supports .NET Core. To use XUnit, add <code>xunit</code> and <code>dotnet-test-xunit</code> into dependencies section:</p>
 <pre><code>&quot;dependencies&quot;: {
    &quot;xunit&quot;: &quot;2.1.0&quot;
@@ -139,7 +139,7 @@ dotnet build
 dotnet test
 </code></pre><p>Run tests:</p>
 <pre><code>docker run -rm -v $(pwd):/src --rm  problem54 
-</code></pre><p>Following the green-red-refactory process, add tests and implementation untill all scenarios are coverd. Then we get a solution. The final code can be found <a href="https://github.com/MonsterCoder/Project_euler_problems/tree/master/54/CSharp" target="_blank" rel="external">here</a>. </p>
+</code></pre><p>Following the green-red-refactory process, add tests and implementation until all scenarios are covered. Then we get a solution. The final code can be found <a href="https://github.com/MonsterCoder/Project_euler_problems/tree/master/54/CSharp" target="_blank" rel="external">here</a>. </p>
 <h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>In this post I have shown how we can develop and run an application based on .NET Core in a Docker container. Although be in the very early stages, the .NET Command Line Interface tool seems to be as easy to use as NPM or bundler.</p>
 
       

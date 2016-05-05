@@ -64,10 +64,10 @@
     </header>
     <div class="entry">
       
-        <p>GitLab is a web-based Git repository manager with Git repository management, code reviews, issue tracking, wikis. It is very similar to GitHub but can be hosted on your own server. It will be awesome to have an on-permise git server for my private projects and personal documents. I can also use it to mirror remote repositories hosted on GitHub. Recently I bought a QNAP 451 NAS. It has a feature called Container Station, which integrates Linux Containers (LXC) and Docker virtualisation technologies. Container Station allows me to operate multiple isolated Linux® systems on a QNAP NAS. This makes this NAS a perfect host for my git server.</p>
+        <p>GitLab is a web-based Git repository manager with Git repository management, code reviews, issue tracking, wikis. It is very similar to GitHub but can be hosted on your own server. It will be awesome to have an on-premise git server for my private projects and personal documents. I can also use it to mirror remote repositories hosted on GitHub. Recently I bought a QNAP 451 NAS. It has a feature called Container Station, which integrates Linux Containers (LXC) and Docker virtualisation technologies. Container Station allows me to operate multiple isolated Linux® systems on a QNAP NAS. This makes this NAS a perfect host for my git server.</p>
 <h2 id="Create-a-GitLab-container"><a href="#Create-a-GitLab-container" class="headerlink" title="Create a GitLab container"></a>Create a GitLab container</h2><p>First you need to have Container Station Installed. <a href="https://www.qnap.com/i/en/tutorial/con_show.php?op=showone&amp;cid=179" target="_blank" rel="external">Here</a> you can find detailed instructions on how to do that.</p>
 <p><img src="/images/AppCenter.jpg" alt="App Store"></p>
-<p>Then open Container Station, click <code>Create Container</code>, choose GitLib which happens to be the first one in list.</p>
+<p>Then open Container Station, click <code>Create Container</code>, choose GitLib which happens to be the first one in the list.</p>
 <p><img src="/images/ContainerStation.jpg" alt="App Store"></p>
 <p><img src="/images/Create.jpg" alt="App Store"></p>
 <p>Docker images are pulled from the popular docker registry <a href="https://hub.docker.com/" target="_blank" rel="external">Dockerhub</a>. It is interesting to see that QNAP Container Station knows to launch the GitLib image with <a href="https://docs.docker.com/compose/" target="_blank" rel="external">docker-compose</a>. Which results in creating three containers. These three containers provide a complete GitLab service. </p>
@@ -76,7 +76,7 @@ gitlab1_postgresql_1
 gitlab1_redis_1
 </code></pre><p>Each container can be individually configured from UI. </p>
 <p><img src="/images/settings.jpg" alt="App Store"></p>
-<p>Open a web brower and go to <a href="http://10.0.1.25:10080/" target="_blank" rel="external">http://10.0.1.25:10080/</a>, log in(default username / password: root / 5iveL! Fe) to start using GitLab.</p>
+<p>Open a web browser and go to <a href="http://10.0.1.25:10080/" target="_blank" rel="external">http://10.0.1.25:10080/</a>, log in(default username / password: root / 5iveL! Fe) to start using GitLab.</p>
 <p><img src="/images/gitlab2.jpg" alt="App Store"></p>
 <p>I want to  checkout out what is running under the hood. Open a terminal and SSH into the NAS, list all the running containers.</p>
 <pre><code>ssh root@10.0.1.25

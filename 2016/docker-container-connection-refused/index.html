@@ -6,7 +6,7 @@
   <title>Docker Container Connection Refused | Awakening Byte</title>
   <meta name="author" content="George Chen">
   
-  <meta name="description" content="I’ve been playing with .NET Core CLI recently and came across cli-samples on github. The projects in this repository show working examples using the d">
+  <meta name="description" content="I’ve been playing with .NET Core CLI recently and came across cli-samples on Github. The projects in this repository show working examples using the d">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -64,7 +64,7 @@
     </header>
     <div class="entry">
       
-        <p>I’ve been playing with .NET Core CLI recently and came across <a href="https://github.com/aspnet/cli-samples" target="_blank" rel="external">cli-samples</a> on github. The projects in this repository show working examples using the dotnet CLI and ASP.NET 5. Everything runs well on Mac OS. Then I decided to make a docker image from the HelloMvc project.</p>
+        <p>I’ve been playing with .NET Core CLI recently and came across <a href="https://github.com/aspnet/cli-samples" target="_blank" rel="external">cli-samples</a> on Github. The projects in this repository show working examples using the dotnet CLI and ASP.NET 5. Everything runs well on Mac OS. Then I decided to make a docker image from the HelloMvc project.</p>
 <p>The Dockerfile is quite simple</p>
 <pre><code>FROM microsoft/dotnet-preview
 RUN mkdir /src
@@ -94,7 +94,7 @@ Hosting environment: Production
 Content root path: /src/HelloMvc
 Now listening on: http://localhost:5000
 Application started. Press Ctrl+C to shut down.
-</code></pre><p>The ip address of docker machine is</p>
+</code></pre><p>The IP address of docker machine is</p>
 <pre><code>docker-machine ip default
 
 192.168.99.100
@@ -102,12 +102,12 @@ Application started. Press Ctrl+C to shut down.
 <pre><code>This site can’t be reached
 
 192.168.99.100 refused to connect.
-</code></pre><p>What is going on? It worked well without container, and port 5000 is exposed to outside access. When list the active containers, I can see that the port binding is from 0.0.0.0:5000 to 5000, which allows inbound access from all netword interfaces.</p>
+</code></pre><p>What is going on? It worked well without container, and port 5000 is exposed to outside access. When listing the active containers, I can see that the port binding is from 0.0.0.0:5000 to 5000, which allows inbound access from all network interfaces.</p>
 <pre><code>docker ps
 
 CONTAINER ID        IMAGE                      COMMAND             CREATED             STATUS              PORTS                 
 c94a021995d9        HelloMvc   &quot;dotnet run&quot;         12 seconds ago      Up 11 seconds       0.0.0.0:5000-&gt;5000/tcp  
-</code></pre><p>However, the MVC application listens to 127.0.0.1:5000 by default, which is a loopback ip address. As a result, it only acceps connection requets within the current host. Connections from outside the container will be simply refused. I need to make it listen to all network interferface by listening to 0.0.0.0. All that need to be changed was the program.cs</p>
+</code></pre><p>However, the MVC application listens to 127.0.0.1:5000 by default, which is a loopback IP address. As a result, it only acceps connection requets within the current host. Connections from outside the container will be simply refused. I need to make it listen to all network interface by listening to 0.0.0.0. All that need to be changed was the program.cs</p>
 <pre><code>public class Program
 {
     public static void Main(string[] args)

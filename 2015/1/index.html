@@ -6,9 +6,9 @@
   <title>Build a Backend With Node.js, Container and Azure (1) | Awakening Byte</title>
   <meta name="author" content="George Chen">
   
-  <meta name="description" content="These years I have worked with several projects with non-profite organizations and Startups. Here are some common features to these projects.
+  <meta name="description" content="These years I have worked with several projects with non-profit organizations and Startups. Here are some common features to these projects.
 
-Scalabi">
+Scalabil">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -66,17 +66,17 @@ Scalabi">
     </header>
     <div class="entry">
       
-        <p>These years I have worked with several projects with non-profite organizations and Startups. Here are some common features to these projects.</p>
+        <p>These years I have worked with several projects with non-profit organizations and Startups. Here are some common features to these projects.</p>
 <ul>
 <li>Scalability: it starts from small, but need scale up easily</li>
 <li>Agility: be able to move to different platforms</li>
-<li>Flexiblity: components and features might be expanded or replaced</li>
+<li>Flexibility: components and features might be expanded or replaced</li>
 <li>Management &amp; Operations: not to keep own infrastructure </li>
 <li>Limited budget</li>
 </ul>
-<p>Rails and Heroku are used to be my first choice for these. RoR is an amazing framework with a strong ecosystem.  While Heroku offers instant deployment, easy scaling and requires little manitainace. </p>
-<p>Until last year, I swithced to Node.js and docker container for even more simplicity and scalability.<br>Lets uses an example to prove it.</p>
-<h2 id="example-application"><a href="#example-application" class="headerlink" title="example application"></a>example application</h2><p>Lets say we are going to build a REST API for user registration. User sign-up your service with a mobile or web client which will call the API. After a successful sginup, the backend will send the user a welcome email with a confirmation link. </p>
+<p>Rails and Heroku are used to be my first choice for these. RoR is an amazing framework with a strong ecosystem. While Heroku offers instant deployment, easy scaling and requires little maintainable.</p>
+<p>Until last year, I switched to Node.js and Docker container for even more simplicity and scalability. Lets uses an example to prove it.</p>
+<h2 id="Example-application"><a href="#Example-application" class="headerlink" title="Example application"></a>Example application</h2><p>Let’s say we are going to build a REST API for user registration. User sign-up your service with a mobile or web client which will call the API. After a successful signup, the backend will send the user a welcome email with a confirmation link.</p>
 <p>It contains the following services:</p>
 <ul>
 <li>Registration API</li>
@@ -94,7 +94,7 @@ $ docker run -d --name rabbit-server -p 15672:15672 -p 4369:4369 -p 5671:5671 -p
 </code></pre><p>run</p>
 <pre><code>$ docker ps
 </code></pre><p>you should see containers of MongoDB and RabbitMQ are up and running.</p>
-<h2 id="REST-API"><a href="#REST-API" class="headerlink" title="REST API"></a>REST API</h2><p>in next post, we are going to implement an REST API servic using Node.js and deploy to it Azure website. Keep tuned.</p>
+<h2 id="REST-API"><a href="#REST-API" class="headerlink" title="REST API"></a>REST API</h2><p>in next post, we are going to implement a REST API service using Node.js and deploy to it Azure website. Keep tuned.</p>
 
       
     </div>

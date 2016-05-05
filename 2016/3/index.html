@@ -6,7 +6,7 @@
   <title>Build a Backend With Node.js, Container and Azure (3) | Awakening Byte</title>
   <meta name="author" content="George Chen">
   
-  <meta name="description" content="In last post, We have created an API that accepts registration request, saves user information into database. Once a registration completed, we want t">
+  <meta name="description" content="In the last post, We have created an API that accepts registration request, saves user information into the database. Once a registration is completed">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -64,8 +64,8 @@
     </header>
     <div class="entry">
       
-        <p>In last post, We have created an API that accepts registration request, saves user information into database. Once a registration completed, we want to send a welcome email to the user. Sending email is a time consuming task, it should be done asynchronously outside the user request/response cycle. This enables web requests to return immediately, results in better response time and higher throughput. </p>
-<h3 id="Email-worker"><a href="#Email-worker" class="headerlink" title="Email worker"></a>Email worker</h3><p>In this post we are going to create an email worker that runs in a seperated process, pulls tasks from message queue and sends emails. </p>
+        <p>In the last post, We have created an API that accepts registration request, saves user information into the database. Once a registration is completed, we want to send a welcome email to the user. Sending email is a time-consuming task, it should be done asynchronously outside the user request/response cycle. This enables web requests to return immediately, results in better response time and higher throughput. </p>
+<h3 id="Email-worker"><a href="#Email-worker" class="headerlink" title="Email worker"></a>Email worker</h3><p>In this post we are going to create an email worker that runs in a separate process, pulls tasks from the message queue and sends emails. </p>
 <pre><code>var config = require(&apos;./config/config&apos;)
 var nodemailer = require(&apos;nodemailer&apos;);
 

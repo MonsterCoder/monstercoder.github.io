@@ -6,7 +6,7 @@
   <title>Project Euler Problems | Awakening Byte</title>
   <meta name="author" content="George Chen">
   
-  <meta name="description" content="First time I came across a project-euler problem was at Stack Overflow. While answering an algorithem question, I found the Project Euler provides a f">
+  <meta name="description" content="First time I came across a project-euler problem was at Stack Overflow. While answering an algorithm question, I found the Project Euler provides a fu">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -64,11 +64,11 @@
     </header>
     <div class="entry">
       
-        <p>First time I came across a project-euler problem was at Stack Overflow. While answering an algorithem question, I found the <a href="https://projecteuler.net" target="_blank" rel="external">Project Euler</a> provides a fun way to learn new concepts and keep my problem solving and mathematics skills sharp. </p>
+        <p>First time I came across a project-euler problem was at Stack Overflow. While answering an algorithm question, I found the <a href="https://projecteuler.net" target="_blank" rel="external">Project Euler</a> provides a fun way to learn new concepts and keep my problem solving and mathematics skills sharp. </p>
 <blockquote>
 <p>Project Euler is a series of challenging mathematical/computer programming problems that will require more than just mathematical insights to solve. Although mathematics will help you arrive at elegant and efficient methods, the use of a computer and programming skills will be required to solve most problems.</p>
 </blockquote>
-<p>So I decide to solve one problem a day and keep my solutions here. To spicy things up, I want solve each problem with two different languages. One imperative language that I am already comfortable with,  such as C#, ruby, java, javascript. Another one, I would use a functional language. </p>
+<p>So I decide to solve one problem a day and keep my solutions here. To spice things up, I want to solve each problem with two different languages. One imperative language that I am already comfortable with,  such as C#, ruby, java, javascript. Another one, I would use a functional language. </p>
 <h3 id="Problem-1-Multiples-of-3-and-5"><a href="#Problem-1-Multiples-of-3-and-5" class="headerlink" title="Problem 1: Multiples of 3 and 5"></a>Problem 1: Multiples of 3 and 5</h3><blockquote>
 <p>If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23.<br>Find the sum of all the multiples of 3 or 5 below 1000.</p>
 </blockquote>
@@ -81,7 +81,7 @@ for(var i =1; i &lt; 1000; i ++) {
     result += i;
   }
 }
-</code></pre><p>But NO, I really don’t want see any for-loop or while-loop here. Using C# doesn’t mean you cannot do it in a concise, declaritive style. Here you go:</p>
+</code></pre><p>But NO, I really don’t want to see any for-loop or while-loop here. Using C# doesn’t mean you cannot do it in a concise, declarative style. Here you go:</p>
 <pre><code>Enumerable
 .Range(1, 999)
 .Where(n =&gt; (n % 3) * (n % 5) ==0)

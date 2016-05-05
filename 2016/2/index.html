@@ -6,7 +6,7 @@
   <title>Build a Backend With Node.js, Container and Azure (2) | Awakening Byte</title>
   <meta name="author" content="George Chen">
   
-  <meta name="description" content="Node.js is a popular a server-side framework for building high performance backend. In this post we will be looking at creating a backend API using us">
+  <meta name="description" content="Node.js is a popular a server-side framework for building high performance backend. In this post we will be looking at creating a backend API using No">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -64,7 +64,7 @@
     </header>
     <div class="entry">
       
-        <p>Node.js is a popular a server-side framework for building high performance backend. In this post we will be looking at creating a backend API using using Node, Express and Mongoose. It will handle user registration requests and publish a message to job queue.</p>
+        <p>Node.js is a popular a server-side framework for building high performance backend. In this post we will be looking at creating a backend API using Node, Express and Mongoose. It will handle user registration requests and publish a message to job queue.</p>
 <h3 id="Creating-the-App"><a href="#Creating-the-App" class="headerlink" title="Creating the App"></a>Creating the App</h3><p>Our project structure is like the following. We will keep this very simple for the demonstration purposes.</p>
 <pre><code>├── server.js
 └── src
@@ -102,7 +102,7 @@
 )
 
 module.exports = mongoose.model(&apos;User&apos;, userSchema);
-</code></pre><p>Now lets look at the api.js. In this file we define how our api responds to a client request to a particular endpoint, which is a URI (or path) and a specific HTTP request method (GET, POST, and so on).<br>Here we has a handler function that accepts a post request, creates a new user. Once the registration has completed, it publish an email sending job to message queue. </p>
+</code></pre><p>Now lets look at the api.js. In this file we define how our api responds to a client request to a particular endpoint, which is a URI (or path) and a specific HTTP request method (GET, POST, and so on).<br>Here we has a handler function that accepts a post request, creates a new user. Once the registration has completed, it publish an email sending the job to the message queue. </p>
 <p>app.js</p>
 <pre><code>app.post(&apos;/register&apos;, function(req, res) {
     var user = new User(req.body);
@@ -148,7 +148,7 @@ function send_to_queue(ch, q_name, content) {
             }
     })
 }    
-</code></pre><p>The email service publishes an email task to message queue. In next post, we will implement a work process that picks up an email task from the message queue and send an email out throught SMTP. </p>
+</code></pre><p>The email service publishes an email task to the message queue. In next post, we will implement a work process that picks up an email task from the message queue and sends an email out through SMTP. </p>
 
       
     </div>
