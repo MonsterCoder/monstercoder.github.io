@@ -1,0 +1,300 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Basic Usage of Redis | Awakening Byte</title>
+  <meta name="author" content="George Chen">
+  
+  <meta name="description" content="Redis is an open source (BSD licensed), in-memory data structure store, used as database, cache and message broker. Due to it is fast speed in storing">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Basic Usage of Redis"/>
+  <meta property="og:site_name" content="Awakening Byte"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Awakening Byte" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner">
+<header class="site-head"  style="background-image: url(https://pbs.twimg.com/media/CS2ri2OUwAABH9s.jpg)" >
+	<nav id="main-nav" >
+	  <ul>
+	    
+	      <li><a href="/">Home</a></li>
+	    
+	      <li><a href="/archives">Archives</a></li>
+	    
+	  </ul>
+	  <div class="clearfix"></div>
+	</nav>
+
+	<div id="box" class="clearfix">
+	  <h1>Awakening Byte</h1>
+	  <h2>You cannot travel the path until you become the path itself</h2>
+	</div>
+
+</header></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-12T14:35:23.000Z"><a href="/2016/redis/">2016-06-12</a></time>
+      
+      
+  
+    <h1 class="title">Basic Usage of Redis</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Redis is an open source (BSD licensed), in-memory data structure store, used as database, cache and message broker. Due to it is fast speed in storing and fetch data, it is widely used as a cache system in web applications. Lets see how it is used in a php example project.</p>
+<pre><code>&lt;?php
+  //connect to redis
+  $redis = new Redis();
+  $status = $redis-&gt;connect(&apos;127.0.0.1&apos;, 6379);
+
+  if($status){
+    echo &quot;Connection to server sucessfully&quot;;
+    echo &quot;Server is running: &quot; . $redis-&gt;ping();
+  } else{
+    echo &quot;Connection to server failed&quot;;
+  }
+
+
+  Once connected, the connect method will return true;
+</code></pre><p>List operation</p>
+<pre><code>Push element to a list :   lPush
+Pop element from a list:  lPop
+Get element from a list:  lGet
+Length of the list:         ILen
+
+    &lt;?php
+
+       error_reporting(E_ALL);
+       ini_set(&apos;display_errors&apos;, 1);
+
+       //connect to redis
+       $redis = new Redis();
+       $status = $redis-&gt;connect(&apos;127.0.0.1&apos;, 6379);
+
+       if($status){
+         echo &quot;Connection to server sucessfully\n&quot;;
+       }else{
+         echo &quot;Connection to server failed\n&quot;;
+       }
+
+       $redis-&gt;delete(&apos;list1&apos;);
+
+       //list
+       $redis-&gt;lPush(&apos;list1&apos;, &apos;1&apos;);
+       $redis-&gt;lPush(&apos;list1&apos;, &apos;2&apos;);
+       $redis-&gt;lPush(&apos;list1&apos;, &apos;3&apos;);
+       $redis-&gt;lPush(&apos;list1&apos;, &apos;4&apos;);
+
+       for($i = 0; $i &lt; 4; $i++){
+         $result = $redis-&gt;lGet(&apos;list1&apos;, $i);
+         echo &quot;element in postion &quot; . $i .&quot; : &quot;. $result . &quot;\n&quot;;
+       }
+
+       $result = $redis-&gt;lPop(&apos;list1&apos;);
+       echo &quot;poped element : &quot; . $result . &quot;\n&quot;;
+
+       //get the length of the list
+       $result = $redis-&gt;lLen(&apos;list1&apos;);
+       echo &quot;length of the list : &quot; . $result . &quot;\n&quot;;
+
+       //get the size of the list
+      $result = $redis-&gt;lSize(&apos;list1&apos;);
+      echo &quot;size of the list : &quot; . $result . &quot;\n&quot;;
+</code></pre><p>Hash Map</p>
+<pre><code>add element to a hash table :   hSet
+get element from a hash table:  hGet
+does a key exists?:  hExists
+Length of the hash table:         hLen
+
+   //hash map
+   $redis-&gt;hSet(&quot;hash1&quot;, &quot;abc&quot;, 1);
+   $redis-&gt;hSet(&quot;hash1&quot;, &quot;mvp&quot;, 2);
+   $redis-&gt;hSet(&quot;hash1&quot;, &quot;vip&quot;, 3);
+
+   $result = $redis-&gt;hGet(&apos;hash1&apos;, &quot;abc&quot;);
+   echo &quot;hash element abc: &quot; . $result . &quot;\n&quot;;
+   $result = $redis-&gt;hGet(&apos;hash1&apos;, &quot;mvp&quot;);
+   echo &quot;hash element abc: &quot; . $result . &quot;\n&quot;;
+   $result = $redis-&gt;hGet(&apos;hash1&apos;, &quot;vip&quot;);
+   echo &quot;hash element abc: &quot; . $result . &quot;\n&quot;;
+
+   $result = $redis-&gt;hExists(&apos;hash1&apos;, &quot;vip&quot;);
+   echo &quot;hash element abc exists? &quot; . $result . &quot;\n&quot;;
+   $result = $redis-&gt;hExists(&apos;hash1&apos;, &quot;tip&quot;);
+   echo &quot;hash element abc exists? &quot; . $result . &quot;\n&quot;;
+
+   $result = $redis-&gt;hLen(&apos;hash1&apos;);
+   echo &quot;hash table abc length: &quot; . $result . &quot;\n&quot;;
+</code></pre>
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/development/">development</a>, <a href="/tags/Redis/">Redis</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://monstercoder.github.io/2016/redis/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:monstercoder.github.io">
+  </form>
+</div>
+
+  
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/NET-Core/">.NET Core</a><small>2</small></li>
+  
+    <li><a href="/tags/NET-Core-CLI/">.NET Core CLI</a><small>1</small></li>
+  
+    <li><a href="/tags/API/">API</a><small>1</small></li>
+  
+    <li><a href="/tags/ASP-Net-Core/">ASP.Net Core</a><small>1</small></li>
+  
+    <li><a href="/tags/Azure/">Azure</a><small>1</small></li>
+  
+    <li><a href="/tags/C/">C#</a><small>3</small></li>
+  
+    <li><a href="/tags/Container/">Container</a><small>1</small></li>
+  
+    <li><a href="/tags/Development/">Development</a><small>1</small></li>
+  
+    <li><a href="/tags/F/">F#</a><small>2</small></li>
+  
+    <li><a href="/tags/GitLab/">GitLab</a><small>1</small></li>
+  
+    <li><a href="/tags/Node-js/">Node.js</a><small>4</small></li>
+  
+    <li><a href="/tags/PHP/">PHP</a><small>1</small></li>
+  
+    <li><a href="/tags/REST/">REST</a><small>1</small></li>
+  
+    <li><a href="/tags/Redis/">Redis</a><small>1</small></li>
+  
+    <li><a href="/tags/VMWare/">VMWare</a><small>1</small></li>
+  
+    <li><a href="/tags/architecture/">architecture</a><small>3</small></li>
+  
+    <li><a href="/tags/authentication/">authentication</a><small>1</small></li>
+  
+    <li><a href="/tags/development/">development</a><small>4</small></li>
+  
+    <li><a href="/tags/docker/">docker</a><small>6</small></li>
+  
+    <li><a href="/tags/linux/">linux</a><small>1</small></li>
+  
+    <li><a href="/tags/microservice/">microservice</a><small>3</small></li>
+  
+    <li><a href="/tags/php/">php</a><small>1</small></li>
+  
+    <li><a href="/tags/project-euler/">project-euler</a><small>3</small></li>
+  
+    <li><a href="/tags/security/">security</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 George Chen
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

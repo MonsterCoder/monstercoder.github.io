@@ -1,0 +1,289 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Understand Php Autoload | Awakening Byte</title>
+  <meta name="author" content="George Chen">
+  
+  <meta name="description" content="Let us do little research on the loader mechanism of PHP project. Loader mechanism is the method to load these PHP files the main program need to use ">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Understand Php Autoload"/>
+  <meta property="og:site_name" content="Awakening Byte"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Awakening Byte" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner">
+<header class="site-head"  style="background-image: url(https://pbs.twimg.com/media/CS2ri2OUwAABH9s.jpg)" >
+	<nav id="main-nav" >
+	  <ul>
+	    
+	      <li><a href="/">Home</a></li>
+	    
+	      <li><a href="/archives">Archives</a></li>
+	    
+	  </ul>
+	  <div class="clearfix"></div>
+	</nav>
+
+	<div id="box" class="clearfix">
+	  <h1>Awakening Byte</h1>
+	  <h2>You cannot travel the path until you become the path itself</h2>
+	</div>
+
+</header></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-07-01T12:24:50.000Z"><a href="/2016/load/">2016-07-01</a></time>
+      
+      
+  
+    <h1 class="title">Understand Php Autoload</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Let us do little research on the loader mechanism of PHP project. Loader mechanism is the method to load these PHP files the main program need to use </p>
+<p>how these old PHP projects load base classes and functional classes.</p>
+<ol>
+<li><p>Opencart 1.5.6.3</p>
+<p>In the index.php of opencart 1.5.6.3, we can find the following statement near the top of few lines</p>
+<p>require_once(DIR_SYSTEM . ‘startup.php’);</p>
+<p>DIR_SYSTEM is a constant which defined in config.php, and the value the path of system folder on server</p>
+<p>The following code is part of the file upload/system/startup.php</p>
+</li>
+</ol>
+<pre><code>// Helper
+require_once(DIR_SYSTEM . &apos;helper/json.php&apos;); 
+require_once(DIR_SYSTEM . &apos;helper/utf8.php&apos;); 
+
+// Engine
+require_once(DIR_SYSTEM . &apos;engine/action.php&apos;); 
+require_once(DIR_SYSTEM . &apos;engine/controller.php&apos;);
+require_once(DIR_SYSTEM . &apos;engine/front.php&apos;);
+require_once(DIR_SYSTEM . &apos;engine/loader.php&apos;); 
+require_once(DIR_SYSTEM . &apos;engine/model.php&apos;);
+require_once(DIR_SYSTEM . &apos;engine/registry.php&apos;);
+
+// Common
+require_once(DIR_SYSTEM . &apos;library/cache.php&apos;);
+require_once(DIR_SYSTEM . &apos;library/url.php&apos;);
+require_once(DIR_SYSTEM . &apos;library/config.php&apos;);
+require_once(DIR_SYSTEM . &apos;library/db.php&apos;);
+require_once(DIR_SYSTEM . &apos;library/document.php&apos;);
+require_once(DIR_SYSTEM . &apos;library/encryption.php&apos;);
+require_once(DIR_SYSTEM . &apos;library/image.php&apos;);
+require_once(DIR_SYSTEM . &apos;library/language.php&apos;);
+require_once(DIR_SYSTEM . &apos;library/log.php&apos;);
+require_once(DIR_SYSTEM . &apos;library/mail.php&apos;);
+require_once(DIR_SYSTEM . &apos;library/pagination.php&apos;);
+require_once(DIR_SYSTEM . &apos;library/request.php&apos;);
+require_once(DIR_SYSTEM . &apos;library/response.php&apos;);
+require_once(DIR_SYSTEM . &apos;library/session.php&apos;);
+require_once(DIR_SYSTEM . &apos;library/template.php&apos;);
+require_once(DIR_SYSTEM . &apos;library/openbay.php&apos;);
+require_once(DIR_SYSTEM . &apos;library/ebay.php&apos;);
+require_once(DIR_SYSTEM . &apos;library/amazon.php&apos;);
+require_once(DIR_SYSTEM . &apos;library/amazonus.php&apos;);
+</code></pre><p>  There are a lots of require_once statement to include the base class and module class there. What we should do if we want to add a library class? First, we should write that file under system\library folder, then we add another requirement_once statement in upload/system/startup.php.</p>
+<ol>
+<li><p>Wordpress</p>
+<p>Wordpress is not object oriented system. I haven’t plan to analysis the implementation of this system deeply. We only focus on the loader part.</p>
+<p>after open the wp-settings.php file under the root folder of Wordpress, we can see the code show shows below. </p>
+<p><img src="/images/p3-1.png" alt="App Store"></p>
+<p>The wordpress have lots of require statement, and the require statement distributed very diverse. </p>
+<p>Secondly, are there better way to load file when system startup?<br>Answer is yes. PHP 5.3+ provides a SPL function to register customized loader function. After we registered the loader function, PHP will call the function to load file when php notice there is a class haven’t loaded.</p>
+<p>  Index.php<br>  &lt;?php</p>
+<pre><code>function autoloader($class) {
+  include &apos;lib/&apos; . $class . &apos;.php&apos;;
+}
+
+spl_autoload_register(&apos;autoloader&apos;);
+
+$a = new A();
+$out = $a-&gt;plus(1,2);
+echo $out;
+
+lib/A.php
+</code></pre><p>  &lt;?php</p>
+<p>  class A{</p>
+<pre><code>public function plus($a, $b){
+  return $a + $b;
+}
+</code></pre><p>  }</p>
+<p><img src="/images/p3-2.png" alt="App Store"></p>
+<p>We will get 3 after executed this program. The autoloader function automatically called to load class A. The load rule depends on how we want to locate the file path.</p>
+<p>Finally, all the new PHP projects use this way to load php file on startup, such as, YII2, Laravel, and Drupal 8.</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/development/">development</a>, <a href="/tags/php/">php</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://monstercoder.github.io/2016/load/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:monstercoder.github.io">
+  </form>
+</div>
+
+  
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/NET-Core/">.NET Core</a><small>2</small></li>
+  
+    <li><a href="/tags/NET-Core-CLI/">.NET Core CLI</a><small>1</small></li>
+  
+    <li><a href="/tags/API/">API</a><small>1</small></li>
+  
+    <li><a href="/tags/ASP-Net-Core/">ASP.Net Core</a><small>1</small></li>
+  
+    <li><a href="/tags/Azure/">Azure</a><small>1</small></li>
+  
+    <li><a href="/tags/C/">C#</a><small>3</small></li>
+  
+    <li><a href="/tags/Container/">Container</a><small>1</small></li>
+  
+    <li><a href="/tags/Development/">Development</a><small>1</small></li>
+  
+    <li><a href="/tags/F/">F#</a><small>2</small></li>
+  
+    <li><a href="/tags/GitLab/">GitLab</a><small>1</small></li>
+  
+    <li><a href="/tags/Node-js/">Node.js</a><small>4</small></li>
+  
+    <li><a href="/tags/PHP/">PHP</a><small>1</small></li>
+  
+    <li><a href="/tags/REST/">REST</a><small>1</small></li>
+  
+    <li><a href="/tags/Redis/">Redis</a><small>1</small></li>
+  
+    <li><a href="/tags/VMWare/">VMWare</a><small>1</small></li>
+  
+    <li><a href="/tags/architecture/">architecture</a><small>3</small></li>
+  
+    <li><a href="/tags/authentication/">authentication</a><small>1</small></li>
+  
+    <li><a href="/tags/development/">development</a><small>4</small></li>
+  
+    <li><a href="/tags/docker/">docker</a><small>6</small></li>
+  
+    <li><a href="/tags/linux/">linux</a><small>1</small></li>
+  
+    <li><a href="/tags/microservice/">microservice</a><small>3</small></li>
+  
+    <li><a href="/tags/php/">php</a><small>1</small></li>
+  
+    <li><a href="/tags/project-euler/">project-euler</a><small>3</small></li>
+  
+    <li><a href="/tags/security/">security</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 George Chen
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Build REST API With Yii2 | Awakening Byte</title>
+  <meta name="author" content="George Chen">
+  
+  <meta name="description" content="yii provides a whole set of tools to simplify the task of implementing RESTful Web Service APIs. Here I am goint build an example REST APIs with yii2.">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Build REST API With Yii2"/>
+  <meta property="og:site_name" content="Awakening Byte"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Awakening Byte" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner">
+<header class="site-head"  style="background-image: url(https://pbs.twimg.com/media/CS2ri2OUwAABH9s.jpg)" >
+	<nav id="main-nav" >
+	  <ul>
+	    
+	      <li><a href="/">Home</a></li>
+	    
+	      <li><a href="/archives">Archives</a></li>
+	    
+	  </ul>
+	  <div class="clearfix"></div>
+	</nav>
+
+	<div id="box" class="clearfix">
+	  <h1>Awakening Byte</h1>
+	  <h2>You cannot travel the path until you become the path itself</h2>
+	</div>
+
+</header></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-07-03T00:53:41.000Z"><a href="/2016/yii2/">2016-07-02</a></time>
+      
+      
+  
+    <h1 class="title">Build REST API With Yii2</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>yii provides a whole set of tools to simplify the task of implementing RESTful Web Service APIs. Here I am goint build an example REST APIs with yii2. Lets get started.</p>
+<ol>
+<li>open phpstorm, create an empty project, and initial composer.</li>
+<li>Open cmd, locate to project folder</li>
+<li><p>Run following two composer commends:</p>
+<p>  composer global require “fxp/composer-asset-plugin:^1.2.0”<br>  composer create-project –prefer-dist yiisoft/yii2-app-basic basic</p>
+<p>If you need learn more about composer, checkout: <a href="https://getcomposer.org/" target="_blank" rel="external">https://getcomposer.org/</a></p>
+</li>
+<li><p>Now upload whole project to the server </p>
+<p><img src="/images/p6-1.png" alt="App Store"></p>
+</li>
+<li><p>Change the ownership of the website folder</p>
+<p>  cd /home/wwwroot/project1.abc.com<br>  chown www:www ./ -R</p>
+</li>
+<li><p>Open the browser</p>
+<p><img src="/images/p6-2.png" alt="App Store"></p>
+</li>
+<li><p>Database connection</p>
+<p><img src="/images/p6-3.png" alt="App Store"></p>
+</li>
+<li><p>Configure the url manager</p>
+<p><img src="/images/p6-4.png" alt="App Store"></p>
+<p><img src="/images/p6-5.png" alt="App Store"></p>
+</li>
+<li><p>Now we can generate model class by Gii. Open the url:<br><a href="http://project1.abc.com/basic/web/index.php?r=gii" target="_blank" rel="external">http://project1.abc.com/basic/web/index.php?r=gii</a></p>
+<p><img src="/images/p6-6.png" alt="App Store"></p>
+<p>We have customer table, just use this table</p>
+<p><img src="/images/p6-7.png" alt="App Store"></p>
+<p><img src="/images/p6-8.png" alt="App Store"></p>
+<p><img src="/images/p6-9.png" alt="App Store"></p>
+</li>
+<li><p>Use this model as the model of our controller</p>
+<p><img src="/images/p6-10.png" alt="App Store"></p>
+</li>
+<li><p>Make a request</p>
+<p><img src="/images/p6-11.png" alt="App Store"></p>
+<p><img src="/images/p6-12.png" alt="App Store"></p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/REST/">REST</a>, <a href="/tags/API/">API</a>, <a href="/tags/Development/">Development</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://monstercoder.github.io/2016/yii2/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:monstercoder.github.io">
+  </form>
+</div>
+
+  
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/NET-Core/">.NET Core</a><small>2</small></li>
+  
+    <li><a href="/tags/NET-Core-CLI/">.NET Core CLI</a><small>1</small></li>
+  
+    <li><a href="/tags/API/">API</a><small>1</small></li>
+  
+    <li><a href="/tags/ASP-Net-Core/">ASP.Net Core</a><small>1</small></li>
+  
+    <li><a href="/tags/Azure/">Azure</a><small>1</small></li>
+  
+    <li><a href="/tags/C/">C#</a><small>3</small></li>
+  
+    <li><a href="/tags/Container/">Container</a><small>1</small></li>
+  
+    <li><a href="/tags/Development/">Development</a><small>1</small></li>
+  
+    <li><a href="/tags/F/">F#</a><small>2</small></li>
+  
+    <li><a href="/tags/GitLab/">GitLab</a><small>1</small></li>
+  
+    <li><a href="/tags/Node-js/">Node.js</a><small>4</small></li>
+  
+    <li><a href="/tags/PHP/">PHP</a><small>1</small></li>
+  
+    <li><a href="/tags/REST/">REST</a><small>1</small></li>
+  
+    <li><a href="/tags/Redis/">Redis</a><small>1</small></li>
+  
+    <li><a href="/tags/VMWare/">VMWare</a><small>1</small></li>
+  
+    <li><a href="/tags/architecture/">architecture</a><small>3</small></li>
+  
+    <li><a href="/tags/authentication/">authentication</a><small>1</small></li>
+  
+    <li><a href="/tags/development/">development</a><small>4</small></li>
+  
+    <li><a href="/tags/docker/">docker</a><small>6</small></li>
+  
+    <li><a href="/tags/linux/">linux</a><small>1</small></li>
+  
+    <li><a href="/tags/microservice/">microservice</a><small>3</small></li>
+  
+    <li><a href="/tags/php/">php</a><small>1</small></li>
+  
+    <li><a href="/tags/project-euler/">project-euler</a><small>3</small></li>
+  
+    <li><a href="/tags/security/">security</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 George Chen
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Build a Local PHP Development Environment | Awakening Byte</title>
+  <meta name="author" content="George Chen">
+  
+  <meta name="description" content="PHP is a widely-used, free, server scripting language, and a powerful tool for making dynamic and interactive Web pages. I will show how to build a lo">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Build a Local PHP Development Environment"/>
+  <meta property="og:site_name" content="Awakening Byte"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Awakening Byte" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner">
+<header class="site-head"  style="background-image: url(https://pbs.twimg.com/media/CS2ri2OUwAABH9s.jpg)" >
+	<nav id="main-nav" >
+	  <ul>
+	    
+	      <li><a href="/">Home</a></li>
+	    
+	      <li><a href="/archives">Archives</a></li>
+	    
+	  </ul>
+	  <div class="clearfix"></div>
+	</nav>
+
+	<div id="box" class="clearfix">
+	  <h1>Awakening Byte</h1>
+	  <h2>You cannot travel the path until you become the path itself</h2>
+	</div>
+
+</header></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-20T21:13:28.000Z"><a href="/2016/LNMP/">2016-05-20</a></time>
+      
+      
+  
+    <h1 class="title">Build a Local PHP Development Environment</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>PHP is a widely-used, free, server scripting language, and a powerful tool for making dynamic and interactive Web pages. I will show how to build a local PHP development environment</p>
+<ol>
+<li><p>Set up LNMP<br> We use the integrated installation package for our development environment.<br> Create a folder named source under /home, we will put all sources file in this folder.<br> and start setup the lnmp</p>
+<p> mkdir /home/source</p>
+<pre><code>cd /home/source
+</code></pre><p>  wget -c <a href="http://soft.vpser.net/lnmp/lnmp1.3-full.tar.gz" target="_blank" rel="external">http://soft.vpser.net/lnmp/lnmp1.3-full.tar.gz</a><br> tar zxf lnmp1.3-full.tar.gz &amp;&amp; cd lnmp1.3-full<br> ./install.sh lnmp</p>
+<ul>
+<li>given the mysql root password：jXS90VERcZqqE7XP</li>
+<li>yes to install InnoDB</li>
+<li>select the MySQKL 5.7.11</li>
+<li>use PHP 7.0.7</li>
+<li><p>use TCMalloc as memory allocator</p>
+<p><img src="/images/p2-1.png" alt="App Store"></p>
+<p><img src="/images/p2-2.png" alt="App Store"></p>
+<p>Now we finished the installation of LNMP.</p>
+</li>
+</ul>
+</li>
+<li><p>Create a domain on host machine </p>
+<p>a. Run notepad by administrator privilege</p>
+<p>b. Open hosts file: C:\Windows\System32\drivers\etc\hosts</p>
+<p><img src="/images/p2-3.png" alt="App Store"></p>
+<p>c.    Add a domain mapping to virtual machine. We will use this domain to access our website. The IP address of virtual machine is 192.168.183.132, and I take the domain “project1.abc.com” for first project.</p>
+<p><img src="/images/p2-4.png" alt="App Store"></p>
+</li>
+<li><p>LNMP operations</p>
+<p>a)    create a new website</p>
+<p>commend: lnmp vhost {add|list|del}</p>
+<p>let’s create a website: project1.abc.com<br>run commend “lnmp vhost add”, input the domain for website “project1.abc.com”, </p>
+<p><img src="/images/p2-5.png" alt="App Store"></p>
+<p>Create database for my website</p>
+<ul>
+<li>name: project1</li>
+<li>user: project1</li>
+<li>password: 0WkWy2dIHhcLfLKs</li>
+</ul>
+<p><img src="/images/p2-6.png" alt="App Store"></p>
+<p>Press any key to start create virtual host</p>
+<p><img src="/images/p2-8.png" alt="App Store"></p>
+<p>Now, we write an index.php file with following content<br>vim /home/wwwroot/project1.abc.com/index.php</p>
+<p><img src="/images/p2-9.png" alt="App Store"></p>
+<p>Now, we can access the website on host machine by <a href="http://project1.abc.com/" target="_blank" rel="external">http://project1.abc.com/</a></p>
+<p><img src="/images/p2-10.png" alt="App Store"></p>
+<p>b)    LNMP status management </p>
+<p>lnmp {restart | start |stop}</p>
+<p><img src="/images/p2-11.png" alt="App Store"></p>
+<p>c)    MySQL status management</p>
+<p>/etc/init.d/mysql {start|stop|restart|reload|force-reload|status}</p>
+<p>d)    Nginx status management</p>
+<p>/etc/init.d/nginx {start|stop|reload|restart}</p>
+</li>
+<li><p>Operation MySQL on host machine<br>a.    allow all machine access database by root</p>
+<p>execute mysql –u root –p, and give the password to login mysql</p>
+<p>use mysql database, and execute update statement.</p>
+<p><img src="/images/p2-12.png" alt="App Store"></p>
+<p>b.    restart the LNMP</p>
+<p><img src="/images/p2-13.png" alt="App Store"></p>
+<p>c.    open MySQL Workbench on host machine, create a new server. Give a name for the server, and provide the username, password, and port.</p>
+<p><img src="/images/p2-14.png" alt="App Store"></p>
+<p>Press test connection</p>
+<p><img src="/images/p2-15.png" alt="App Store"></p>
+<p>Ok, MySQL database connected. Press “OK” to save the server information.</p>
+<p>click the server block, then we can operate the database now<br><img src="/images/p2-16.png" alt="App Store"></p>
+<p>Now, we can add this server to Phpstorm as remote server. Write code on windows and run in centos.</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/development/">development</a>, <a href="/tags/PHP/">PHP</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://monstercoder.github.io/2016/LNMP/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:monstercoder.github.io">
+  </form>
+</div>
+
+  
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/NET-Core/">.NET Core</a><small>2</small></li>
+  
+    <li><a href="/tags/NET-Core-CLI/">.NET Core CLI</a><small>1</small></li>
+  
+    <li><a href="/tags/API/">API</a><small>1</small></li>
+  
+    <li><a href="/tags/ASP-Net-Core/">ASP.Net Core</a><small>1</small></li>
+  
+    <li><a href="/tags/Azure/">Azure</a><small>1</small></li>
+  
+    <li><a href="/tags/C/">C#</a><small>3</small></li>
+  
+    <li><a href="/tags/Container/">Container</a><small>1</small></li>
+  
+    <li><a href="/tags/Development/">Development</a><small>1</small></li>
+  
+    <li><a href="/tags/F/">F#</a><small>2</small></li>
+  
+    <li><a href="/tags/GitLab/">GitLab</a><small>1</small></li>
+  
+    <li><a href="/tags/Node-js/">Node.js</a><small>4</small></li>
+  
+    <li><a href="/tags/PHP/">PHP</a><small>1</small></li>
+  
+    <li><a href="/tags/REST/">REST</a><small>1</small></li>
+  
+    <li><a href="/tags/Redis/">Redis</a><small>1</small></li>
+  
+    <li><a href="/tags/VMWare/">VMWare</a><small>1</small></li>
+  
+    <li><a href="/tags/architecture/">architecture</a><small>3</small></li>
+  
+    <li><a href="/tags/authentication/">authentication</a><small>1</small></li>
+  
+    <li><a href="/tags/development/">development</a><small>4</small></li>
+  
+    <li><a href="/tags/docker/">docker</a><small>6</small></li>
+  
+    <li><a href="/tags/linux/">linux</a><small>1</small></li>
+  
+    <li><a href="/tags/microservice/">microservice</a><small>3</small></li>
+  
+    <li><a href="/tags/php/">php</a><small>1</small></li>
+  
+    <li><a href="/tags/project-euler/">project-euler</a><small>3</small></li>
+  
+    <li><a href="/tags/security/">security</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 George Chen
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
