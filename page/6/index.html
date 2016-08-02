@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Node.js | Awakening Byte</title>
+  <title>Page 6 | Awakening Byte</title>
   <meta name="author" content="George Chen">
   
   
@@ -47,49 +47,75 @@
 </header></header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
-<h2 class="archive-title tag">Node.js</h2>
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-08-13T23:12:03.000Z"><a href="/2015/1/">2015-08-13</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2015/1/">Build a Backend With Node.js, Container and Azure (1)</a></h1>
+  
 
+    </header>
+    <div class="entry">
+      
+        <p>These years I have worked with several projects with non-profit organizations and Startups. Here are some common features to these projects.</p>
+<ul>
+<li>Scalability: it starts from small, but need scale up easily</li>
+<li>Agility: be able to move to different platforms</li>
+<li>Flexibility: components and features might be expanded or replaced</li>
+<li>Management &amp; Operations: not to keep own infrastructure </li>
+<li>Limited budget</li>
+</ul>
+<p>Rails and Heroku are used to be my first choice for these. RoR is an amazing framework with a strong ecosystem. While Heroku offers instant deployment, easy scaling and requires little maintainable.</p>
+<p>Until last year, I switched to Node.js and Docker container for even more simplicity and scalability. Lets uses an example to prove it.</p>
+<h2 id="Example-application"><a href="#Example-application" class="headerlink" title="Example application"></a>Example application</h2><p>Let’s say we are going to build a REST API for user registration. User sign-up your service with a mobile or web client which will call the API. After a successful signup, the backend will send the user a welcome email with a confirmation link.</p>
+<p>It contains the following services:</p>
+<ul>
+<li>Registration API</li>
+<li>MongoDB</li>
+<li>Email-worker</li>
+<li>Message Queue</li>
+</ul>
+<h2 id="setup"><a href="#setup" class="headerlink" title="setup"></a>setup</h2><h3 id="install-node-js"><a href="#install-node-js" class="headerlink" title="install node.js"></a>install node.js</h3><p>First we need to install node and updating npm on our dev machine. <a href="https://docs.npmjs.com/getting-started/installing-node" target="_blank" rel="external">link</a> </p>
+<h3 id="start-MongoDB-and-RabbitMQ-services"><a href="#start-MongoDB-and-RabbitMQ-services" class="headerlink" title="start MongoDB and RabbitMQ services"></a>start MongoDB and RabbitMQ services</h3><p>Login to Microsoft Azure porta<br>(if you don’t have an Azure Subscription, get a <a href="https://azure.microsoft.com/en-us/pricing/free-trial/" target="_blank" rel="external">free trial</a>)</p>
+<p>Go to  “Virtual Machines” and create a vm from Docker on Unbuntu Server image</p>
+<p>SSH into your new created VM</p>
+<p>then start services with the following command</p>
+<pre><code>$ docker run -d --name mongo-server -p 27017:27017 mongo:3
+$ docker run -d --name rabbit-server -p 15672:15672 -p 4369:4369 -p 5671:5671 -p 5672:5672 -p 25672:25672 --hostname rabbit  -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=admin rabbitmq:3-management
+</code></pre><p>run</p>
+<pre><code>$ docker ps
+</code></pre><p>you should see containers of MongoDB and RabbitMQ are up and running.</p>
+<h2 id="REST-API"><a href="#REST-API" class="headerlink" title="REST API"></a>REST API</h2><p>in next post, we are going to implement a REST API service using Node.js and deploy to it Azure website. Keep tuned.</p>
 
-  <div class="archive">
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2016-04-09T19:08:38.000Z"><a href="/2016/3/">2016-04-09</a></time>
-            
-              <h1 class="title"><a href="/2016/3/">Build a Backend With Node.js, Container and Azure (3)</a></h1>
-            
-          </header>
-        </div>
-      </article>
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2016-01-11T18:12:14.000Z"><a href="/2016/2/">2016-01-11</a></time>
-            
-              <h1 class="title"><a href="/2016/2/">Build a Backend With Node.js, Container and Azure (2)</a></h1>
-            
-          </header>
-        </div>
-      </article>
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2015-12-22T05:33:02.000Z"><a href="/2015/deploy-node-app-to-azure-website/">2015-12-21</a></time>
-            
-              <h1 class="title"><a href="/2015/deploy-node-app-to-azure-website/">Troubleshoot Your node.js App Deployment on Azure Website</a></h1>
-            
-          </header>
-        </div>
-      </article>
-    
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
   </div>
-</div></div>
+</article>
+
+
+
+
+
+<nav id="pagination">
+  
+    <a href="/page/5/" class="alignleft prev">Prev</a>
+  
+  
+  <div class="clearfix"></div>
+</nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">

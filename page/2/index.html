@@ -53,506 +53,143 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-09T19:08:38.000Z"><a href="/2016/3/">2016-04-09</a></time>
+        <time datetime="2016-05-30T14:05:11.000Z"><a href="/2016/token/">2016-05-30</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/3/">Build a Backend With Node.js, Container and Azure (3)</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>In the last post, We have created an API that accepts registration request, saves user information into the database. Once a registration is completed, we want to send a welcome email to the user. Sending email is a time-consuming task, it should be done asynchronously outside the user request/response cycle. This enables web requests to return immediately, results in better response time and higher throughput. </p>
-<h3 id="Email-worker"><a href="#Email-worker" class="headerlink" title="Email worker"></a>Email worker</h3><p>In this post we are going to create an email worker that runs in a separate process, pulls tasks from the message queue and sends emails. </p>
-<pre><code>var config = require(&apos;./config/config&apos;)
-var nodemailer = require(&apos;nodemailer&apos;);
-
-var EmailService = require(&apos;./src/email_service&apos;)
-
-function handleError()  {
-    this.close();
-    setTimeout( function() {
-        processor = start_worker();
-    }
-    , 10000)
-}
-
-function onMessage(data) {
-    var email_address = data;
-    var transporter = nodemailer.createTransport( {
-        service: config.email.service ,
-        auth: {
-            user: config.email.user, // Your email id
-            pass: config.email.pass  // Your password
-        }
-    });
-
-    var mailOptions = {
-        from: config.email.from, 
-        to: email_address, 
-        subject: &apos;Welcome!&apos;, 
-        html: &apos;&lt;b&gt;Thanks for registering&lt;/b&gt;&apos; 
-    };
-
-    transporter.sendMail(mailOptions, function(error, info){
-        if(error){
-            console.log(error);
-        }else{
-            console.log(&apos;Message sent: &apos; + info.response);
-        };
-    });
-}
-
-function start_worker() {
-    var emailProcessor = new EmailService();
-    emailProcessor.once(&apos;error&apos;, handleError.bind(emailProcessor))
-    emailProcessor.once(&apos;connect&apos;, (function() {
-            this.process(&apos;email&apos;, onMessage)
-        })
-        .bind(emailProcessor) 
-    )
-
-    return emailProcessor.start();
-}
-
-
-var processor = start_worker();
-</code></pre><p>We also need to install the <a href="https://github.com/nodemailer/nodemailer" target="_blank" rel="external">nodemailer</a> package which does the real work of email sending.</p>
-<pre><code>npm install --save nodemailer
-</code></pre><p>Note that we are using the same repository as api. The EmailService is used by both api and work for message publish/subscribe. </p>
-<p>In next post, we will put everything together. Start a dev database, message queue, launch the API server, run the task work.</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-03T17:12:14.000Z"><a href="/2016/project-euler-54/">2016-04-03</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/project-euler-54/">Project Euler - Poker Hands (1) - C# Solution</a></h1>
+    <h1 class="title"><a href="/2016/token/">Implementation of Token Based Authentication</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>To see the real power of a functional langulage, I would apply it to a complicate problem. The problem 54, <a href="https://projecteuler.net/problem=54" target="_blank" rel="external">porker hands</a> looks a good candidate for this advanture.</p>
-<p>##Problem</p>
-<blockquote>
-<p>In the card game poker, a hand consists of five cards and are ranked, from lowest to highest, in the following way:</p>
-<ul>
-<li>High Card: Highest value card.</li>
-<li>One Pair: Two cards of the same value.</li>
-<li>Two Pairs: Two different pairs.</li>
-<li>Three of a Kind: Three cards of the same value.</li>
-<li>Straight: All cards are consecutive values.</li>
-<li>Flush: All cards of the same suit.</li>
-<li>Full House: Three of a kind and a pair.</li>
-<li>Four of a Kind: Four cards of the same value.</li>
-<li>Straight Flush: All cards are consecutive values of same suit.</li>
-<li>Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.</li>
-</ul>
-<p>The cards are valued in the order:<br>2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King, Ace.<br>If two players have the same ranked hands then the rank made up of the highest value wins; for example, a pair of eights beats a pair of fives (see example 1 below). But if two ranks tie, for example, both players have a pair of queens, then highest cards in each hand are compared (see example 4 below); if the highest cards tie then the next highest cards are compared, and so on.</p>
-<p>Consider the following five hands dealt to two players:</p>
-<table>
-<thead>
-<tr>
-<th>Hand</th>
-<th>Player 1</th>
-<th>Player 2</th>
-<th>Winner</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>5H 5C 6S 7S KD</td>
-<td>2C 3S 8S 8D TD</td>
-<td>Player 2</td>
-</tr>
-<tr>
-<td>2</td>
-<td>5D 8C 9S JS AC</td>
-<td>2C 5C 7D 8S QH</td>
-<td>Player 1</td>
-</tr>
-<tr>
-<td>3</td>
-<td>2D 9C AS AH AC</td>
-<td>3D 6D 7D TD QD</td>
-<td>Player 2</td>
-</tr>
-<tr>
-<td>4</td>
-<td>4D 6S 9H QH QC</td>
-<td>3D 6D 7H QD QS</td>
-<td>Player 1</td>
-</tr>
-<tr>
-<td>5</td>
-<td>2H 2D 4C 4D 4S</td>
-<td>3C 3D 3S 9S 9D</td>
-<td>Player 1</td>
-</tr>
-</tbody>
-</table>
-<p>The file, <a href="https://projecteuler.net/project/resources/p054_poker.txt" target="_blank" rel="external">poker.txt</a>, contains one-thousand random hands dealt to two players. Each line of the file contains ten cards (separated by a single space): the first five are Player 1’s cards and the last five are Player 2’s cards. You can assume that all hands are valid (no invalid characters or repeated cards), each player’s hand is in no specific order, and in each hand there is a clear winner.</p>
-<p>How many hands does Player 1 win?</p>
-</blockquote>
-<h3 id="C-solution"><a href="#C-solution" class="headerlink" title="C# solution"></a>C# solution</h3><p>Obviously, the core of this solution is to rank each hand of cards. We are going to model it as the following.</p>
-<pre><code>public interface IRank
-{
-    Tuple&lt;int, double&gt; Score(int order);
-} 
-
-public abstract class Rank : IRank {
-
-    public static readonly IDictionary&lt;char, int&gt;  Mapper = new Dictionary&lt;char, int&gt; {
-         {&apos;1&apos;,1}, {&apos;2&apos;,2}, {&apos;3&apos;,3}, {&apos;4&apos;,4}, {&apos;5&apos;,5}, {&apos;6&apos;,6}, {&apos;7&apos;,7}, {&apos;8&apos;,8}, {&apos;9&apos;,9}, {&apos;T&apos;,10}, {&apos;J&apos;,11}, {&apos;Q&apos;,12}, {&apos;K&apos;,13}, {&apos;A&apos;,14}
-    };
-
-    protected readonly IEnumerable&lt;string&gt; cards = null;
-
-    public Rank(IEnumerable&lt;string&gt; cards) {
-         this.cards = cards;
-    }
-
-    public virtual Tuple&lt;int, double&gt; Score(int order) {
-        if (Match() == false) {
-            return new Tuple&lt;int,double&gt;(0,0);
-        }
-
-        return new Tuple&lt;int,double&gt;(order, Remainder);
-    }
-
-    protected abstract bool Match();
-
-    protected virtual double Remainder {
-        get {
-            return 0;
-        }
-    } 
-
-    protected IEnumerable&lt;IGrouping&lt;int, int&gt;&gt; GetGroups(int level) {
-        return cards.GroupBy(c =&gt; Mapper[c[0]], c=&gt; 1).Where(g =&gt; g.Count() == level).OrderBy(c =&gt; c.Key);
-    }
+        <p>###What is token based authentication</p>
+<p>Token-based authentication is a method to authenticate user access to the specific resources with a valid token that is generated by the server only if user provided a correct username and password.</p>
+<p>###Steps to implement a simple token-based authentication example</p>
+<pre><code>a)    Create customer database
+b)    Unique token generator
+c)    Implements customer login operation
+d)    Authentication
+</code></pre><p>###Create a customer database</p>
+<pre><code>Create table customer  (
+  customer_id int(11) not null AUTO_INCREMENT,
+  username varchar(255) unique not null,
+  password varchar(255) not null,
+  token varchar(255),
+  expired varchar(100),
+  ip varchar(255),
+  primary key (customer_id)
+);
+</code></pre><p>  Add a customer:</p>
+<pre><code>Insert into customer(username, password) values(&quot;admin&quot;, &quot;123456&quot;);
+</code></pre><p>###Unique token generator</p>
+<p>  We need a method to generate unique token for different customers. The token is composed by three parts: machine id, timestamp and unique id. </p>
+<pre><code>//generate token
+function generate_token(){
+  $date = new DateTime();
+  $token = $date-&gt;getTimestamp();
+  //if we have multiple server, we need to assign different prefix to each one
+  $token = uniqid(&apos;server1&apos;, true);       
+ return $token;
 }
-</code></pre><p>We use Rank class to abstract the game rules. Each child class encapsulates a certain cards pattern and its corresponding weight. When the game starts, all rank instances are evaluated.  If the current hand matches a rank’s pattern, a score will be returned. The first item will be the rank’s order(significance), and the second item is a caculated number used to compare hands with the same rank. Otherwise, a <code>Tuple&lt;0,0&gt;</code> will be returned.</p>
-<pre><code>public class Game {
+</code></pre><p>###Customer login</p>
+<pre><code>&lt;?php
+  error_reporting(E_ALL);
+  ini_set(&apos;display_errors&apos;, 1);
 
-    // return 1 if player wins, otherwise return 0;
-    public static int Judge(string hands) {
-        var cards = hands.Split(&apos; &apos;);
-        var _player1 = new Hand(cards.Take(5));
-        var _player2 = new Hand(cards.Skip(5).Take(5));
+  //get username and password
+  $username = $_POST[&apos;username&apos;];
+  $password = $_POST[&apos;password&apos;];
+  $ip = $_SERVER[&apos;REMOTE_ADDR&apos;];
 
-        if (_player1.Weight.Item1 ==  _player2.Weight.Item1) {
-            return _player1.Weight.Item2 &gt;  _player2.Weight.Item2 ? 1 : 0;
-        }
-
-        return _player1.Weight.Item1 &gt; _player2.Weight.Item1 ? 1 : 0;
-    }
+ //generate token
+function generate_token(){
+  $date = new DateTime();
+  $token = $date-&gt;getTimestamp();
+  $token = $token . uniqid(&apos;server1&apos;, true);       //if we have multiple server, we need to assign different prefix to each one
+  return $token;
 }
 
+//connect database
+try {
+  $pdo = new PDO(&apos;mysql:host=localhost;dbname=project1&apos;, &quot;project1&quot;, &quot;0WkWy2dIHhcLfLKs&quot;);
 
-public class Hand {
+  $sql = &quot;select * from customer where username=:username and password=:password&quot;;
+  $sth = $pdo-&gt;prepare($sql, array(PDO::ATTR_CURSOR =&gt; PDO::CURSOR_FWDONLY));
+  $sth-&gt;execute(array(&apos;:username&apos; =&gt; $username, &apos;:password&apos; =&gt; $password));
+  $customer = $sth-&gt;fetchAll();
 
-    readonly IEnumerable&lt;IRank&gt; _ranks = null;
-    readonly IEnumerable&lt;string&gt; _cards = null;
+  if(count($customer) == 0){
 
-    public Hand(IEnumerable&lt;string&gt; cards) {
-        if ( cards?.Count() != 5 ) {
-            throw new Exception();
-        }
-        _cards = cards;
+    echo &quot;username or password not correct&quot;;
+    die();
 
-        _ranks = new List&lt;IRank&gt; {
-            new High_Card(cards),
-            new One_Pair(cards),
-            new Two_Pairs(cards),
-            new Three_Of_Kinds(cards),
-            new Straight(cards),
-            new Flush(cards),
-            new Full_House(cards),
-            new Four_Of_Kinds(cards),
-            new Straight_Flush(cards),
-            new Royal_Flush(cards)
-        };
-    }
+  }else{
 
-    public Tuple&lt;int,double&gt; Weight {
-        get {
-            return  _ranks.Select((r, order) =&gt; r.Score(order))
-            .Where(r =&gt; r.Item2 &gt; 0)
-            .OrderBy(r =&gt; r.Item1)
-            .Last();
-        }
-    }
-</code></pre><p>I really enjoy having unit tests to guild my implementation at small steps towards a final solution. My brain is just not powerful enough to keep all the rules, edge cases in mind. Writing tests leads to better desgined, easy to maintained code. public class Hand_tests {</p>
-<pre><code>[Fact]
-public void Hight_card()
-{
-    var result = Game.Judge(&quot;8C TS KC 9H 4S 7D 2S 5D 3S AC&quot;);
-    Assert.True(result == 0);
-}
+    $customer = $customer[0];
+    $customer_id = $customer[&apos;customer_id&apos;];
+    $token = generate_token();
 
-[Fact]
-public void One_pair_vs_hight_card()
-{
-    var result = Game.Judge(&quot;5H 8C 6S 2S 2D AC KS QS TD 9D&quot;);
-    Assert.True(result == 1);
-}
+    //expired after 24 hours
+    $date = new DateTime();
+    $date-&gt;add(new DateInterval(&apos;PT24H&apos;));
 
-[Fact]
-public void Two_Pairs_pair_over_one_pair()
-{
-    var result = Game.Judge(&quot;2C 2S 3S 3D 4D AH AC KS QS JD&quot;);
-    Assert.True(result == 1);
-}
+    $sql = &quot;update customer set token=:token, ip=:ip, expired=:expired where customer_id=:customer_id&quot;;
+    $sth = $pdo-&gt;prepare($sql, array(PDO::ATTR_CURSOR =&gt; PDO::CURSOR_FWDONLY));
+    $sth-&gt;execute(
+        array(
+            &apos;:token&apos; =&gt; $token,
+            &apos;:ip&apos; =&gt; $ip,
+            &apos;:expired&apos; =&gt; $date-&gt;getTimestamp(),
+            &apos;:customer_id&apos; =&gt; $customer_id
+        )
+    );
 
-[Fact]
-public void Three_of_kind_vs_two_pairs()
-{
-    var result = Game.Judge(&quot;2S 2D 2K 3D 4D AD AC KS KH QC&quot;);
-    Assert.True(result == 1);
-}
-
-[Fact]
-public void Straight_vs_three_of_kind()
-{
-    var result = Game.Judge(&quot;2C 3D 4D 5H 6D AD AC AS KH QC&quot;);
-    Assert.True(result == 1);
-}
-
-[Fact]
-public void flash_vs_straight()
-{
-    var result = Game.Judge(&quot;2D 4D 5D 7D 8D AD AC AS KH QC&quot;);
-    Assert.True(result == 1);
-}
-
-[Fact]
-public void Full_house_vs_flash()
-{
-    var result = Game.Judge(&quot;2D 2S 2H 3D 3C AD 9D KD 7D 6D&quot;);
-    Assert.True(result == 1);
-}
-
-...
-</code></pre><p>Once all the test scenarios are passed, we can be confident to get  correct result</p>
-<pre><code>public class Program
-{
-    public static void Main(string[] args)
-    {
-        using(var reader = File.OpenText(&quot;p054_poker.txt&quot;)) {
-            var line = reader.ReadLine();
-            var player1_wins = 0;
-
-            while(line !=null) {
-                player1_wins += Game.Judge(line);
-                line = reader.ReadLine();
-            }
-
-            Console.WriteLine(&quot;Player 1 wins&quot;);
-            Console.WriteLine(player1_wins);
-        }
-    }
-}
-</code></pre><p><a href="https://github.com/MonsterCoder/Project_euler_problems/tree/master/54/CSharp" target="_blank" rel="external">Source Code</a></p>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>   We see some of the benifits of OOP here. A clear modular structure good for defining abstract types where implementation details are hidden and the unit has a clearly defined interface. Implementation can be shared between classes. </p>
-<p>However, for algorithm focused problems, function languages normally produce a more concise, efficient solution. In post, I will revisit this problem  with a functional solution</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-01T16:07:57.000Z"><a href="/2016/project-euler/">2016-04-01</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/project-euler/">Project Euler Problems</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>First time I came across a project-euler problem was at Stack Overflow. While answering an algorithm question, I found the <a href="https://projecteuler.net" target="_blank" rel="external">Project Euler</a> provides a fun way to learn new concepts and keep my problem solving and mathematics skills sharp. </p>
-<blockquote>
-<p>Project Euler is a series of challenging mathematical/computer programming problems that will require more than just mathematical insights to solve. Although mathematics will help you arrive at elegant and efficient methods, the use of a computer and programming skills will be required to solve most problems.</p>
-</blockquote>
-<p>So I decide to solve one problem a day and keep my solutions here. To spice things up, I want to solve each problem with two different languages. One imperative language that I am already comfortable with,  such as C#, ruby, java, javascript. Another one, I would use a functional language. </p>
-<h3 id="Problem-1-Multiples-of-3-and-5"><a href="#Problem-1-Multiples-of-3-and-5" class="headerlink" title="Problem 1: Multiples of 3 and 5"></a>Problem 1: Multiples of 3 and 5</h3><blockquote>
-<p>If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23.<br>Find the sum of all the multiples of 3 or 5 below 1000.</p>
-</blockquote>
-<h4 id="Solution-1"><a href="#Solution-1" class="headerlink" title="Solution 1"></a>Solution 1</h4><p>C#</p>
-<p>It could be something like this</p>
-<pre><code>var result = 0;
-
-for(var i =1; i &lt; 1000; i ++) {
-  if (i % 3 == 0 || 1 % 5 ==0 ) {
-    result += i;
+    echo &quot;token : &quot; . $token;
   }
+
+  $dbh = null;
+  } catch (PDOException $e) {
+    print &quot;Error!: &quot; . $e-&gt;getMessage() . &quot;&lt;br/&gt;&quot;;
+    die();
 }
-</code></pre><p>But NO, I really don’t want to see any for-loop or while-loop here. Using C# doesn’t mean you cannot do it in a concise, declarative style. Here you go:</p>
-<pre><code>Enumerable
-.Range(1, 999)
-.Where(n =&gt; (n % 3) * (n % 5) ==0)
-.Sum();
-</code></pre><h4 id="Solution-2"><a href="#Solution-2" class="headerlink" title="Solution 2"></a>Solution 2</h4><p>Lets do it in a real functional language.</p>
-<p>F#</p>
-<pre><code>[1..999] |&gt; List.filter (fun n -&gt; (n % 5) * (n % 3) = 0 ) |&gt; List.sum
-</code></pre>
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
+</code></pre><p>###Authentication by token</p>
+<pre><code>&lt;?php
+  //check user token
+  $token = $_POST[&apos;token&apos;];
+  $ip = $_SERVER[&apos;REMOTE_ADDR&apos;];
 
+ //current timestamp
+ $date = new DateTime();
+ $timestamp = $date-&gt;getTimestamp();
 
+ //connect database
+ try {
+   $pdo = new PDO(&apos;mysql:host=localhost;dbname=project1&apos;, &quot;project1&quot;, &quot;0WkWy2dIHhcLfLKs&quot;);
 
+   $sql = &quot;select * from customer where token=:token and ip=:ip and expired &gt; :timestamp&quot;;
+   $sth = $pdo-&gt;prepare($sql, array(PDO::ATTR_CURSOR =&gt; PDO::CURSOR_FWDONLY));
+   $sth-&gt;execute(array(&apos;:token&apos; =&gt; $token, &apos;:ip&apos; =&gt; $ip, &apos;:timestamp&apos; =&gt; $timestamp));
+   $customer = $sth-&gt;fetchAll();
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-01-11T18:12:14.000Z"><a href="/2016/2/">2016-01-11</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/2/">Build a Backend With Node.js, Container and Azure (2)</a></h1>
-  
+   if(count($customer) == 0){
 
-    </header>
-    <div class="entry">
-      
-        <p>Node.js is a popular a server-side framework for building high performance backend. In this post we will be looking at creating a backend API using Node, Express and Mongoose. It will handle user registration requests and publish a message to job queue.</p>
-<h3 id="Creating-the-App"><a href="#Creating-the-App" class="headerlink" title="Creating the App"></a>Creating the App</h3><p>Our project structure is like the following. We will keep this very simple for the demonstration purposes.</p>
-<pre><code>├── server.js
-└── src
-    ├── api.js
-    └── email_service.js
-├── config
-│   └── config.js
-├── model
-│   └── user.js
-├── package.json
-├── docker-compose.yml
-├── Dockerfile
-</code></pre><p>Fist,  create the package.json </p>
-<pre><code>npm init
-</code></pre><p>This will ask you a bunch of questions, and then write a package.json for you. Now install the packages we will be using in this project.</p>
-<pre><code>npm install --save express mongoose body-parser amqplib
-</code></pre><p>Then, we define a user model with Mongoose. Mongoose provides a schema-based way to model application data. It includes built-in type casting, validation, query building, business logic hooks and more, out of the box.</p>
-<p>   var mongoose = require(‘mongoose’);</p>
-<pre><code>var userSchema = new mongoose.Schema({
-  email : { 
-    type: String, 
-    trim: true, 
-    required: true, 
-    index: { unique: true, uniqueCaseInsensitive: true },
-    validate: {
-      validator: function(v) {
-            p =/^[a-zA-Z0-9.!#$%&amp;&apos;*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/i
-            p.test(v);
-        },
-          message: &apos;{VALUE} is not a valid email address!&apos;
-        }
-    },
-    created_at: { type: Date, default: Date.now },
+     echo &quot;you haven&apos;t login system&quot;;
+     die();
+
+   } else {
+
+     $customer = $customer[0];
+     $username = $customer[&apos;username&apos;];
+
+     echo &quot;you are : &quot; . $username;
   }
-)
 
-module.exports = mongoose.model(&apos;User&apos;, userSchema);
-</code></pre><p>Now lets look at the api.js. In this file we define how our api responds to a client request to a particular endpoint, which is a URI (or path) and a specific HTTP request method (GET, POST, and so on).<br>Here we has a handler function that accepts a post request, creates a new user. Once the registration has completed, it publish an email sending the job to the message queue. </p>
-<p>app.js</p>
-<pre><code>app.post(&apos;/register&apos;, function(req, res) {
-    var user = new User(req.body);
-    user
-    .save()
-    .then(
-        function(u) {
-            email_service.send_welcome_email(u);
-            return res.json({success: true})
-        },
-        function(err) {
-            return res.status(400).json({sucess: false, data: req.body, error: err})
-        }
-    )
-});
-</code></pre><p>We will delegate the work of sending email task to the email_servie. Note the send_welcome_email is a non-block function. </p>
-<p>email_service.js</p>
-<pre><code>EmailService.prototype.send_welcome_email = function(customer) {
-    var self = this;
-
-    if (self.ch) {
-         process.nextTick(function() {
-                 send_to_queue(self.ch, email_queue, customer.email);
-         })
-    } else {
-        self.conn.createConfirmChannel( function(err, ch) {
-            if (err) {
-                return console.error(err);
-            }
-        self.ch = ch;
-        ch.on(&quot;error&quot;, function(err) { console.error(err)});
-        send_to_queue(self.ch, email_queue, customer.email)
-      })
-    }                                        
+} catch (PDOException $e) {
+  print &quot;Error!: &quot; . $e-&gt;getMessage() . &quot;&lt;br/&gt;&quot;;
+  die();
 }
-
-function send_to_queue(ch, q_name, content) {
-    ch.publish(&apos;&apos;, q_name, new Buffer(content), { persistent: true },
-        function (err, ok) {
-            if (err) {
-                console.error(&quot;[AMQP] publish &quot;, err);
-                pubChannel.connection.close();
-            }
-    })
-}    
-</code></pre><p>The email service publishes an email task to the message queue. In next post, we will implement a work process that picks up an email task from the message queue and sends an email out through SMTP. </p>
+</code></pre><p>By checking IP address and expired time, an illegal token can be prevented to access the system.</p>
 
       
     </div>
@@ -575,48 +212,82 @@ function send_to_queue(ch, q_name, content) {
     <header>
       
         <div class="icon"></div>
-        <time datetime="2015-12-22T05:33:02.000Z"><a href="/2015/deploy-node-app-to-azure-website/">2015-12-21</a></time>
+        <time datetime="2016-05-20T21:13:28.000Z"><a href="/2016/LNMP/">2016-05-20</a></time>
       
       
   
-    <h1 class="title"><a href="/2015/deploy-node-app-to-azure-website/">Troubleshoot Your node.js App Deployment on Azure Website</a></h1>
+    <h1 class="title"><a href="/2016/LNMP/">Build a Local PHP Development Environment</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>Deploying Node applications to Azure website seems simple. Just set up continuous deployment on the Azure Portal. Azure will build, test and automatically deploy your app when you check in code. Everything runs so well until you open a browser, navigate to the website url and see this: 500 internal server error. That was exactly the case we had in the last project. The application was written in node &amp; express with dependancies to 52 npm packages including babel, redis, new relic, gulp, webpack. It works like a charm on local servers, just not on Azure website with git deployment. As usual, most documentation we found online are about “Hello world” which won’t help much with a production problem. Here are some of the steps we used to diagnose and analysis the deploy problem and make it work.</p>
-<h2 id="Test-compilation-on-windows"><a href="#Test-compilation-on-windows" class="headerlink" title="Test compilation on windows"></a>Test compilation on windows</h2><p>During npm install, some node modules with native extensions will be compiled to match the hosting OS and architecture(x86 or x64). If the application is developed on Mac OS, Linux and deploy to Azure website, first thing to do is to confirm that every module is compatible with Windows platform. </p>
-<p>##web.config file<br>Under the hood, Azure website hosts node.js apps with iisnode. You need a web.config to config iisnode. If you use git deployment, when Azure detects an app.js or server.js file, it will automatically generate a web.config. Or you can add a custom one manually. Open the web.config file, and check the handlers section. Make sure it points to the correct application entry point.</p>
-<pre><code>&lt;handlers&gt;
-    &lt;add name=&quot;iisnode&quot; path=&quot;app.js&quot; verb=&quot;*&quot; modules=&quot;iisnode&quot;/&gt;
-&lt;/handlers&gt;
-</code></pre><h2 id="Environment-variables"><a href="#Environment-variables" class="headerlink" title="Environment variables"></a>Environment variables</h2><p>You can set environment variables through a website portal or Azure CLI. The easiest way to check their value is through website portal, under <strong>config</strong> section, choose app settings. Or if you are using Azure CLI, run</p>
-<pre><code>azure site config list your-site
-</code></pre><p>Make sure there is no PORT setting. iisnode will use this variable to pipe IIS to your app.<br>Also check value of WEBSITE_NODE_DEFAULT_VERSION, it sets default node version used by the target website.</p>
-<h2 id="Check-in-node-modules"><a href="#Check-in-node-modules" class="headerlink" title="Check in node_modules"></a>Check in node_modules</h2><p>When using git deployment, normally we don’t check in node_modules. However, according to this Azure documentation</p>
-<blockquote>
-<p>Azure Websites does not support all native modules and might fail at compiling those with very specific prerequisites. </p>
-</blockquote>
-<p>So if all the about steps don’t help, you might want to test it out by checking in you node_modules. Remember, before checkin, run npm install on a Windows platform with some architecture of you website.</p>
-<h2 id="Enable-Application-log"><a href="#Enable-Application-log" class="headerlink" title="Enable Application log"></a>Enable Application log</h2><p>Add the following to your iisnode.yml</p>
-<pre><code>node_env: production
-loggingEnabled: true
-devErrorsEnabled: true
-</code></pre><p>Then you can use Azure CLI to live stream the logs</p>
-<pre><code>$ azure site log tail sampleBlog
-</code></pre><h2 id="Debug-with-Kudu"><a href="#Debug-with-Kudu" class="headerlink" title="Debug with Kudu"></a>Debug with Kudu</h2><p><a href="https://github.com/" target="_blank" rel="external">Kudu</a> is the engine behind git deployments in Azure Web Sites.<br>Every Azure web site has an associated ‘scm’ service site at <a href="https://your-site.scm.azurewebsites.net/" target="_blank" rel="external">https://your-site.scm.azurewebsites.net/</a>. It provides a set of tools for troubleshooting and analysis your node.js website. You can:</p>
+        <p>PHP is a widely-used, free, server scripting language, and a powerful tool for making dynamic and interactive Web pages. I will show how to build a local PHP development environment</p>
+<ol>
+<li><p>Set up LNMP<br> We use the integrated installation package for our development environment.<br> Create a folder named source under /home, we will put all sources file in this folder.<br> and start setup the lnmp</p>
+<p> mkdir /home/source</p>
+<pre><code>cd /home/source
+</code></pre><p>  wget -c <a href="http://soft.vpser.net/lnmp/lnmp1.3-full.tar.gz" target="_blank" rel="external">http://soft.vpser.net/lnmp/lnmp1.3-full.tar.gz</a><br> tar zxf lnmp1.3-full.tar.gz &amp;&amp; cd lnmp1.3-full<br> ./install.sh lnmp</p>
 <ul>
-<li>Launch the <a href="https://github.com/projectkudu/kudu/wiki/Kudu-console" target="_blank" rel="external">diagnostic console</a></li>
-<li>Check runtime environment</li>
-<li>Monitor active node process</li>
+<li>given the mysql root password：jXS90VERcZqqE7XP</li>
+<li>yes to install InnoDB</li>
+<li>select the MySQKL 5.7.11</li>
+<li>use PHP 7.0.7</li>
+<li><p>use TCMalloc as memory allocator</p>
+<p><img src="/images/p2-1.png" alt="App Store"></p>
+<p><img src="/images/p2-2.png" alt="App Store"></p>
+<p>Now we finished the installation of LNMP.</p>
+</li>
 </ul>
-<p>Open the debug console, choose CMD or powershell.<br>Then start you app with node.exe directly</p>
-<pre><code>$ cd D:\home\site\wwwroot&gt; 
-$ node app.js
-</code></pre><p>If you see an error from a node module, it might be caused by either wrong node version or corrupt node_module.  Check the current node version </p>
-<pre><code>$ node -v
-</code></pre><p>Make sure it is your target version. Run npm install for the failed module if necessary. Once the app starts from console, you can close it and restart your website. Open a browser and see your website start working.</p>
+</li>
+<li><p>Create a domain on host machine </p>
+<p>a. Run notepad by administrator privilege</p>
+<p>b. Open hosts file: C:\Windows\System32\drivers\etc\hosts</p>
+<p><img src="/images/p2-3.png" alt="App Store"></p>
+<p>c.    Add a domain mapping to virtual machine. We will use this domain to access our website. The IP address of virtual machine is 192.168.183.132, and I take the domain “project1.abc.com” for first project.</p>
+<p><img src="/images/p2-4.png" alt="App Store"></p>
+</li>
+<li><p>LNMP operations</p>
+<p>a)    create a new website</p>
+<p>commend: lnmp vhost {add|list|del}</p>
+<p>let’s create a website: project1.abc.com<br>run commend “lnmp vhost add”, input the domain for website “project1.abc.com”, </p>
+<p><img src="/images/p2-5.png" alt="App Store"></p>
+<p>Create database for my website</p>
+<ul>
+<li>name: project1</li>
+<li>user: project1</li>
+<li>password: 0WkWy2dIHhcLfLKs</li>
+</ul>
+<p><img src="/images/p2-6.png" alt="App Store"></p>
+<p>Press any key to start create virtual host</p>
+<p><img src="/images/p2-8.png" alt="App Store"></p>
+<p>Now, we write an index.php file with following content<br>vim /home/wwwroot/project1.abc.com/index.php</p>
+<p><img src="/images/p2-9.png" alt="App Store"></p>
+<p>Now, we can access the website on host machine by <a href="http://project1.abc.com/" target="_blank" rel="external">http://project1.abc.com/</a></p>
+<p><img src="/images/p2-10.png" alt="App Store"></p>
+<p>b)    LNMP status management </p>
+<p>lnmp {restart | start |stop}</p>
+<p><img src="/images/p2-11.png" alt="App Store"></p>
+<p>c)    MySQL status management</p>
+<p>/etc/init.d/mysql {start|stop|restart|reload|force-reload|status}</p>
+<p>d)    Nginx status management</p>
+<p>/etc/init.d/nginx {start|stop|reload|restart}</p>
+</li>
+<li><p>Operation MySQL on host machine<br>a.    allow all machine access database by root</p>
+<p>execute mysql –u root –p, and give the password to login mysql</p>
+<p>use mysql database, and execute update statement.</p>
+<p><img src="/images/p2-12.png" alt="App Store"></p>
+<p>b.    restart the LNMP</p>
+<p><img src="/images/p2-13.png" alt="App Store"></p>
+<p>c.    open MySQL Workbench on host machine, create a new server. Give a name for the server, and provide the username, password, and port.</p>
+<p><img src="/images/p2-14.png" alt="App Store"></p>
+<p>Press test connection</p>
+<p><img src="/images/p2-15.png" alt="App Store"></p>
+<p>Ok, MySQL database connected. Press “OK” to save the server information.</p>
+<p>click the server block, then we can operate the database now<br><img src="/images/p2-16.png" alt="App Store"></p>
+<p>Now, we can add this server to Phpstorm as remote server. Write code on windows and run in centos.</p>
+</li>
+</ol>
 
       
     </div>
@@ -639,45 +310,38 @@ $ node app.js
     <header>
       
         <div class="icon"></div>
-        <time datetime="2015-08-13T23:12:03.000Z"><a href="/2015/1/">2015-08-13</a></time>
+        <time datetime="2016-05-19T05:02:39.000Z"><a href="/2016/centos/">2016-05-19</a></time>
       
       
   
-    <h1 class="title"><a href="/2015/1/">Build a Backend With Node.js, Container and Azure (1)</a></h1>
+    <h1 class="title"><a href="/2016/centos/">Create a CentOS Virtual Machine in VMWare Station</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>These years I have worked with several projects with non-profit organizations and Startups. Here are some common features to these projects.</p>
-<ul>
-<li>Scalability: it starts from small, but need scale up easily</li>
-<li>Agility: be able to move to different platforms</li>
-<li>Flexibility: components and features might be expanded or replaced</li>
-<li>Management &amp; Operations: not to keep own infrastructure </li>
-<li>Limited budget</li>
-</ul>
-<p>Rails and Heroku are used to be my first choice for these. RoR is an amazing framework with a strong ecosystem. While Heroku offers instant deployment, easy scaling and requires little maintainable.</p>
-<p>Until last year, I switched to Node.js and Docker container for even more simplicity and scalability. Lets uses an example to prove it.</p>
-<h2 id="Example-application"><a href="#Example-application" class="headerlink" title="Example application"></a>Example application</h2><p>Let’s say we are going to build a REST API for user registration. User sign-up your service with a mobile or web client which will call the API. After a successful signup, the backend will send the user a welcome email with a confirmation link.</p>
-<p>It contains the following services:</p>
-<ul>
-<li>Registration API</li>
-<li>MongoDB</li>
-<li>Email-worker</li>
-<li>Message Queue</li>
-</ul>
-<h2 id="setup"><a href="#setup" class="headerlink" title="setup"></a>setup</h2><h3 id="install-node-js"><a href="#install-node-js" class="headerlink" title="install node.js"></a>install node.js</h3><p>First we need to install node and updating npm on our dev machine. <a href="https://docs.npmjs.com/getting-started/installing-node" target="_blank" rel="external">link</a> </p>
-<h3 id="start-MongoDB-and-RabbitMQ-services"><a href="#start-MongoDB-and-RabbitMQ-services" class="headerlink" title="start MongoDB and RabbitMQ services"></a>start MongoDB and RabbitMQ services</h3><p>Login to Microsoft Azure porta<br>(if you don’t have an Azure Subscription, get a <a href="https://azure.microsoft.com/en-us/pricing/free-trial/" target="_blank" rel="external">free trial</a>)</p>
-<p>Go to  “Virtual Machines” and create a vm from Docker on Unbuntu Server image</p>
-<p>SSH into your new created VM</p>
-<p>then start services with the following command</p>
-<pre><code>$ docker run -d --name mongo-server -p 27017:27017 mongo:3
-$ docker run -d --name rabbit-server -p 15672:15672 -p 4369:4369 -p 5671:5671 -p 5672:5672 -p 25672:25672 --hostname rabbit  -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=admin rabbitmq:3-management
-</code></pre><p>run</p>
-<pre><code>$ docker ps
-</code></pre><p>you should see containers of MongoDB and RabbitMQ are up and running.</p>
-<h2 id="REST-API"><a href="#REST-API" class="headerlink" title="REST API"></a>REST API</h2><p>in next post, we are going to implement a REST API service using Node.js and deploy to it Azure website. Keep tuned.</p>
+        <p>I have been using Virtual Box in development for several years. Really like its simplicity and easy of use. Recently, I worked on a project that used VMWare Station as development enviroment. Here I am go to documentment how to create a CentOS virtual machine in VMWare Station.</p>
+<p>Click File -&gt; New Virtual Machine, click “next”’</p>
+<p><img src="/images/p1.png" alt="App Store"></p>
+<p>Choose the path of the CentOS image file, click “next”</p>
+<p><img src="/images/p2.png" alt="App Store"></p>
+<p>Give a name for you virtual machine, and select a path to store all files. click “next”</p>
+<p><img src="/images/p3.png" alt="App Store"></p>
+<p>Modify the maximum disk size to 40gb, and click next, and next.</p>
+<p><img src="/images/p4.png" alt="App Store"></p>
+<p>Now start installation of centos system. Just select “Install CentOS 7” and press enter</p>
+<p><img src="/images/p5.png" alt="App Store"></p>
+<p>Select the language you prefer</p>
+<p><img src="/images/p6.png" alt="App Store"></p>
+<p>Select installation destination, click “installation destination”, and click “done” to use default configuration.</p>
+<p><img src="/images/p7.png" alt="App Store"></p>
+<p><img src="/images/p8.png" alt="App Store"></p>
+<p>Click the “software selection”, we use GNODE Desktop here, and click “done”</p>
+<p><img src="/images/p9.png" alt="App Store"></p>
+<p>Then click “Begin Installation”<br>Now set the password for root</p>
+<p><img src="/images/p10.png" alt="App Store"></p>
+<p><img src="/images/p11.png" alt="App Store"></p>
+<p>After all finished, click Reboot</p>
 
       
     </div>
@@ -699,6 +363,8 @@ $ docker run -d --name rabbit-server -p 15672:15672 -p 4369:4369 -p 5671:5671 -p
   
     <a href="/" class="alignleft prev">Prev</a>
   
+  
+    <a href="/page/3/" class="alignright next">Next</a>
   
   <div class="clearfix"></div>
 </nav></div></div>

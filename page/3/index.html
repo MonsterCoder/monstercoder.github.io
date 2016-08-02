@@ -1,0 +1,422 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Page 3 | Awakening Byte</title>
+  <meta name="author" content="George Chen">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="Awakening Byte"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Awakening Byte" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner">
+<header class="site-head"  style="background-image: url(https://pbs.twimg.com/media/CS2ri2OUwAABH9s.jpg)" >
+	<nav id="main-nav" >
+	  <ul>
+	    
+	      <li><a href="/">Home</a></li>
+	    
+	      <li><a href="/archives">Archives</a></li>
+	    
+	  </ul>
+	  <div class="clearfix"></div>
+	</nav>
+
+	<div id="box" class="clearfix">
+	  <h1>Awakening Byte</h1>
+	  <h2>You cannot travel the path until you become the path itself</h2>
+	</div>
+
+</header></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-29T05:03:59.000Z"><a href="/2016/docker-container-connection-refused/">2016-04-29</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/docker-container-connection-refused/">Docker Container Connection Refused</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>I’ve been playing with .NET Core CLI recently and came across <a href="https://github.com/aspnet/cli-samples" target="_blank" rel="external">cli-samples</a> on Github. The projects in this repository show working examples using the dotnet CLI and ASP.NET 5. Everything runs well on Mac OS. Then I decided to make a docker image from the HelloMvc project.</p>
+<p>The Dockerfile is quite simple</p>
+<pre><code>FROM microsoft/dotnet-preview
+RUN mkdir /src
+WORKDIR /src
+ADD . /src
+RUN dotnet restore
+RUN dotnet build
+CMD dotnet run
+</code></pre><p>Built and runned with port 5000 exposed </p>
+<pre><code>docker run --rm  -v $(pwd):/src -p 5000:5000 -w /src HelloMvc
+</code></pre><p>The application started and was listening on port 5000. Looks good.</p>
+<pre><code>Project HelloMvc (.NETCoreApp,Version=v1.0) will be compiled because inputs were modified
+Compiling HelloMvc for .NETCoreApp,Version=v1.0
+/src/HelloMvc/project.json(6,26): warning DOTNET1015: The &apos;compilationOptions&apos; option is deprecated. Use &apos;buildOptions&apos; instead.
+
+Compilation succeeded.
+    1 Warning(s)
+    0 Error(s)
+
+Time elapsed 00:00:07.9852201
+
+dbug: Microsoft.AspNetCore.Hosting.Internal.WebHost[3]
+      Hosting starting
+dbug: Microsoft.AspNetCore.Hosting.Internal.WebHost[4]
+      Hosting started
+Hosting environment: Production
+Content root path: /src/HelloMvc
+Now listening on: http://localhost:5000
+Application started. Press Ctrl+C to shut down.
+</code></pre><p>The IP address of docker machine is</p>
+<pre><code>docker-machine ip default
+
+192.168.99.100
+</code></pre><p>However, when I opened a browser and typed in <a href="http://192.168.99.100:5000" target="_blank" rel="external">http://192.168.99.100:5000</a>, I saw this</p>
+<pre><code>This site can’t be reached
+
+192.168.99.100 refused to connect.
+</code></pre><p>What is going on? It worked well without container, and port 5000 is exposed to outside access. When listing the active containers, I can see that the port binding is from 0.0.0.0:5000 to 5000, which allows inbound access from all network interfaces.</p>
+<pre><code>docker ps
+
+CONTAINER ID        IMAGE                      COMMAND             CREATED             STATUS              PORTS                 
+c94a021995d9        HelloMvc   &quot;dotnet run&quot;         12 seconds ago      Up 11 seconds       0.0.0.0:5000-&gt;5000/tcp  
+</code></pre><p>However, the MVC application listens to 127.0.0.1:5000 by default, which is a loopback IP address. As a result, it only acceps connection requets within the current host. Connections from outside the container will be simply refused. I need to make it listen to all network interface by listening to 0.0.0.0. All that need to be changed was the program.cs</p>
+<pre><code>public class Program
+{
+    public static void Main(string[] args)
+    {
+        var host = new WebHostBuilder()
+                    .UseKestrel()
+                    .UseContentRoot(Directory.GetCurrentDirectory())
+                    .UseIISIntegration()
+                    .UseStartup&lt;Startup&gt;()
+                    .UseUrls(&quot;http://0.0.0.0:5000&quot;)
+                    .Build();
+
+        host.Run();
+    }
+}
+</code></pre><p>Hope this may save someone a few hours of time.</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-13T00:53:41.000Z"><a href="/2016/run-gitlab-on-Qnap451-nas/">2016-04-12</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/run-gitlab-on-Qnap451-nas/">Run GitLab on QNAP NAS With Container</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>GitLab is a web-based Git repository manager with Git repository management, code reviews, issue tracking, wikis. It is very similar to GitHub but can be hosted on your own server. It will be awesome to have an on-premise git server for my private projects and personal documents. I can also use it to mirror remote repositories hosted on GitHub. Recently I bought a QNAP 451 NAS. It has a feature called Container Station, which integrates Linux Containers (LXC) and Docker virtualisation technologies. Container Station allows me to operate multiple isolated Linux® systems on a QNAP NAS. This makes this NAS a perfect host for my git server.</p>
+<h2 id="Create-a-GitLab-container"><a href="#Create-a-GitLab-container" class="headerlink" title="Create a GitLab container"></a>Create a GitLab container</h2><p>First you need to have Container Station Installed. <a href="https://www.qnap.com/i/en/tutorial/con_show.php?op=showone&amp;cid=179" target="_blank" rel="external">Here</a> you can find detailed instructions on how to do that.</p>
+<p><img src="/images/AppCenter.jpg" alt="App Store"></p>
+<p>Then open Container Station, click <code>Create Container</code>, choose GitLib which happens to be the first one in the list.</p>
+<p><img src="/images/ContainerStation.jpg" alt="App Store"></p>
+<p><img src="/images/Create.jpg" alt="App Store"></p>
+<p>Docker images are pulled from the popular docker registry <a href="https://hub.docker.com/" target="_blank" rel="external">Dockerhub</a>. It is interesting to see that QNAP Container Station knows to launch the GitLib image with <a href="https://docs.docker.com/compose/" target="_blank" rel="external">docker-compose</a>. Which results in creating three containers. These three containers provide a complete GitLab service. </p>
+<pre><code>gitlab1_gitlab_1
+gitlab1_postgresql_1
+gitlab1_redis_1
+</code></pre><p>Each container can be individually configured from UI. </p>
+<p><img src="/images/settings.jpg" alt="App Store"></p>
+<p>Open a web browser and go to <a href="http://10.0.1.25:10080/" target="_blank" rel="external">http://10.0.1.25:10080/</a>, log in(default username / password: root / 5iveL! Fe) to start using GitLab.</p>
+<p><img src="/images/gitlab2.jpg" alt="App Store"></p>
+<p>I want to  checkout out what is running under the hood. Open a terminal and SSH into the NAS, list all the running containers.</p>
+<pre><code>ssh root@10.0.1.25
+
+[~] # docker ps
+CONTAINER ID        IMAGE                         COMMAND                  CREATED             STATUS              PORTS                                                   NAMES
+e0805483da90        sameersbn/gitlab:8.2.3        &quot;/sbin/entrypoint.sh &quot;   21 hours ago        Up 21 hours         443/tcp, 0.0.0.0:10022-&gt;22/tcp, 0.0.0.0:10080-&gt;80/tcp   gitlab1_gitlab_1
+13491bc0d510        sameersbn/postgresql:9.4-11   &quot;/sbin/entrypoint.sh&quot;    21 hours ago        Up 21 hours         5432/tcp                                                gitlab1_postgresql_1
+25217f65f54a        sameersbn/redis:latest        &quot;/sbin/entrypoint.sh&quot;    21 hours ago        Up 21 hours         6379/tcp                                                gitlab1_redis_1
+</code></pre><p>Note except gitlab1_gitlab_1, other two don’t have ports map to the host. How does the gitlab1_gitlab_1 connect to them?<br>Lets take a close look at inspect gitlab1_gitlab_1</p>
+<pre><code>docker inspect gitlab1_gitlab_1
+
+...
+    &quot;Links&quot;: [
+        &quot;/gitlab1_postgresql_1:/gitlab1_gitlab_1/postgresql&quot;,
+        &quot;/gitlab1_postgresql_1:/gitlab1_gitlab_1/postgresql_1&quot;,
+        &quot;/gitlab1_redis_1:/gitlab1_gitlab_1/redis_1&quot;,
+        &quot;/gitlab1_redis_1:/gitlab1_gitlab_1/redisio&quot;,
+        &quot;/gitlab1_postgresql_1:/gitlab1_gitlab_1/gitlab1_postgresql_1&quot;,
+        &quot;/gitlab1_redis_1:/gitlab1_gitlab_1/gitlab1_redis_1&quot;
+    ],
+...
+</code></pre><p>Aha, here we go. Instead of network port mappings, it uses linking system to connect to postgressql and redis services. Very neat!</p>
+<p><code>Network port mappings are not the only way Docker containers can connect to one another. Docker also has a linking system that allows you to link multiple containers together and send connection information from one to another. When containers are linked, information about a source container can be sent to a recipient container. This allows the recipient to see selected data describing aspects of the source container</code></p>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>Thanks for Container Station, setting up a GitLab server on QNAP NAS is a straight forward and joyful job. QNAP does an excellent job in integrating Docker virtualization with its QTS operating system. If you need more control, you still have full access to the Docker engine which QNAP Container Station built on top.</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-12T01:22:56.000Z"><a href="/2016/get-started-with-dotnet-core-on-docker/">2016-04-11</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/get-started-with-dotnet-core-on-docker/">Get Started With .NET Core on Docker</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>New .NET Core is the biggest change since the invention of .NET platform. It is fully open-source,  componentised and is supported by Windows, Linux and Mac OSX. In this post I am going to give it a test ride by creating a containerized C# appliction with the latest .NET CORE CLI tool. I want to get a feel of how this experience is close to working with node.js or ruby.</p>
+<h2 id="Enviroment"><a href="#Enviroment" class="headerlink" title="Enviroment"></a>Enviroment</h2><p>Instead of installing .NET Core and CLI tool locally, I am going to use a .NET container as both the build and runtime environment. Offical .NET Docker images are hosted at <a href="https://hub.docker.com/r/microsoft/dotnet" target="_blank" rel="external">https://hub.docker.com/r/microsoft/dotnet</a>.  Instructions on how to install Docker can be found from here: <a href="http://docs.docker.com/mac/started/" target="_blank" rel="external">Mac</a> , <a href="http://docs.docker.com/windows/started/" target="_blank" rel="external">Windows</a>, <a href="http://docs.docker.com/linux/started/" target="_blank" rel="external">Linux</a>.</p>
+<p>##Application</p>
+<p>I am building a solution to solve <a href="https://projecteuler.net/problem=54" target="_blank" rel="external">Poker hands problem</a>. First, Lets get started by adding a project directory.</p>
+<pre><code>mkdir poker_hands
+cd poker_hands
+</code></pre><p>Then create a new project with the CLI tool</p>
+<pre><code>docker run --rm -v &quot;$PWD&quot;:/src -w /src microsoft/dotnet:0.0.1-alpha dotnet new
+</code></pre><p>The <code>dotnet new</code> command adds 3 new files into the working directory</p>
+<pre><code>NuGet.Config
+Program.cs
+project.json
+</code></pre><p>NuGet.Config contains sources that NuGet packages can be loaded from. Program.cs contains application entry point which is a static Main method. Project.json is the project configuration file. Lets take a close look at it. (Note I have made changes to the generated one)</p>
+<pre><code>{
+    &quot;version&quot;: &quot;1.0.0-*&quot;,
+    &quot;compilationOptions&quot;: {
+        &quot;emitEntryPoint&quot;: true
+    },
+
+    &quot;dependencies&quot;: {
+       &quot;NETStandard.Library&quot;: &quot;1.0.0-rc2-23811&quot;
+       &quot;xunit&quot;: &quot;2.1.0&quot;
+       &quot;dotnet-test-xunit&quot;: &quot;1.0.0-dev-128011-22&quot;
+    },
+
+    &quot;frameworks&quot;: {
+        &quot;netstandardapp1.5&quot;: {
+          &quot;imports&quot;: &quot;dnxcore50&quot;
+       }
+    }
+}
+</code></pre><p><code>emitEntryPoint</code> is set to true, which tells .NET runtime to invoke Main method as entry point when the application runs. For class libraries, this setting is not needed.<br>In dependencies section, there is NETStandard.Library. This is a reference NuGet Package that references other packages such as System.Console, System.Collections. Unlike .NET framewokr, .NET Core is pay-to-play. To use Console, Collections, Linq and other features in code, corresponding packages must be installed as dependencies. The frameworks section lists all the Frameworks this application supports. Since I am targeting .NET Core only, just netstandardapp1.5 is included. The imports section maps old dnxcore50 to this new moniker. It is also possible to add “net46” to frameworks section. That will enable the application to support .NET framework 4.6. However, doing so will make this application lose its ability to run on a Linux runtime. </p>
+<p>To make this application a self-contained docker image, we need a Dockfile</p>
+<pre><code>FROM microsoft/dotnet:0.0.1-alpha
+RUN mkdir /src
+WORKDIR /src
+ADD . /src
+CMD sh run.sh
+</code></pre><p>run.sh is a helper script that calls restore and build before run</p>
+<pre><code>dotnet restore 
+dotnet build
+dotnet run
+</code></pre><h2 id="Run-the-application"><a href="#Run-the-application" class="headerlink" title="Run the application"></a>Run the application</h2><pre><code>docker build -t problem54 .
+docker run -rm -v $(pwd):/src --rm  problem54 
+</code></pre><p>If everything goes well, you are going to see “Hello World” printed out in the terminal. Not a very exciting application so far. </p>
+<h2 id="Unit-testing"><a href="#Unit-testing" class="headerlink" title="Unit testing"></a>Unit testing</h2><p>My first attempt was to use NUnit. However, NUnit console (and the underlying NUnit Engine) do not support running unit tests against .NET core yet. There is a work around according to this <a href="http://stackoverflow.com/questions/36578232/run-nunit-tests-in-dotnet-core" target="_blank" rel="external">answer</a> to my question on Stack Overflow. I gave it a try and it did work. Then I switched to XUnit which comes with a runner supports .NET Core. To use XUnit, add <code>xunit</code> and <code>dotnet-test-xunit</code> into dependencies section:</p>
+<pre><code>&quot;dependencies&quot;: {
+   &quot;xunit&quot;: &quot;2.1.0&quot;
+   &quot;dotnet-test-xunit&quot;: &quot;1.0.0-dev-128011-22&quot;,
+   &quot;NETStandard.Library&quot;: &quot;1.5.0-rc2-23931&quot;
+}
+</code></pre><p>and add this line to the project.json</p>
+<pre><code>&quot;testRunner&quot;: &quot;xunit&quot;
+</code></pre><p>Now add a test file and first test.</p>
+<p><a href="https://github.com/MonsterCoder/Project_euler_problems/blob/master/54/CSharp/tests/Poker_hands_tests.cs" target="_blank" rel="external">Poker_hands_tests.cs</a></p>
+<pre><code>using Xunit;
+using Poker.models;
+
+namespace Poker.tests
+{
+    public class Hand_tests {
+        [Fact]
+        public void Hight_card()
+        {
+            var result = Game.Judge(&quot;8C TS KC 9H 4S 7D 2S 5D 3S AC&quot;);
+            Assert.True(result == 0);
+        }
+    }
+ }
+</code></pre><p> And update the run.sh to </p>
+<pre><code>dotnet restore 
+dotnet build
+dotnet test
+</code></pre><p>Run tests:</p>
+<pre><code>docker run -rm -v $(pwd):/src --rm  problem54 
+</code></pre><p>Following the green-red-refactory process, add tests and implementation until all scenarios are covered. Then we get a solution. The final code can be found <a href="https://github.com/MonsterCoder/Project_euler_problems/tree/master/54/CSharp" target="_blank" rel="external">here</a>. </p>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>In this post I have shown how we can develop and run an application based on .NET Core in a Docker container. Although be in the very early stages, the .NET Command Line Interface tool seems to be as easy to use as NPM or bundler.</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+<nav id="pagination">
+  
+    <a href="/page/2/" class="alignleft prev">Prev</a>
+  
+  
+    <a href="/page/4/" class="alignright next">Next</a>
+  
+  <div class="clearfix"></div>
+</nav></div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:monstercoder.github.io">
+  </form>
+</div>
+
+  
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/NET-Core/">.NET Core</a><small>2</small></li>
+  
+    <li><a href="/tags/NET-Core-CLI/">.NET Core CLI</a><small>1</small></li>
+  
+    <li><a href="/tags/API/">API</a><small>1</small></li>
+  
+    <li><a href="/tags/ASP-Net-Core/">ASP.Net Core</a><small>1</small></li>
+  
+    <li><a href="/tags/Azure/">Azure</a><small>1</small></li>
+  
+    <li><a href="/tags/C/">C#</a><small>3</small></li>
+  
+    <li><a href="/tags/Container/">Container</a><small>1</small></li>
+  
+    <li><a href="/tags/Development/">Development</a><small>1</small></li>
+  
+    <li><a href="/tags/F/">F#</a><small>2</small></li>
+  
+    <li><a href="/tags/GitLab/">GitLab</a><small>1</small></li>
+  
+    <li><a href="/tags/Node-js/">Node.js</a><small>4</small></li>
+  
+    <li><a href="/tags/PHP/">PHP</a><small>1</small></li>
+  
+    <li><a href="/tags/REST/">REST</a><small>1</small></li>
+  
+    <li><a href="/tags/Redis/">Redis</a><small>1</small></li>
+  
+    <li><a href="/tags/VMWare/">VMWare</a><small>1</small></li>
+  
+    <li><a href="/tags/architecture/">architecture</a><small>3</small></li>
+  
+    <li><a href="/tags/authentication/">authentication</a><small>1</small></li>
+  
+    <li><a href="/tags/development/">development</a><small>4</small></li>
+  
+    <li><a href="/tags/docker/">docker</a><small>6</small></li>
+  
+    <li><a href="/tags/linux/">linux</a><small>1</small></li>
+  
+    <li><a href="/tags/microservice/">microservice</a><small>3</small></li>
+  
+    <li><a href="/tags/php/">php</a><small>1</small></li>
+  
+    <li><a href="/tags/project-euler/">project-euler</a><small>3</small></li>
+  
+    <li><a href="/tags/security/">security</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 George Chen
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
